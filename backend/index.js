@@ -27,26 +27,25 @@ connection.connect((err) => {
 });
 
 
-
 app.post("/user", (req, res) => {
+    const username = req.body.fname;
+    const password = req.body.lname;
 
-const username = req.body.username;
-const password = req.body.password;
+    // Assuming you have a 'user' table with 'username' and 'password' columns
+    const selectQuery = "SELECT * FROM user WHERE username = ? AND password = ?";
 
-const selectQuery = "SELECT * FROM users WHERE username = ? AND password = ?";
-
-connection.query(selectQuery, [username, password], (err, results) => {
-    if (err) {
-        console.error("Error checking credentials:", err);
-        res.status(500).send("Error checking credentials");
-    } else {
-        if (results.length > 0) {
-            console.log("Credentials are valid");
-            res.status(200).send("Credentials are valid");
+    connection.query(selectQuery, [username, password], (err, results) => {
+        if (err) {
+            console.error("Error checking credentials:", err);
+            res.status(500).json({ error: "Error checking credentials" });
         } else {
-            console.log("Invalid credentials");
-            res.status(401).send("Invalid credentials");
+            if (results.length > 0) {
+                console.log("Credentials are valid");
+                res.status(200).json({ message: "Credentials are valid" });
+            } else {
+                console.log("Invalid credentials");
+                res.status(401).json({ error: "Invalid credentials" });
+            }
         }
-    }
-});
+    });
 });
