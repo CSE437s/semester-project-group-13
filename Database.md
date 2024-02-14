@@ -10,7 +10,7 @@ Port: 16031
 
 User: avnadmin
 
-Password: AVNS_sRE-H6rsyz2-2rsc83W
+Password: AVNS_wABtR6d4vmnUszOm4hC
 
 SSL mode: REQUIRED
 

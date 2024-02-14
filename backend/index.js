@@ -14,10 +14,11 @@ app.get("/", (req, res) => {
 
 
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "universitydatabase"
+    host: "oasispractice-chrisspam1126-ece5.a.aivencloud.com",
+    port: "16031",
+    user: "avnadmin",
+    password: "AVNS_wABtR6d4vmnUszOm4hC",
+    database: "defaultdb"
 });
 
 connection.connect((err) => {
