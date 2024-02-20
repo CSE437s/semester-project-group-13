@@ -7,4 +7,13 @@
 
 ## Instructions/Link to access: <insert here>
 
+cd backend 
+
+node index.js
+
+cd ..
+
+cd frontend
+
+npm start
 
