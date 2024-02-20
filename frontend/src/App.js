@@ -20,22 +20,23 @@ function App() {
   };
   
   const apiCallDataBase = () => {
-    axios.post('http://localhost:8080/getUser', { fname: 'usernameValue', lname: 'passwordValue' })
-    .then((response) => {
-      const data = response.data;
-      console.log(data);
-      setUsername(data.username);
-      setPassword(data.password);
+    const credentials = { username: 'guest', password: 'password' };
+    axios.post('http://localhost:8080/getUser', credentials)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setUsername(data.username);
+        setPassword(data.password);
     }).catch((error) => {
       console.error('Error making API call:', error);
     });
   }
   
   
-  const showCurrentUserNameAndPassword = (user, pass) => {
-    setUsername(user);
-    setPassword(pass)
-  }
+  const showCurrentUserNameAndPassword = () => {
+    console.log('Current User:', username);
+    console.log('Current Password:', password);
+  };
    
   return (
     <div className="App">
@@ -43,7 +44,7 @@ function App() {
 
         <button onClick={apiCallTest}>Make API Call</button>
         <button onClick={apiCallDataBase}>Get Database</button>
-        <button onClick={() => showCurrentUserNameAndPassword(username, password)}>
+        <button onClick={showCurrentUserNameAndPassword}>
           Show Current User and Password
         </button>
       </header>
