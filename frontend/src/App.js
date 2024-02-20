@@ -3,7 +3,7 @@
 import axios from 'axios';
 import './App.css';
 import React, { useState } from 'react';
-
+import MyPage from './MyPage';
 
 
 function App() {
