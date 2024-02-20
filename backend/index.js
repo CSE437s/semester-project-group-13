@@ -3,8 +3,15 @@ const app = express();
 const bodyParser = require("body-parser");
 //const mysql = require("mysql");
 const cors = require('cors');
+const corsOptions = {
+    origin: 'http://localhost:3000', // Update with your React app's origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+  };
+  
+app.use(cors(corsOptions));
 
-app.use(cors());
 
 
 app.get('/', (req, res) => {

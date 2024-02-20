@@ -5,11 +5,13 @@ import './App.css';
 
 //data will be the string we send from our server
 const apiCall = () => {
-  axios.get('http://localhost:8080').then((data) => {
-    //this console.log will be in our frontend console
-    console.log(data)
-  })
-}
+  axios.get('http://localhost:8080').then((response) => {
+    const data = response.data;
+    console.log(data);
+  }).catch((error) => {
+    console.error('Error making API call:', error);
+  });
+};
 
 function App() {
   return (
@@ -22,3 +24,5 @@ function App() {
     </div>
   );
 }
+
+export default App;
