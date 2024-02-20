@@ -2,24 +2,50 @@
 
 import axios from 'axios';
 import './App.css';
+import React, { useState } from 'react';
 
-//data will be the string we send from our server
-const apiCall = () => {
-  axios.get('http://localhost:8080').then((response) => {
-    const data = response.data;
-    console.log(data);
-  }).catch((error) => {
-    console.error('Error making API call:', error);
-  });
-};
+
 
 function App() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const apiCallTest = () => {
+    
+    axios.get('http://localhost:8080').then((response) => {
+      const data = response.data;
+      console.log(data);
+    }).catch((error) => {
+      console.error('Error making API call:', error);
+    });
+  };
+  
+  const apiCallDataBase = () => {
+    axios.post('http://localhost:8080/getUser', { fname: 'usernameValue', lname: 'passwordValue' })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      setUsername(data.username);
+      setPassword(data.password);
+    }).catch((error) => {
+      console.error('Error making API call:', error);
+    });
+  }
+  
+  
+  const showCurrentUserNameAndPassword = (user, pass) => {
+    setUsername(user);
+    setPassword(pass)
+  }
+   
   return (
     <div className="App">
       <header className="App-header">
 
-        <button onClick={apiCall}>Make API Call</button>
-
+        <button onClick={apiCallTest}>Make API Call</button>
+        <button onClick={apiCallDataBase}>Get Database</button>
+        <button onClick={() => showCurrentUserNameAndPassword(username, password)}>
+          Show Current User and Password
+        </button>
       </header>
     </div>
   );

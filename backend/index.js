@@ -1,16 +1,12 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
-//const mysql = require("mysql");
+const mysql = require("mysql");
 const cors = require('cors');
-const corsOptions = {
-    origin: 'http://localhost:3000', // Update with your React app's origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-  };
+
   
-app.use(cors(corsOptions));
+app.use(cors());
+app.use(bodyParser.json());
 
 
 
@@ -19,11 +15,7 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(8080, () => {
-    console.log('server listening on port 8080')
-})
 
-/*
 const connection = mysql.createConnection({
     host: "oasispractice-chrisspam1126-ece5.a.aivencloud.com",
     port: "16031",
@@ -38,11 +30,10 @@ connection.connect((err) => {
 });
 
 
-app.post("/user", (req, res) => {
+app.post("/getUser", (req, res) => {
     const username = req.body.fname;
     const password = req.body.lname;
 
-    // Assuming you have a 'user' table with 'username' and 'password' columns
     const selectQuery = "SELECT * FROM user WHERE username = ? AND password = ?";
 
     connection.query(selectQuery, [username, password], (err, results) => {
@@ -60,4 +51,5 @@ app.post("/user", (req, res) => {
         }
     });
 });
-*/
+
+
