@@ -16,7 +16,7 @@ app.listen(8080, () => {
     console.log('server listening on port 8080')
 })
 
-
+/*
 const connection = mysql.createConnection({
     host: "oasispractice-chrisspam1126-ece5.a.aivencloud.com",
     port: "16031",
@@ -53,3 +53,4 @@ app.post("/user", (req, res) => {
         }
     });
 });
+*/
