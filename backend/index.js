@@ -1,17 +1,17 @@
-const express = require("express");
+const express = require('express');
+const app = express();
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const cors = require('cors');
 
-const app = express();
 app.use(cors());
 
-app.listen(3000, () => {
-    console.log("Server started ...");
-});
+app.listen(8080, () => {
+    console.log('server listening on port 8080')
+})
 
-app.get("/", (req, res) => {
-    res.send("Hello From The Server");
+app.get('/', (req, res) => {
+    res.send('Hello from our server!')
 })
 
 
