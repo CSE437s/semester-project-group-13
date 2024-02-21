@@ -3,6 +3,7 @@
 import axios from 'axios';
 import './App.css';
 import React, { useState } from 'react';
+import Login from './Login'
 
 
 
@@ -37,19 +38,31 @@ function App() {
     console.log('Current User:', username);
     console.log('Current Password:', password);
   };
-   
-  return (
-    <div className="App">
-      <header className="App-header">
 
-        <button onClick={apiCallTest}>Make API Call</button>
-        <button onClick={apiCallDataBase}>Get Database</button>
-        <button onClick={showCurrentUserNameAndPassword}>
-          Show Current User and Password
-        </button>
-      </header>
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleSuccessfulLogin = () => {
+    setLoggedIn(true);
+  };
+
+  return (
+    <div>
+      {loggedIn ? (
+        <div className="App">
+        <header className="App-header">
+  
+          <button onClick={apiCallTest}>Make API Call</button>
+          <button onClick={apiCallDataBase}>Get Database</button>
+          <button onClick={showCurrentUserNameAndPassword}>
+            Show Current User and Password
+          </button>
+        </header>
+      </div>
+      ) : (
+        <Login onLogin={handleSuccessfulLogin} />
+      )}
     </div>
   );
-}
+};
 
 export default App;
