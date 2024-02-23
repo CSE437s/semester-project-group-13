@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Login = (props) => {
-    // State variables for handling username and password inputs
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    // Function to handle form submission
     const handleLogin = (e) => {
         e.preventDefault();
         
@@ -15,7 +13,7 @@ const Login = (props) => {
         console.log('Password:', password);
 
 
-        const credentials = { username: 'guest', password: 'password' };
+        const credentials = { username: username, password: password };
         axios.post('http://localhost:8080/getUser', credentials)
             .then((response) => {
                 const data = response.data;

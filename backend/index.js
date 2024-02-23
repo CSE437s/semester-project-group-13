@@ -181,7 +181,7 @@ app.get("/getAllRefugees", (req, res) => {
     app.post("/createDonation", (req, res) => {
         const item = req.body.item;
         const quantity = req.body.quantity;
-        const completed = req.body.completed;
+        const completed = false;
         const donator_id = req.body.donator_id;
     
         const query = "INSERT INTO donations (item, quantity, completed, donator_id) VALUES (?, ?, ?, ?)";
@@ -198,7 +198,7 @@ app.get("/getAllRefugees", (req, res) => {
         });
     });
     app.post("/createDonator", (req, res) => {
-        const donations_history = req.body.donationsHistory;
+        const donations_history = "";
         const first_name = req.body.first_name;
         const last_name = req.body.last_name;
         const phone_number = req.body.phone_number;

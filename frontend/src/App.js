@@ -4,12 +4,17 @@ import axios from 'axios';
 import './App.css';
 import React, { useState } from 'react';
 import Login from './Login'
+import Refugees from './Refugees';
+import Donators from './Donators';
+import Landing from './Landing';
 
 
 
 function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const apiCallTest = () => {
     
     axios.get('http://localhost:8080').then((response) => {
@@ -39,7 +44,6 @@ function App() {
     console.log('Current Password:', password);
   };
 
-  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleSuccessfulLogin = () => {
     setLoggedIn(true);
@@ -47,20 +51,22 @@ function App() {
 
   return (
     <div>
-      {loggedIn ? (
         <div className="App">
         <header className="App-header">
-  
-          <button onClick={apiCallTest}>Make API Call</button>
-          <button onClick={apiCallDataBase}>Get Database</button>
-          <button onClick={showCurrentUserNameAndPassword}>
-            Show Current User and Password
-          </button>
-        </header>
-      </div>
+      {loggedIn ? (
+
+          <Landing></Landing>
+          // <Donators></Donators>
+          // <button onClick={apiCallTest}>Make API Call</button>
+          // <button onClick={apiCallDataBase}>Get Database</button>
+          // <button onClick={showCurrentUserNameAndPassword}>
+          //   Show Current User and Password
+          // </button>
       ) : (
         <Login onLogin={handleSuccessfulLogin} />
       )}
+      </header>
+      </div>
     </div>
   );
 };
