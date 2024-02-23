@@ -57,6 +57,7 @@ const Login = (props) => {
                 <br />
                 <button type="submit">Login</button>
             </form>
+            <button type="button">TestApi</button>
         </div>
     );
 };

@@ -52,50 +52,51 @@ app.post("/getUser", (req, res) => {
 });
 
 app.post("/createFamily", (req, res) => {
-    const headOfHouseHold = req.body.headOfHouseHold;
-    const familyName = req.body.familyName;
+    const head_of_household = req.body.head_of_household;
+    const last_name = req.body.last_name;
     const address = req.body.address;
     const city = req.body.city;
-    const zipCode = req.body.zipCode;
-    const familyMembers = req.body.familyMembers;
-    const phoneNumber = req.body.phoneNumber;
+    const zip = req.body.zip;
+    const family_members = req.body.family_members;
+    const good_neighbor = req.body.good_neighbor;
     
-    const query = "INSERT INTO families (headOfHouseHold, familyName, address, city, zipcode, familyMembers, phoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const query = "INSERT INTO families (head_of_household, last_name, address, city, zip, family_members, good_neighbor) VALUES (?, ?, ?, ?, ?, ?)";
 
-    connection.query(query, [headOfHouseHold, familyName, address, city, zipCode, familyMembers, phoneNumber], (err, results) => {
+    connection.query(query, [head_of_household, last_name, address, city, zip, family_members, good_neighbor], (err, results) => {
         if (err) {
             console.error("Error Creating Family", err);
             res.status(500).json({ error: "Error creating family" });
         } else {
-            const familyId = results.insertId;
-            console.log("Family created with ID:", familyId);
-            res.status(200).json({ result: "Success", familyId });
+            const family_Id = results.insertId;
+            console.log("Family created with ID:", family_Id);
+            res.status(200).json({ result: "Success", family_Id });
         }
     });
 });
+
 app.post("/createRefugee", (req, res) => {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const phoneNumber = req.body.phoneNumber;
-    const countryOfOrigin = req.body.countryOfOrigin;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+    const phone_number = req.body.phone_number;
+    const country_of_origin = req.body.country_of_origin;
     const age = req.body.age;
-    const dateOfArrivalToUS = req.body.dateOfArrivalToUS;
-    const dateOfJoiningOasis = req.body.dateOfJoiningOasis;
-    const dateOfBirth = req.body.dateOfBirth;
+    const date_of_arrival_to_us = req.body.date_of_arrival_to_us;
+    const date_of_joining_oasis = req.body.date_of_joining_oasis;
+    const date_of_birth = req.body.date_of_birth;
     const gender = req.body.gender;
     const email = req.body.email;
-    const familyID = req.body.familyID;
+    const family_id = req.body.family_id;
 
-    const query = "INSERT INTO refugees (firstName, lastName, phoneNumber, countryOfOrigin, age, dateOfArrivalToUS, dateOfJoiningOasis, dateOfBirth, gender, email, familyID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const query = "INSERT INTO refugees (first_name, last_name, phone_number, country_of_origin, age, date_of_arrival_to_us, date_of_joining_oasis, date_of_birth, gender, email, family_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    connection.query(query, [firstName, lastName, phoneNumber, countryOfOrigin, age, dateOfArrivalToUS, dateOfJoiningOasis, dateOfBirth, gender, email, familyID], (err, results) => {
+    connection.query(query, [first_name, last_name, phone_number, country_of_origin, age, date_of_arrival_to_us, date_of_joining_oasis, date_of_birth, gender, email, family_id], (err, results) => {
         if (err) {
             console.error("Error Creating Refugee", err);
             res.status(500).json({ error: "Error creating refugee" });
         } else {
-            const refugeeId = results.insertId;
-            console.log("Refugee created with ID:", refugeeId);
-            res.status(200).json({ result: "Success", refugeeId });
+            const refugee_ID = results.insertId;
+            console.log("Refugee created with ID:", refugee_ID);
+            res.status(200).json({ result: "Success", refugee_ID });
         }
     });
 });
@@ -143,21 +144,21 @@ app.get("/getAllRefugees", (req, res) => {
 
 
     app.post("/createGoodNeighbor", (req, res) => {
-        const refugeeFamilyID = req.body.refugeeFamilyID;
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const phoneNumber = req.body.phoneNumber;
-        const churchTheyAttend = req.body.churchTheyAttend;
-        const donatorID = req.body.donatorID;
+        const refugee_family_id = req.body.refugee_family_id;
+        const first_name = req.body.first_name;
+        const last_name = req.body.last_name;
+        const phone_number = req.body.phone_number;
+        const church_they_attend = req.body.church_they_attend;
+        const donator_id = req.body.donator_id;
     
-        const query = "INSERT INTO good_neighbors (firstName, lastName, phoneNumber, churchTheyAttend, donatorID, refugeeFamilyID) VALUES (?, ?, ?, ?, ?, ?)";
+        const query = "INSERT INTO good_neighbors (first_name, last_name, phone_number, church_they_attend, donator_id, refugee_family_id) VALUES (?, ?, ?, ?, ?, ?)";
     
-        connection.query(query, [firstName, lastName, phoneNumber, churchTheyAttend, donatorID, refugeeFamilyID], (err, results) => {
+        connection.query(query, [first_name, last_name, phone_number, church_they_attend, donator_id, refugee_family_id], (err, results) => {
             if (err) {
                 console.error("Error Creating Good Neighbor", err);
                 res.status(500).json({ error: "Error creating good neighbor" });
             } else {
-                const neighborId = results.insertId;
+                const neighbor_ID = results.insertId;
                 console.log("Good Neighbor created with ID:", neighborId);
                 res.status(200).json({ result: "Success", neighborId });
             }
@@ -181,40 +182,40 @@ app.get("/getAllRefugees", (req, res) => {
         const item = req.body.item;
         const quantity = req.body.quantity;
         const completed = req.body.completed;
-        const donatorID = req.body.donatorID;
+        const donator_id = req.body.donator_id;
     
-        const query = "INSERT INTO donations (item, quantity, completed, donatorID) VALUES (?, ?, ?, ?)";
+        const query = "INSERT INTO donations (item, quantity, completed, donator_id) VALUES (?, ?, ?, ?)";
     
-        connection.query(query, [item, quantity, completed, donatorID], (err, results) => {
+        connection.query(query, [item, quantity, completed, donator_id], (err, results) => {
             if (err) {
                 console.error("Error Creating Donation", err);
                 res.status(500).json({ error: "Error creating donation" });
             } else {
-                const donationId = results.insertId;
-                console.log("Donation created with ID:", donationId);
-                res.status(200).json({ result: "Success", donationId });
+                const donation_id = results.donation_id;
+                console.log("Donation created with ID:", donation_id);
+                res.status(200).json({ result: "Success", donation_id });
             }
         });
     });
     app.post("/createDonator", (req, res) => {
-        const donationsHistory = req.body.donationsHistory;
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const phoneNumber = req.body.phoneNumber;
+        const donations_history = req.body.donationsHistory;
+        const first_name = req.body.first_name;
+        const last_name = req.body.last_name;
+        const phone_number = req.body.phone_number;
         const address = req.body.address;
         const city = req.body.city;
-        const zipCode = req.body.zipCode;
+        const zip = req.body.zip;
     
-        const query = "INSERT INTO donators (donationsHistory, firstName, lastName, phoneNumber, address, city, zipCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        const query = "INSERT INTO donators (donations_history, first_name, last_name, phone_number, address, city, zip) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
-        connection.query(query, [donationsHistory, firstName, lastName, phoneNumber, address, city, zipCode], (err, results) => {
+        connection.query(query, [donations_history, first_name, last_name, phone_number, address, city, zip], (err, results) => {
             if (err) {
                 console.error("Error Creating Donator", err);
                 res.status(500).json({ error: "Error creating donator" });
             } else {
-                const donatorId = results.insertId;
-                console.log("Donator created with ID:", donatorId);
-                res.status(200).json({ result: "Success", donatorId });
+                const donator_id = results.donator_id;
+                console.log("Donator created with ID:", donator_id);
+                res.status(200).json({ result: "Success", donator_id });
             }
         });
     });
