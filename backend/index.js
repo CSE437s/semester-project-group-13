@@ -102,7 +102,7 @@ app.post("/createRefugee", (req, res) => {
 });
 
 
-app.get("/getAllRefugees", (req, res) => {
+app.get("/getAllRefugee", (req, res) => {
     const query = "SELECT * FROM refugees";
 
     connection.query(query, (err, results) => {
@@ -110,6 +110,8 @@ app.get("/getAllRefugees", (req, res) => {
             console.error("Error retrieving refugees", err);
             res.status(500).json({ error: "Error retrieving refugees" });
         } else {
+            console.log("This worked");
+            
             res.status(200).json({ refugees: results });
         }
     });

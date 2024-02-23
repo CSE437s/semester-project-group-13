@@ -16,9 +16,9 @@ const Donators = (props) => {
 
 
     useEffect(() => {
-        axios.post('http://localhost:8080/getAllDonators')
+        axios.get('http://localhost:8080/getAllDonators')
             .then((response) => {
-                const dataFromApi = response.donators;
+                const dataFromApi = response.data.donators;
                 console.log(dataFromApi);
                 setDonatorData(dataFromApi);
             })
@@ -26,9 +26,9 @@ const Donators = (props) => {
                 console.error('Error making API call:', error);
             });
 
-        axios.post('http://localhost:8080/getAllDonations')
+        axios.get('http://localhost:8080/getAllDonations')
             .then((response) => {
-                const dataFromApi = response.donations;
+                const dataFromApi = response.data.donations;
                 console.log(dataFromApi);
                 setDonationData(dataFromApi);
             })

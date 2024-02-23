@@ -8,9 +8,9 @@ const Refugees = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.post('http://localhost:8080/getAllFamilies')
+        axios.get('http://localhost:8080/getAllRefugee')
             .then((response) => {
-                const dataFromApi = response.refugees;
+                const dataFromApi = response.data.refugees;
                 console.log(dataFromApi);
                 setData(dataFromApi);
             })

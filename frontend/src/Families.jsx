@@ -8,9 +8,9 @@ const Families = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.post('http://localhost:8080/getAllFamilies')
+        axios.get('http://localhost:8080/getAllFamilies')
             .then((response) => {
-                const dataFromApi = response.families;
+                const dataFromApi = response.data.families;
                 console.log(dataFromApi);
                 setData(dataFromApi);
             })

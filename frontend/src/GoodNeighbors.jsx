@@ -8,9 +8,9 @@ const GoodNeighbors = (props) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.post('http://localhost:8080/getAllGoodNeighbors')
+        axios.get('http://localhost:8080/getAllGoodNeighbors')
             .then((response) => {
-                const dataFromApi = response.goodNeighbors;
+                const dataFromApi = response.data.goodNeighbors;
                 console.log(dataFromApi);
                 setData(dataFromApi);
             })
