@@ -186,7 +186,7 @@ app.get("/getAllRefugee", (req, res) => {
         const completed = false;
         const donator_id = req.body.donator_id;
     
-        const query = "INSERT INTO donations (item, quantity, completed, donator_id) VALUES (?, ?, ?, ?)";
+        const query = "INSERT INTO donations (item, quantity, completed, donator_id) VALUES (?, ?, ?, 1)";
     
         connection.query(query, [item, quantity, completed, donator_id], (err, results) => {
             if (err) {
