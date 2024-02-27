@@ -54,7 +54,6 @@ const Refugees = (props) => {
     { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
     { name: 'date_of_arrival_to_us', label: 'Date of Arrival [to US]', type: 'date' },
     { name: 'date_of_joining_oasis', label: 'Date of Arrival [to Oasis]', type: 'date' },
-    { name: 'country_of_origin', label: 'Country of Origin', type: 'text' }
     ];
 
     return (

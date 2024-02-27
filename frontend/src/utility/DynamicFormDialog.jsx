@@ -17,6 +17,8 @@ import theme from '../style/theme';
 
 const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
   const [formData, setFormData] = useState({});
+  const [formAlert, setFormAlert] = useState(false);
+
   const theme = useTheme();
   console.log('theme', theme)
 
@@ -45,6 +47,7 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
                 type={field.type}
                 value={formData[field.name] || ''}
                 onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                required
               />
             </FormControl>
           ))}
@@ -53,7 +56,7 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
           <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleFormSubmit}>
             Submit
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button bg={'white'} color={theme.colors.purple[500]} onClick={onClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

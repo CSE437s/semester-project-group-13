@@ -38,7 +38,7 @@ const BasicPage = (props) => {
             {props.children}
           </ModalBody>
           <ModalFooter>
-            <Button color={theme.colors.purple[500]} mr={3} onClick={onClose}>
+            <Button bg={'white'} color={theme.colors.purple[500]} mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

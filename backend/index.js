@@ -76,8 +76,8 @@ app.post("/createFamily", (req, res) => {
   const address = req.body.address;
   const city = req.body.city;
   const zip = req.body.zip;
-  const family_members = req.body.family_members;
-  const good_neighbor = req.body.good_neighbor;
+  const family_members = req.body.family_members ? req.body.family_members : "";
+  const good_neighbor = req.body.good_neighbor ? req.body.good_neighbor : "" ;
 
   const query =
     "INSERT INTO families (head_of_household, last_name, address, city, zip, family_members, good_neighbor) VALUES (?, ?, ?, ?, ?, ?)";
@@ -150,7 +150,7 @@ app.post("/createRefugee", (req, res) => {
   );
 });
 
-app.get("/getAllRefugee", (req, res) => {
+app.get("/getAllRefugees", (req, res) => {
   const query = "SELECT * FROM refugees";
 
   connection.query(query, (err, results) => {
