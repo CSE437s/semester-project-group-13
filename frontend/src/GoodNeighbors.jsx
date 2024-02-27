@@ -14,7 +14,7 @@ const GoodNeighbors = (props) => {
     const theme = useTheme();
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllGoodNeighbors')
+        axios.get('https://semester-project-group-13-backend.vercel.app/getAllGoodNeighbors')
             .then((response) => {
                 const dataFromApi = response.data.goodNeighbors;
                 console.log(dataFromApi);
@@ -34,7 +34,7 @@ const GoodNeighbors = (props) => {
     };
 
     const handleCreateGoodNeighbor = (formData) => {
-        axios.post('http://localhost:8080/createGoodNeighbor', formData)
+        axios.post('https://semester-project-group-13-backend.vercel.app/createGoodNeighbor', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);

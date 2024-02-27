@@ -14,7 +14,7 @@ const Families = (props) => {
     const theme = useTheme();
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllFamilies')
+        axios.get('https://semester-project-group-13-backend.vercel.app/getAllFamilies')
             .then((response) => {
                 const dataFromApi = response.data.families;
                 console.log(dataFromApi);
@@ -34,7 +34,7 @@ const Families = (props) => {
     };
 
     const handleCreateFamily = (formData) => {
-        axios.post('http://localhost:8080/createFamily', formData)
+        axios.post('https://semester-project-group-13-backend.vercel.app/createFamily', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);

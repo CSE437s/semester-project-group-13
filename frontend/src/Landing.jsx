@@ -16,7 +16,7 @@ const Landing = (props) => {
     const handleLogout = () => {    
         console.log('Logout Clicked');
     
-        axios.post('http://localhost:8080/logout')
+        axios.post('https://semester-project-group-13-backend.vercel.app/logout')
           .then((response) => {
             const data = response.data;
             console.log(data);

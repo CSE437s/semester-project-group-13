@@ -15,7 +15,7 @@ const Donators = (props) => {
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllDonators')
+        axios.get('https://semester-project-group-13-backend.vercel.app/getAllDonators')
             .then((response) => {
                 const dataFromApi = response.data.donators;
                 console.log(dataFromApi);
@@ -35,7 +35,7 @@ const Donators = (props) => {
     };
 
     const handleCreateDonator = (formData) => {
-        axios.post('http://localhost:8080/createDonator', formData)
+        axios.post('https://semester-project-group-13-backend.vercel.app/createDonator', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);

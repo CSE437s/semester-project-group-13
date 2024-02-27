@@ -14,7 +14,7 @@ const Refugees = (props) => {
     const theme = useTheme();
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllRefugees')
+        axios.get('https://semester-project-group-13-backend.vercel.app/getAllRefugees')
             .then((response) => {
                 const dataFromApi = response.data.refugees;
                 console.log(dataFromApi);
@@ -35,7 +35,7 @@ const Refugees = (props) => {
 
     //this logic should be handled by the family page in the future
     const handleCreateRefugee = (formData) => {
-        axios.post('http://localhost:8080/createRefugee', formData)
+        axios.post('https://semester-project-group-13-backend.vercel.app/createRefugee', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
