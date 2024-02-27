@@ -23,18 +23,18 @@ const BasicPage = (props) => {
   const onOpen = () => setIsOpen(true);
 
   return (
-    <ChakraProvider>
+    <div>
       <CSSReset />
-      <Box textAlign="center" mt="8">
-        <Button borderColor={theme.colors.purple[700]} border={'solid 2px'} onClick={onOpen}>{props.title}</Button>
+      <Box textAlign="center" mt="8" flex={1}>
+        <Button onClick={onOpen}>{props.title}</Button>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{props.title}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody overflowX={'auto'} overflowY={'auto'}>
             {props.children}
           </ModalBody>
           <ModalFooter>
@@ -44,7 +44,7 @@ const BasicPage = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </ChakraProvider>
+    </div>
   );
 };
 

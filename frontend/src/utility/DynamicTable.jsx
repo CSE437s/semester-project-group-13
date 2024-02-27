@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+} from '@chakra-ui/react';
+import translateBE from './translateBE';
 
 const DynamicTable = ({ data }) => {
-    const [selectedRow, setSelectedRow] = useState(-1);
+  const [selectedRow, setSelectedRow] = useState(-1);
 
   if (!data || !data.length) {
     return <p>No data available</p>;
   }
-
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
@@ -23,33 +33,33 @@ const DynamicTable = ({ data }) => {
   );
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
+    <Box>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
             {filteredColumns.map((column) => (
-              <th key={column}>{column}</th>
+              <Th key={column}>{translateBE(column)}</Th>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </Tr>
+        </Thead>
+        <Tbody>
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
+            <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
               {filteredColumns.map((column) => (
-                <td key={column}>{row[column]}</td>
+                <Td key={column}>{row[column]}</Td>
               ))}
-            </tr>
+            </Tr>
           ))}
-        </tbody>
-      </table>
+        </Tbody>
+      </Table>
 
       {selectedRow !== -1 && (
-        <div className="dialog">
+        <Box className="dialog">
           <p>Row details: {JSON.stringify(data[selectedRow])}</p>
-          <button onClick={handleCloseDialog}>Close</button>
-        </div>
+          <Button onClick={handleCloseDialog}>Close</Button>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 
