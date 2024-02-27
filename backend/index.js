@@ -7,13 +7,11 @@ const cors = require("cors");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(
-  session({
+app.use(session({
     secret: "1qGzaT2IpNaCWB1siRvh7nVT2JIUyQUU", //this needs to be moved offline in future versions
     resave: false,
     saveUninitialized: true,
-  })
-);
+}))
 
 app.get("/", (req, res) => {
   res.send("Hello from our server!");
