@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DynamicTable from './utility/DynamicTable';
 import axios from 'axios';
+import BasicPage from './utility/BasicPage';
 
 const GoodNeighbors = (props) => {
     console.log('Good Neighbors Page clicked');
@@ -21,9 +22,11 @@ const GoodNeighbors = (props) => {
 
     return (
         <div>
-            <button onClick={() => props.onPageClose()}>Home</button>
-            <h2>Good Neighbors</h2>
-            <DynamicTable data={data}></DynamicTable>
+            <BasicPage
+                title="Good Neighbors"
+            >
+                <DynamicTable data={data}></DynamicTable>
+            </BasicPage>
         </div>
     );
 };

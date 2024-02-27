@@ -3,6 +3,7 @@ import DynamicTable from './utility/DynamicTable';
 import axios from 'axios';
 import DynamicFormDialog from './utility/DynamicFormDialog';
 import { Button } from '@chakra-ui/react';
+import BasicPage from './utility/BasicPage';
 
 const Donators = (props) => {
     console.log('Donators Page clicked');
@@ -96,57 +97,37 @@ const Donators = (props) => {
     
     return (
         <div>
-            <button onClick={() => props.onPageClose()}>Home</button>
-
-            {donatorView ? (
-                <div>
-                    { !openCreateDonatorDialog ?
-                        (
-                            <div>
-                                <h2>Donators</h2>
-                                <button onClick={handleToggle}>Toggle Donation View</button>
-                                <DynamicTable data={donatorData}></DynamicTable>
-                                <Button variant="outline" onClick={handleOpenCreateDonatorDialog}>
-                                    Add Donator
-                                </Button>
-                            </div>
-                        ) : null
-                    }
-
-                    <DynamicFormDialog
+            <BasicPage
+                title="Donators"
+            >
+                <DynamicTable data={donatorData}></DynamicTable>
+                <Button variant="outline" onClick={handleOpenCreateDonatorDialog}>
+                    Add Donator
+                </Button>
+                <DynamicFormDialog
                         isOpen={openCreateDonatorDialog}
                         onClose={handleCloseCreateDonatorDialog}
                         onSubmit={handleCreateDonator}
                         formFields={donatorFields}
                         title={"Add Donator"}
                     />
-                </div>
-            ) : (
-                <div>
-                    { !openCreateDonationDialog ?
-                        (
-                            <div>
-                                <h2>Donations</h2>
-                                <button onClick={handleToggle}>Toggle Donator View</button>
-                                <DynamicTable data={donationData}></DynamicTable>
-                                <Button variant="outline" onClick={handleOpenCreateDonationDialog}>
-                                    Add Donation
-                                </Button>
-                            </div>
-                        ) : null
-
-                    }
-
-                    <DynamicFormDialog
+            </BasicPage>
+            <BasicPage
+                title="Donations"
+            >
+                <DynamicTable data={donationData}></DynamicTable>
+                <Button variant="outline" onClick={handleOpenCreateDonationDialog}>
+                    Add Donation
+                </Button>
+                <DynamicFormDialog
                         isOpen={openCreateDonationDialog}
                         onClose={handleCloseCreateDonationDialog}
                         onSubmit={handleCreateDonation}
                         formFields={donationFields}
                         title={"Add Donation"}
 
-                    />           
-                </div>
-            )}
+                    />   
+            </BasicPage>
         </div>
     );
 };
