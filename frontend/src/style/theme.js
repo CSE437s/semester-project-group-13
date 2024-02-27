@@ -33,6 +33,14 @@ const theme = extendTheme({
             bg: 'primary.600',
           },
         },
+        outline: {
+            border: 'solid primary.500 2px',
+            bg: 'primary.100',
+            color: 'white',
+            _hover: {
+                bg: 'primary.2000',
+            },
+        },
       },
     },
   },

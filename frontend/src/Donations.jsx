@@ -7,19 +7,19 @@ import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
 
 
-const Donators = (props) => {
+const Donations = (props) => {
     console.log('Donators Page clicked');
     const theme = useTheme();
 
-    const [donatorData, setDonatorData] = useState([]);
+    const [donationData, setDonationData] = useState([]);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllDonators')
+        axios.get('http://localhost:8080/getAllDonations')
             .then((response) => {
-                const dataFromApi = response.data.donators;
+                const dataFromApi = response.data.donations;
                 console.log(dataFromApi);
-                setDonatorData(dataFromApi);
+                setDonationData(dataFromApi);
             })
             .catch((error) => {
                 console.error('Error making API call:', error);
@@ -34,8 +34,8 @@ const Donators = (props) => {
         setOpenCreateDialog(false);
     };
 
-    const handleCreateDonator = (formData) => {
-        axios.post('http://localhost:8080/createDonator', formData)
+    const handleCreateDonation = (formData) => {
+        axios.post('http://localhost:8080/createDonation', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -45,32 +45,30 @@ const Donators = (props) => {
         });
     };
 
-  const donatorFields = [
-    { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
-    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'address', label: 'Street Address', type: 'text' },
-    { name: 'city', label: 'City', type: 'text' },
-    { name: 'zip', label: 'Zip Code', type: 'number' }
+  const donationFields = [
+    { name: 'item', label: 'Item', type: 'text' },
+    { name: 'quantity', label: 'Quantity', type: 'number' },
+    { name: 'donator_id', label: 'Donator ID', type: 'number' } //in the future this shold be a search bar
   ];
     
     return (
         <BasicPage
-            title="Donators"
+            title="Donations"
         >
             <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
-                Add Donator
+                Record Donation
             </Button>
-            <DynamicTable data={donatorData}></DynamicTable>
+            <DynamicTable data={donationData}></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
-                    onSubmit={handleCreateDonator}
-                    formFields={donatorFields}
-                    title={"Add Donator"}
-                />
+                    onSubmit={handleCreateDonation}
+                    formFields={donationFields}
+                    title={"Record Donation"}
+
+                />   
         </BasicPage>
     );
 };
 
-export default Donators;
+export default Donations;

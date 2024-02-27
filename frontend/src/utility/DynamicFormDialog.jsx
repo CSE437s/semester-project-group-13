@@ -11,10 +11,14 @@ import {
   Input,
   FormControl,
   FormLabel,
+  useTheme
 } from '@chakra-ui/react';
+import theme from '../style/theme';
 
 const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
   const [formData, setFormData] = useState({});
+  const theme = useTheme();
+  console.log('theme', theme)
 
   const handleFieldChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
@@ -24,6 +28,8 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
     onSubmit(formData);
     onClose();
   };
+
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -44,7 +50,7 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
           ))}
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="purple" onClick={handleFormSubmit}>
+          <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleFormSubmit}>
             Submit
           </Button>
           <Button onClick={onClose}>Cancel</Button>
