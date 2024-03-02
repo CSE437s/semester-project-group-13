@@ -1,34 +1,37 @@
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
+const app = express();
+const refugeeRouter = require('./src/routes/refugee.route');
+
+
+app.use(bodyParser.json());
+app.get("/", (req, res) => {
+  res.send("Hello from our server!");
+});
+
+
+app.use('/refugee', refugeeRouter);
+
+
 const session = require("express-session");
-const mysql = require("mysql");
 const cors = require("cors");
 
 app.use(cors());
-app.use(bodyParser.json());
 app.use(session({
     secret: "1qGzaT2IpNaCWB1siRvh7nVT2JIUyQUU", //this needs to be moved offline in future versions
     resave: false,
     saveUninitialized: true,
 }))
 
-app.get("/", (req, res) => {
-  res.send("Hello from our server!");
+
+app.listen(8080, () => {
+  console.log("server listening on port 8080");
 });
 
-const connection = mysql.createConnection({
-  host: "oasispractice-chrisspam1126-ece5.a.aivencloud.com",
-  port: "16031",
-  user: "avnadmin",
-  password: "AVNS_wABtR6d4vmnUszOm4hC",
-  database: "mydatabase",
-});
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log("Connected successfully to MySql server");
-});
+
+
+
 
 app.post("/login", (req, res) => {
   const username = req.body.username;
@@ -150,20 +153,6 @@ app.post("/createRefugee", (req, res) => {
   );
 });
 
-app.get("/getAllRefugees", (req, res) => {
-  const query = "SELECT * FROM refugees";
-
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving refugees", err);
-      res.status(500).json({ error: "Error retrieving refugees" });
-    } else {
-      console.log("This worked");
-
-      res.status(200).json({ refugees: results });
-    }
-  });
-});
 
 app.get("/getAllFamilies", (req, res) => {
   const query = "SELECT * FROM families";
@@ -178,19 +167,6 @@ app.get("/getAllFamilies", (req, res) => {
   });
 });
 
-app.get("/getRefugeesInFamily/:familyId", (req, res) => {
-  const familyId = req.params.familyId;
-  const query = "SELECT * FROM refugees WHERE familyId = ?";
-
-  connection.query(query, [familyId], (err, results) => {
-    if (err) {
-      console.error("Error retrieving refugees in family", err);
-      res.status(500).json({ error: "Error retrieving refugees in family" });
-    } else {
-      res.status(200).json({ refugees: results });
-    }
-  });
-});
 
 app.post("/createGoodNeighbor", (req, res) => {
   const refugee_family_id = req.body.refugee_family_id;
@@ -338,6 +314,3 @@ app.get("/getIncompleteDonations", (req, res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log("server listening on port 8080");
-});
