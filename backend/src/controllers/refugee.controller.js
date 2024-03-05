@@ -20,7 +20,45 @@ async function getOne(req, res, next) {
     }
 }
 
+
+async function create(req, res) {
+  try {
+    const {
+      first_name,
+      last_name,
+      date_of_birth,
+      phone_number,
+      country_of_origin,
+      date_of_arrival_to_us,
+      date_of_joining_oasis,
+      gender,
+      email,
+      family_id
+    } = req.body;
+
+    const result = await refugeeService.create({
+      first_name,
+      last_name,
+      date_of_birth,
+      phone_number,
+      country_of_origin,
+      date_of_arrival_to_us,
+      date_of_joining_oasis,
+      gender,
+      email,
+      family_id
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error Creating Refugee', error);
+    res.status(500).json({ error: 'Error creating refugee' });
+  }
+}
+
+
 module.exports = {
     getAll,
     getOne,
+    create,
 };

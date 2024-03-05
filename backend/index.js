@@ -47,12 +47,11 @@ const requireAuth = (req, res, next) => {
 app.post("/createRefugee", (req, res) => {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
+  const date_of_birth = req.body.date_of_birth;
   const phone_number = req.body.phone_number;
   const country_of_origin = req.body.country_of_origin;
-  const age = req.body.age;
   const date_of_arrival_to_us = req.body.date_of_arrival_to_us;
   const date_of_joining_oasis = req.body.date_of_joining_oasis;
-  const date_of_birth = req.body.date_of_birth;
   const gender = req.body.gender;
   const email = req.body.email;
   const family_id = req.body.family_id;
