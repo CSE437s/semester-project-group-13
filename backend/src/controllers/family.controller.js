@@ -31,7 +31,6 @@ async function create(req, res) {
         zip,
         is_refugee,
         is_good_neighbor,
-        family_members,
         good_neighbor,
         user_id,
       } = req.body;
@@ -45,7 +44,6 @@ async function create(req, res) {
         zip,
         is_refugee,
         is_good_neighbor,
-        family_members,
         good_neighbor,
         user_id,
       });

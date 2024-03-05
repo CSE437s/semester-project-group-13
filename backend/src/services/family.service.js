@@ -18,20 +18,19 @@ async function getOne(family_id) {
       console.error('Error while getting one family', error);
       throw error;
     }
-  }
-
-  async function create({
+  }async function create({
     head_of_household,
     last_name,
     address,
     city,
     zip,
-    family_members = '',
-    good_neighbor = '',
+    is_refugee,
+    is_good_neighbor,
+    user_id,
   }) {
     try {
       const query =
-        'INSERT INTO families (head_of_household, last_name, address, city, zip, family_members, good_neighbor) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        'INSERT INTO families (head_of_household, last_name, address, city, zip, is_refugee, is_good_neighbor, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   
       const results = await db.query(query, [
         head_of_household,
@@ -39,8 +38,9 @@ async function getOne(family_id) {
         address,
         city,
         zip,
-        family_members,
-        good_neighbor,
+        is_refugee,
+        is_good_neighbor,
+        user_id,
       ]);
   
       const family_id = results.insertId;
@@ -51,6 +51,7 @@ async function getOne(family_id) {
       throw error;
     }
   }
+  
 
 module.exports = {
     getAll,
