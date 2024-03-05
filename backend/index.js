@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const app = express();
 const refugeeRouter = require('./src/routes/refugee.route');
 const familyRouter = require('./src/routes/family.route');
-const authRouter = require('./src/routes/auth.route')
+const authRouter = require('./src/routes/auth.route');
+const neighborRouter = require('./src/routes/goodNeighbor.route')
+
 
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
@@ -13,6 +15,8 @@ app.get("/", (req, res) => {
 app.use("/auth", authRouter);
 app.use('/refugee', refugeeRouter);
 app.use('/family', familyRouter);
+app.use('/neighbor', neighborRouter);
+
 
 
 const session = require("express-session");
@@ -39,42 +43,6 @@ const requireAuth = (req, res, next) => {
   }
   next();
 };
-
-app.post("/createFamily", (req, res) => {
-  const head_of_household = req.body.head_of_household;
-  const last_name = req.body.last_name;
-  const address = req.body.address;
-  const city = req.body.city;
-  const zip = req.body.zip;
-  const family_members = req.body.family_members ? req.body.family_members : "";
-  const good_neighbor = req.body.good_neighbor ? req.body.good_neighbor : "" ;
-
-  const query =
-    "INSERT INTO families (head_of_household, last_name, address, city, zip, family_members, good_neighbor) VALUES (?, ?, ?, ?, ?, ?)";
-
-  connection.query(
-    query,
-    [
-      head_of_household,
-      last_name,
-      address,
-      city,
-      zip,
-      family_members,
-      good_neighbor,
-    ],
-    (err, results) => {
-      if (err) {
-        console.error("Error Creating Family", err);
-        res.status(500).json({ error: "Error creating family" });
-      } else {
-        const family_Id = results.insertId;
-        console.log("Family created with ID:", family_Id);
-        res.status(200).json({ result: "Success", family_Id });
-      }
-    }
-  );
-});
 
 app.post("/createRefugee", (req, res) => {
   const first_name = req.body.first_name;
@@ -156,18 +124,6 @@ app.post("/createGoodNeighbor", (req, res) => {
   );
 });
 
-app.get("/getAllGoodNeighbors", (req, res) => {
-  const query = "SELECT * FROM good_neighbors";
-
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving Good Neighbors", err);
-      res.status(500).json({ error: "Error retrieving Good Neighbors" });
-    } else {
-      res.status(200).json({ goodNeighbors: results });
-    }
-  });
-});
 
 app.post("/createDonation", (req, res) => {
   const item = req.body.item;
