@@ -20,7 +20,33 @@ async function getOne(req, res, next) {
     }
 }
 
+async function create(req, res) {
+    try {
+      const {
+        refugee_family_id,
+        host_family_id,
+        match_date,
+        donator_id,
+        neighbor_id
+      } = req.body;
+  
+      const result = await neighborService.create({
+        refugee_family_id,
+        host_family_id,
+        match_date,
+        donator_id,
+        neighbor_id
+      });
+  
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('Error Creating Neighbor', error);
+      res.status(500).json({ error: 'Error creating neighbor' });
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
+    create,
 };

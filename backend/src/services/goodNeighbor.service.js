@@ -20,7 +20,36 @@ async function getOne(neighbor_id) {
     }
   }
 
+  async function create({
+    refugee_family_id,
+    host_family_id,
+    match_date,
+    donator_id,
+    neighbor_id
+  }) {
+    try {
+      const query =
+        'INSERT INTO good_neighbors (refugee_family_id, host_family_id, match_date, donator_id, neighbor_id) VALUES (?, ?, ?, ?, ?)';
+  
+      const results = await db.query(query, [
+        refugee_family_id,
+        host_family_id,
+        match_date,
+        donator_id,
+        neighbor_id
+      ]);
+  
+      const neighbor_ID = results.insertId;
+      console.log('Good Neighbor created with ID:', neighbor_ID);
+      return { success: true, neighbor_ID };
+    } catch (error) {
+      console.error('Error Creating Good Neighbor', error);
+      throw error;
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
+    create,
 };
