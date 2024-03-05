@@ -45,7 +45,7 @@ async function getOne(family_id) {
   
       const family_id = results.insertId;
       console.log('Family created with ID:', family_id);
-      return { result: 'Success', family_id };
+      return { success: true, family_id };
     } catch (error) {
       console.error('Error Creating Family', error);
       throw error;

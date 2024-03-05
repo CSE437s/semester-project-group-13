@@ -23,23 +23,31 @@ async function getOne(req, res, next) {
 async function create(req, res) {
     try {
       const {
+        head_of_household_id,
         head_of_household,
         last_name,
         address,
         city,
         zip,
+        is_refugee,
+        is_good_neighbor,
         family_members,
         good_neighbor,
+        user_id,
       } = req.body;
   
-      const result = await familyService.createFamily({
+      const result = await familyService.create({
+        head_of_household_id,
         head_of_household,
         last_name,
         address,
         city,
         zip,
+        is_refugee,
+        is_good_neighbor,
         family_members,
         good_neighbor,
+        user_id,
       });
   
       res.status(200).json(result);
@@ -48,6 +56,7 @@ async function create(req, res) {
       res.status(500).json({ error: 'Error creating family' });
     }
   }
+  
   
 
 module.exports = {
