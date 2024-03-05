@@ -39,7 +39,7 @@ app.listen(8080, () => {
 
 
 
-
+/* Add this later to make sure we are safe. 
 const requireAuth = (req, res, next) => {
   if (!req.session.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -47,16 +47,4 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-app.get("/getIncompleteDonations", (req, res) => {
-  const query = "SELECT * FROM donations WHERE completed = false";
-
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving Incomplete Donations", err);
-      res.status(500).json({ error: "Error retrieving Incomplete Donations" });
-    } else {
-      res.status(200).json({ incompleteDonations: results });
-    }
-  });
-});
-
+*/
