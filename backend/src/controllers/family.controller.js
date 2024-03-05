@@ -20,7 +20,38 @@ async function getOne(req, res, next) {
     }
 }
 
+async function create(req, res) {
+    try {
+      const {
+        head_of_household,
+        last_name,
+        address,
+        city,
+        zip,
+        family_members,
+        good_neighbor,
+      } = req.body;
+  
+      const result = await familyService.createFamily({
+        head_of_household,
+        last_name,
+        address,
+        city,
+        zip,
+        family_members,
+        good_neighbor,
+      });
+  
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('Error Creating Family', error);
+      res.status(500).json({ error: 'Error creating family' });
+    }
+  }
+  
+
 module.exports = {
     getAll,
     getOne,
+    create,
 };
