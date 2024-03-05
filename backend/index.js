@@ -2,15 +2,17 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const refugeeRouter = require('./src/routes/refugee.route');
-
+const familyRouter = require('./src/routes/family.route');
+const authRouter = require('./src/routes/auth.route')
 
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello from our server!");
 });
 
-
+app.use("/auth", authRouter);
 app.use('/refugee', refugeeRouter);
+app.use('/family', familyRouter);
 
 
 const session = require("express-session");
@@ -31,41 +33,6 @@ app.listen(8080, () => {
 
 
 
-
-
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  const selectQuery = "SELECT * FROM users WHERE username = ? AND password = ?";
-
-  connection.query(selectQuery, [username, password], (err, results) => {
-    if (err) {
-      console.error("Error checking credentials:", err);
-      res.status(500).json({ error: "Error checking credentials" });
-    } else {
-      if (results.length > 0) {
-        console.log("Credentials are valid");
-        req.session.user = { username: username };
-        res.status(200).json({ username: username, password: password });
-      } else {
-        console.log("Invalid credentials");
-        res.status(401).json({ error: "Invalid credentials" });
-      }
-    }
-  });
-});
-
-app.post("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ message: "Error logging out" });
-    }
-    res.json({ message: "Logout successful" });
-  });
-});
-
-//we should do this before calling the database, every time
 const requireAuth = (req, res, next) => {
   if (!req.session.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -153,19 +120,6 @@ app.post("/createRefugee", (req, res) => {
   );
 });
 
-
-app.get("/getAllFamilies", (req, res) => {
-  const query = "SELECT * FROM families";
-
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error("Error retrieving families", err);
-      res.status(500).json({ error: "Error retrieving families" });
-    } else {
-      res.status(200).json({ families: results });
-    }
-  });
-});
 
 
 app.post("/createGoodNeighbor", (req, res) => {
