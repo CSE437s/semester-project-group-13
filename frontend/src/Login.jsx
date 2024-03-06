@@ -20,7 +20,7 @@ const Login = (props) => {
 
     const credentials = { username: username, password: password }; //we should hash the password before sending it (it should be hashed on registration)
 
-    axios.post('http://localhost:8080/login', credentials)
+    axios.post('http://localhost:8080/auth/login', credentials)
       .then((response) => {
         const data = response.data;
         console.log(data);
