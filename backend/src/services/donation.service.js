@@ -1,4 +1,4 @@
-const donationService = require('../services/donation.service');
+const db = require('./db.service');
 
 async function getAll(req, res, next) {
   try {
