@@ -90,10 +90,21 @@ async function getOne(family_id) {
     }
   }
   
-
+  async function deleteOne(family_id) {
+    try {
+      const query = 'DELETE FROM families WHERE family_id = ?';
+      const result = await db.query(query, [family_id]);
+      console.log('Family deleted with ID:', family_id);
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting Family', error);
+      throw error;
+    }
+  }
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

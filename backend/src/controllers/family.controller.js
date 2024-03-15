@@ -87,7 +87,17 @@ async function create(req, res) {
       res.status(500).json({ error: 'Error updating family' });
     }
   }
-  
+
+async function deleteOne(req, res) {
+  try {
+    const { family_id } = req.params;
+    await familyService.deleteOne(family_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting family', error);
+    res.status(500).json({ error: 'Error deleting family' });
+  }
+}
   
 
 module.exports = {
@@ -95,4 +105,5 @@ module.exports = {
     getOne,
     create,
     update,
+    deleteOne,
 };

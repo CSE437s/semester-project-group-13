@@ -77,10 +77,22 @@ async function update(req, res) {
   }
 }
 
+async function deleteOne(req, res) {
+  try {
+    const { volunteer_id } = req.params;
+    await volunteerService.deleteOne(volunteer_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting volunteer', error);
+    res.status(500).json({ error: 'Error deleting volunteer' });
+  }
+}
+
 
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

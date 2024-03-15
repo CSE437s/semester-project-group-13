@@ -66,9 +66,21 @@ async function update(req, res) {
   }
 }
 
+async function deleteOne(req, res) {
+  try {
+    const { neighbor_id } = req.params;
+    await neighborService.deleteOne(neighbor_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting neighbor', error);
+    res.status(500).json({ error: 'Error deleting neighbor' });
+  }
+}
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

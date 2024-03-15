@@ -86,9 +86,22 @@ async function update({ donation_id, item, quantity, completed, giving_family, g
   }
 }
 
+async function deleteOne(donation_id) {
+  try {
+    const query = 'DELETE FROM donations WHERE donation_id = ?';
+    const result = await db.query(query, [donation_id]);
+    console.log('Donation deleted with ID:', donation_id);
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting Donation', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   create,
   update,
+  deleteOne,
 };

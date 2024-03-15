@@ -66,9 +66,22 @@ async function getOne(user_id) {
     }
   }
 
+  async function deleteOne(user_id) {
+    try {
+      const query = 'DELETE FROM users WHERE user_id = ?';
+      await db.query(query, [user_id]);
+      console.log(`User with ID ${user_id} deleted successfully`);
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting user', error);
+      throw error;
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

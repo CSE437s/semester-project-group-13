@@ -91,9 +91,24 @@ async function update(req, res) {
     res.status(500).json({ error: 'Error updating refugee' });
   }
 }
+
+
+async function deleteOne(req, res) {
+  try {
+    const { refugee_id } = req.params;
+    await refugeeService.deleteOne(refugee_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting refugee', error);
+    res.status(500).json({ error: 'Error deleting refugee' });
+  }
+}
+
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

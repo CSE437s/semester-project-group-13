@@ -74,9 +74,22 @@ async function getOne(neighbor_id) {
     }
   }
 
+  async function deleteOne(neighbor_id) {
+    try {
+      const query = 'DELETE FROM good_neighbors WHERE neighbor_id = ?';
+      const result = await db.query(query, [neighbor_id]);
+      console.log('Neighbor deleted with ID:', neighbor_id);
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting Neighbor', error);
+      throw error;
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };

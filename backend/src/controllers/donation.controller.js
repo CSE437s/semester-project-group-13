@@ -89,6 +89,16 @@ async function update(req, res) {
   }
 }
 
+async function deleteOne(req, res) {
+  try {
+    const { donation_id } = req.params;
+    await donationService.deleteOne(donation_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting donation', error);
+    res.status(500).json({ error: 'Error deleting donation' });
+  }
+}
 
 module.exports = {
   getAll,
@@ -96,4 +106,5 @@ module.exports = {
   create,
   getAllIncomplete,
   update,
+  deleteOne,
 };

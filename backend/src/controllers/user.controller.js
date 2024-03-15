@@ -59,9 +59,21 @@ async function update(req, res) {
   }
 }
 
+async function deleteOne(req, res) {
+  try {
+    const { user_id } = req.params;
+    await userService.deleteOne(user_id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error deleting user', error);
+    res.status(500).json({ error: 'Error deleting user' });
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   create,
   update,
+  deleteOne,
 };

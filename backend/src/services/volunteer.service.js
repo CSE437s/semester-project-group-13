@@ -77,10 +77,23 @@ async function update(volunteer_id, { first_name, last_name, date_of_birth, phon
 }
 
 
+async function deleteOne(volunteer_id) {
+  try {
+    const query = 'DELETE FROM volunteers WHERE volunteer_id = ?';
+    await db.query(query, [volunteer_id]);
+    console.log(`Volunteer with ID ${volunteer_id} deleted successfully`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting volunteer', error);
+    throw error;
+  }
+}
+
 
 module.exports = {
     getAll,
     getOne,
     create,
     update,
+    deleteOne,
 };
