@@ -59,9 +59,59 @@ async function create({
   }
 }
 
+async function update(refugee_id, {
+  first_name,
+  last_name,
+  date_of_birth,
+  phone_number,
+  country_of_origin,
+  date_of_arrival_to_us,
+  date_of_joining_oasis,
+  gender,
+  email,
+  family_id
+}) {
+  try {
+    const query =
+      `UPDATE refugees 
+       SET 
+         first_name = ?, 
+         last_name = ?, 
+         date_of_birth = ?, 
+         phone_number = ?, 
+         country_of_origin = ?, 
+         date_of_arrival_to_us = ?, 
+         date_of_joining_oasis = ?, 
+         gender = ?, 
+         email = ?, 
+         family_id = ? 
+       WHERE refugee_id = ?`;
+
+    const results = await db.query(query, [
+      first_name,
+      last_name,
+      date_of_birth,
+      phone_number,
+      country_of_origin,
+      date_of_arrival_to_us,
+      date_of_joining_oasis,
+      gender,
+      email,
+      family_id,
+      refugee_id
+    ]);
+
+    console.log(`Refugee with ID ${refugee_id} updated successfully`);
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating refugee', error);
+    throw error;
+  }
+}
 
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

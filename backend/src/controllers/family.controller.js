@@ -54,6 +54,39 @@ async function create(req, res) {
       res.status(500).json({ error: 'Error creating family' });
     }
   }
+
+  async function update(req, res) {
+    try {
+      const { family_id } = req.params; // Get family_id from URL path params
+      const {
+        head_of_household,
+        last_name,
+        address,
+        city,
+        zip,
+        is_refugee,
+        is_good_neighbor,
+        user_id,
+      } = req.body;
+  
+      const result = await familyService.update({
+        family_id,
+        head_of_household,
+        last_name,
+        address,
+        city,
+        zip,
+        is_refugee,
+        is_good_neighbor,
+        user_id,
+      });
+  
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('Error Updating Family', error);
+      res.status(500).json({ error: 'Error updating family' });
+    }
+  }
   
   
 
@@ -61,4 +94,5 @@ module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

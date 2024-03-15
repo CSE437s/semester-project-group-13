@@ -51,10 +51,49 @@ async function getOne(family_id) {
       throw error;
     }
   }
+
+  async function update({
+    family_id,
+    head_of_household,
+    last_name,
+    address,
+    city,
+    zip,
+    is_refugee,
+    is_good_neighbor,
+    user_id,
+  }) {
+    try {
+      const query = `
+        UPDATE families 
+        SET head_of_household = ?, last_name = ?, address = ?, city = ?, zip = ?, is_refugee = ?, is_good_neighbor = ?, user_id = ?
+        WHERE family_id = ?
+      `;
+  
+      const results = await db.query(query, [
+        head_of_household,
+        last_name,
+        address,
+        city,
+        zip,
+        is_refugee,
+        is_good_neighbor,
+        user_id,
+        family_id
+      ]);
+  
+      console.log('Family updated with ID:', family_id);
+      return { success: true, family_id };
+    } catch (error) {
+      console.error('Error updating Family', error);
+      throw error;
+    }
+  }
   
 
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

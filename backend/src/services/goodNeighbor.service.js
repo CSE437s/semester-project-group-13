@@ -46,8 +46,37 @@ async function getOne(neighbor_id) {
     }
   }
 
+  async function update({
+    neighbor_id,
+    refugee_family_id,
+    host_family_id,
+    match_date,
+  }) {
+    try {
+      const query = `
+        UPDATE good_neighbors 
+        SET refugee_family_id = ?, host_family_id = ?, match_date = ?
+        WHERE neighbor_id = ?
+      `;
+  
+      const results = await db.query(query, [
+        refugee_family_id,
+        host_family_id,
+        match_date,
+        neighbor_id,
+      ]);
+  
+      console.log('Neighbor updated with ID:', neighbor_id);
+      return { success: true, neighbor_id };
+    } catch (error) {
+      console.error('Error updating Neighbor', error);
+      throw error;
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

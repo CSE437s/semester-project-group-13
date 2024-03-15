@@ -50,10 +50,37 @@ async function create({
     throw error;
   }
 }
+async function update(volunteer_id, { first_name, last_name, date_of_birth, phone_number, user_id, family_id }) {
+  try {
+    const query = `
+      UPDATE volunteers 
+      SET first_name = ?, last_name = ?, date_of_birth = ?, phone_number = ?, user_id = ?, family_id = ?
+      WHERE volunteer_id = ?
+    `;
+
+    const results = await db.query(query, [
+      first_name,
+      last_name,
+      date_of_birth,
+      phone_number,
+      user_id,
+      family_id,
+      volunteer_id
+    ]);
+
+    console.log('Volunteer updated with ID:', volunteer_id);
+    return { success: true, volunteer_id };
+  } catch (error) {
+    console.error('Error updating Volunteer', error);
+    throw error;
+  }
+}
+
 
 
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

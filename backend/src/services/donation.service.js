@@ -59,8 +59,36 @@ async function create({
   }
 }
 
+async function update({ donation_id, item, quantity, completed, giving_family, giving_volunteer, receiving_family, user_id }) {
+  try {
+    const query = `
+      UPDATE donations 
+      SET item = ?, quantity = ?, completed = ?, giving_family = ?, giving_volunteer = ?, receiving_family = ?, user_id = ?
+      WHERE donation_id = ?
+    `;
+
+    const results = await db.query(query, [
+      item,
+      quantity,
+      completed,
+      giving_family,
+      giving_volunteer,
+      receiving_family,
+      user_id,
+      donation_id
+    ]);
+
+    console.log('Donation updated with ID:', donation_id);
+    return { success: true, donation_id };
+  } catch (error) {
+    console.error('Error updating Donation', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
   create,
+  update,
 };

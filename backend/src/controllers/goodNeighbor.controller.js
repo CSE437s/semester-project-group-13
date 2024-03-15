@@ -43,8 +43,32 @@ async function create(req, res) {
     }
   }
 
+async function update(req, res) {
+  try {
+    const { neighbor_id } = req.params;
+    const {
+      refugee_family_id,
+      host_family_id,
+      match_date,
+    } = req.body;
+
+    const result = await neighborService.update({
+      neighbor_id,
+      refugee_family_id,
+      host_family_id,
+      match_date,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error updating Neighbor', error);
+    res.status(500).json({ error: 'Error updating neighbor' });
+  }
+}
+
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

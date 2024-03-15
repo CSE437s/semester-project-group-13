@@ -1,6 +1,6 @@
 const userService = require('../services/user.service');
 
-async function getAllUsers(req, res, next) {
+async function getAll(req, res, next) {
   try {
     const users = await userService.getAll();
     res.status(200).json(users);
@@ -10,7 +10,7 @@ async function getAllUsers(req, res, next) {
   }
 }
 
-async function getOneUser(req, res, next) {
+async function getOne(req, res, next) {
   try {
     const { user_id } = req.params;
     const user = await userService.getOne(user_id);
@@ -21,7 +21,7 @@ async function getOneUser(req, res, next) {
   }
 }
 
-async function createUser(req, res) {
+async function create(req, res) {
   try {
     const { username, password, email, first_name, last_name } = req.body;
     const result = await userService.create({
@@ -38,8 +38,30 @@ async function createUser(req, res) {
   }
 }
 
+async function update(req, res) {
+  try {
+    const { user_id } = req.params;
+    const { username, password, email, first_name, last_name } = req.body;
+
+    const result = await userService.update({
+      user_id,
+      username,
+      password,
+      email,
+      first_name,
+      last_name,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error Updating User', error);
+    res.status(500).json({ error: 'Error updating user' });
+  }
+}
+
 module.exports = {
-  getAllUsers,
-  getOneUser,
-  createUser,
+  getAll,
+  getOne,
+  create,
+  update,
 };

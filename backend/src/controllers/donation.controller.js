@@ -58,9 +58,42 @@ async function create(req, res) {
   }
 }
 
+async function update(req, res) {
+  try {
+    const { donation_id } = req.params; 
+    const {
+      item,
+      quantity,
+      completed,
+      giving_family,
+      giving_volunteer,
+      receiving_family,
+      user_id,
+    } = req.body;
+
+    const result = await donationService.update({
+      donation_id,
+      item,
+      quantity,
+      completed,
+      giving_family,
+      giving_volunteer,
+      receiving_family,
+      user_id,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error Updating Donation', error);
+    res.status(500).json({ error: 'Error updating donation' });
+  }
+}
+
+
 module.exports = {
   getAll,
   getOne,
   create,
   getAllIncomplete,
+  update,
 };

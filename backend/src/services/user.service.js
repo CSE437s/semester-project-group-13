@@ -48,8 +48,27 @@ async function getOne(user_id) {
     }
   }
 
+  async function update({ user_id, username, password, email, first_name, last_name }) {
+    try {
+      const query = `
+        UPDATE users 
+        SET username = ?, password = ?, email = ?, first_name = ?, last_name = ?
+        WHERE user_id = ?
+      `;
+  
+      await db.query(query, [username, password, email, first_name, last_name, user_id]);
+  
+      console.log('User updated with ID:', user_id);
+      return { success: true, user_id };
+    } catch (error) {
+      console.error('Error updating User', error);
+      throw error;
+    }
+  }
+
 module.exports = {
     getAll,
     getOne,
     create,
+    update,
 };

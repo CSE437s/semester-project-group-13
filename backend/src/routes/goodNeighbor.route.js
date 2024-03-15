@@ -5,6 +5,7 @@ const neighborController = require('../controllers/goodNeighbor.controller');
 router.get('/', neighborController.getAll);
 router.get('/:neighbor_id', neighborController.getOne);
 router.post('/create', neighborController.create);  
+router.put('/:neighbor_id/update', neighborController.update); 
 
 
 module.exports = router;
