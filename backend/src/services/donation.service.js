@@ -1,27 +1,46 @@
 const db = require('./db.service');
 
-async function getAll(req, res, next) {
+async function getAll() {
   try {
-    res.json(await donationService.getAll());
-  } catch (err) {
-    console.error('Error while getting all donations', err.message);
-    next(err);
+    const rows = await db.query('SELECT * FROM donations');
+    return {
+      data: rows,
+    };
+  } catch (error) {
+    console.error('Error while getting all donations', error);
+    throw error;
   }
 }
 
-async function getOne(req, res, next) {
+async function getOne(donation_id) {
   try {
-    const { donation_id } = req.params;
-    res.json(await donationService.getOne(donation_id));
-  } catch (err) {
-    console.error('Error while getting one donation', err.message);
-    next(err);
+    const sql = 'SELECT * FROM donations WHERE donation_id = ?';
+    console.log('Executing query:', sql, donation_id);
+
+    const rows = await db.query(sql, [donation_id]);
+    return { data: rows[0] };
+  } catch (error) {
+    console.error('Error while getting one donation', error);
+    throw error;
   }
 }
 
-async function create(req, res) {
+async function create({
+  item,
+  quantity,
+  completed,
+  giving_family,
+  giving_volunteer,
+  receiving_family,
+  user_id,
+}) {
   try {
-    const {
+    const query = `
+      INSERT INTO donations (item, quantity, completed, giving_family, giving_volunteer, receiving_family, user_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const results = await db.query(query, [
       item,
       quantity,
       completed,
@@ -29,39 +48,19 @@ async function create(req, res) {
       giving_volunteer,
       receiving_family,
       user_id,
-    } = req.body;
+    ]);
 
-    const result = await donationService.create({
-      item,
-      quantity,
-      completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      user_id,
-    });
-
-    res.status(200).json(result);
+    const donation_id = results.insertId;
+    console.log('Donation created with ID:', donation_id);
+    return { success: true, donation_id };
   } catch (error) {
     console.error('Error Creating Donation', error);
-    res.status(500).json({ error: 'Error creating donation' });
+    throw error;
   }
 }
-
-async function getAllIncomplete() {
-    try {
-      const query = 'SELECT * FROM donations WHERE completed = false';
-      const results = await db.query(query);
-      return results;
-    } catch (error) {
-      console.error('Error retrieving incomplete donations from the database', error);
-      throw error;
-    }
-  }
 
 module.exports = {
   getAll,
   getOne,
   create,
-  getAllIncomplete,
 };

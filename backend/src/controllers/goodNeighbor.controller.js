@@ -1,9 +1,9 @@
-const neigborService = require('../services/goodNeighbor.service');
+const neighborService = require('../services/goodNeighbor.service');
 
 
 async function getAll(req, res, next) {
     try {
-      res.json(await neigborService.getAll());
+      res.json(await neighborService.getAll());
     } catch (err) {
       console.error('Error while getting all neigbor', err.message);
       next(err);
@@ -13,7 +13,7 @@ async function getAll(req, res, next) {
 async function getOne(req, res, next) {
     try {
         const { refugee_id } = req.params;
-        res.json(await neigborService.getOne(neighbor_id));
+        res.json(await neighborService.getOne(neighbor_id));
     } catch (err) {
         console.error('Error while getting one neigbor', err.message);
         next(err);
@@ -26,7 +26,6 @@ async function create(req, res) {
         refugee_family_id,
         host_family_id,
         match_date,
-        donator_id,
         neighbor_id
       } = req.body;
   
@@ -34,7 +33,6 @@ async function create(req, res) {
         refugee_family_id,
         host_family_id,
         match_date,
-        donator_id,
         neighbor_id
       });
   

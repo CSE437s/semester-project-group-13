@@ -24,18 +24,16 @@ async function getOne(neighbor_id) {
     refugee_family_id,
     host_family_id,
     match_date,
-    donator_id,
     neighbor_id
   }) {
     try {
       const query =
-        'INSERT INTO good_neighbors (refugee_family_id, host_family_id, match_date, donator_id, neighbor_id) VALUES (?, ?, ?, ?, ?)';
+        'INSERT INTO good_neighbors (refugee_family_id, host_family_id, match_date, neighbor_id) VALUES (?, ?, ?, ?)';
   
       const results = await db.query(query, [
         refugee_family_id,
         host_family_id,
         match_date,
-        donator_id,
         neighbor_id
       ]);
   
