@@ -101,10 +101,22 @@ async function getOne(family_id) {
       throw error;
     }
   }
+
+  async function updateUserId(user_idToChange, family_id) {
+    try {
+      const query = 'UPDATE families SET user_id = ? WHERE user_id = ?';
+      await db.query(query, [family_id, user_idToChange]);
+      console.log('User ID updated in families');
+    } catch (error) {
+      console.error('Error updating user ID in families', error);
+      throw error;
+    }
+  }
 module.exports = {
     getAll,
     getOne,
     create,
     update,
     deleteOne,
+    updateUserId,
 };

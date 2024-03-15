@@ -121,10 +121,22 @@ async function deleteOne(refugee_id) {
   }
 }
 
+async function updateUserId(user_idToChange, refugee_id) {
+  try {
+    const query = 'UPDATE refugees SET user_id = ? WHERE user_id = ?';
+    await db.query(query, [refugee_id, user_idToChange]);
+    console.log('User ID updated in refugees');
+  } catch (error) {
+    console.error('Error updating user ID in refugees', error);
+    throw error;
+  }
+}
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
     deleteOne,
+    updateUserId,
 };

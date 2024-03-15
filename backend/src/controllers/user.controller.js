@@ -1,5 +1,10 @@
 const userService = require('../services/user.service');
 
+const donationService = require('../services/donation.service');
+const familyService = require('../services/family.service');
+const refugeeService = require('../services/refugee.service');
+
+
 async function getAll(req, res, next) {
   try {
     const users = await userService.getAll();
@@ -63,6 +68,9 @@ async function deleteOne(req, res) {
   try {
     const { user_id } = req.params;
     await userService.deleteOne(user_id);
+    await donationService.updateUserId(user_id, -1);
+    await familyService.updateUserId(user_id, -1);
+    await refugeeService.updateUserId(user_id, -1);
     res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error deleting user', error);
