@@ -98,6 +98,17 @@ async function deleteOne(req, res) {
     res.status(500).json({ error: 'Error deleting family' });
   }
 }
+
+async function getAllAddresses(req, res, next) {
+  try {
+    const families = await familyService.getAll();
+    const addresses = families.map(family => family.address);
+    res.json(addresses);
+  } catch (err) {
+    console.error('Error while getting all addresses', err.message);
+    next(err);
+  }
+}
   
 
 module.exports = {
@@ -106,4 +117,5 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getAllAddresses,
 };

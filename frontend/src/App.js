@@ -5,12 +5,14 @@ import React, { useState, useEffect } from "react";
 import Login from "./Login";
 import Landing from "./Landing";
 import { useTheme } from "@chakra-ui/react";
+import MapComponent from "./MapComponent";
 
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const theme = useTheme();
+  const [addresses, setAddresses] = useState([]);
 
   const apiCallTest = () => {
     axios
@@ -70,7 +72,7 @@ function App() {
   };
 
   useEffect(() => {
-    checkLoginStatus();
+    // checkLoginStatus();
   }, []);
 
   return (
@@ -87,6 +89,7 @@ function App() {
           <Login onLogin={handleSuccessfulLogin} />
         )}
       </header>
+      <MapComponent addresses={addresses} /> {/* Use the MapComponent */}
     </div>
   );
 }
