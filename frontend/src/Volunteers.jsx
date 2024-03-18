@@ -7,19 +7,19 @@ import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
 
 
-const Donators = (props) => {
-    console.log('Donators Page clicked');
+const Volunteers = (props) => {
+    console.log('Volunteers Page clicked');
     const theme = useTheme();
 
-    const [donatorData, setDonatorData] = useState([]);
+    const [volunteerData, setVolunteerData] = useState([]);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllDonators')
+        axios.get('http://localhost:8080/volunteer')
             .then((response) => {
-                const dataFromApi = response.data.donators;
+                const dataFromApi = response.data.data;
                 console.log(dataFromApi);
-                setDonatorData(dataFromApi);
+                setVolunteerData(dataFromApi);
             })
             .catch((error) => {
                 console.error('Error making API call:', error);
@@ -34,8 +34,8 @@ const Donators = (props) => {
         setOpenCreateDialog(false);
     };
 
-    const handleCreateDonator = (formData) => {
-        axios.post('http://localhost:8080/createDonator', formData)
+    const handleCreateVolunteer = (formData) => {
+        axios.post('http://localhost:8080/volunteer/create', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -45,7 +45,7 @@ const Donators = (props) => {
         });
     };
 
-  const donatorFields = [
+  const volunteerFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'phone_number', label: 'Phone Number', type: 'tel' },
@@ -56,21 +56,21 @@ const Donators = (props) => {
     
     return (
         <BasicPage
-            title="Donators"
+            title="Volunteers"
         >
             <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
-                Add Donator
+                Add Volunteer
             </Button>
-            <DynamicTable data={donatorData}></DynamicTable>
+            <DynamicTable data={volunteerData}></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
-                    onSubmit={handleCreateDonator}
-                    formFields={donatorFields}
-                    title={"Add Donator"}
+                    onSubmit={handleCreateVolunteer}
+                    formFields={volunteerFields}
+                    title={"Add Volunteer"}
                 />
         </BasicPage>
     );
 };
 
-export default Donators;
+export default Volunteers;

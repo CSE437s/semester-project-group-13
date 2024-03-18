@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Refugees from './Refugees';
-import Donators from './Donators';
+import Volunteers from './Volunteers';
 import Donations from './Donations';
 import GoodNeighbors from './GoodNeighbors';
 import Families from './Families';
@@ -34,7 +34,7 @@ const Landing = (props) => {
             </Button>
             <Flex>
                 <Refugees></Refugees>
-                <Donators></Donators>
+                <Volunteers></Volunteers>
                 <Donations></Donations>
                 <GoodNeighbors></GoodNeighbors>
                 <Families></Families>

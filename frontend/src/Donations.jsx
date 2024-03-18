@@ -15,9 +15,9 @@ const Donations = (props) => {
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllDonations')
+        axios.get('http://localhost:8080/donation')
             .then((response) => {
-                const dataFromApi = response.data.donations;
+                const dataFromApi = response.data.data;
                 console.log(dataFromApi);
                 setDonationData(dataFromApi);
             })
@@ -35,7 +35,7 @@ const Donations = (props) => {
     };
 
     const handleCreateDonation = (formData) => {
-        axios.post('http://localhost:8080/createDonation', formData)
+        axios.post('http://localhost:8080/donation/create', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);

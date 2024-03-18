@@ -14,9 +14,9 @@ const GoodNeighbors = (props) => {
     const theme = useTheme();
 
     useEffect(() => {
-        axios.get('http://localhost:8080/getAllGoodNeighbors')
+        axios.get('http://localhost:8080/neighbor')
             .then((response) => {
-                const dataFromApi = response.data.goodNeighbors;
+                const dataFromApi = response.data.data;
                 console.log(dataFromApi);
                 setData(dataFromApi);
             })
@@ -34,7 +34,7 @@ const GoodNeighbors = (props) => {
     };
 
     const handleCreateGoodNeighbor = (formData) => {
-        axios.post('http://localhost:8080/createGoodNeighbor', formData)
+        axios.post('http://localhost:8080/neighbor/create', formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);

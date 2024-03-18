@@ -9,12 +9,26 @@ const donationRouter = require('./src/routes/donation.route')
 const userRouter = require('./src/routes/user.route')
 const volunteerRouter = require('./src/routes/volunteer.route')
 
-
+const session = require("express-session");
+const cors = require("cors");
 
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello from our server!");
 });
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:8080"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.use(session({
+    secret: "1qGzaT2IpNaCWB1siRvh7nVT2JIUyQUU", //this needs to be moved offline in future versions
+    resave: false,
+    saveUninitialized: true,
+}))
 
 app.use("/auth", authRouter);
 app.use('/refugee', refugeeRouter);
@@ -24,29 +38,13 @@ app.use('/donation', donationRouter);
 app.use('/user', userRouter);
 app.use('/volunteer', volunteerRouter);
 
-
-
 app.get('/cors', (req, res) => {
   res.send({ "msg": "This has CORS enabled 🎈" })
   })
 
-
-const session = require("express-session");
-const cors = require("cors");
-
-app.use(cors());
-app.use(session({
-    secret: "1qGzaT2IpNaCWB1siRvh7nVT2JIUyQUU", //this needs to be moved offline in future versions
-    resave: false,
-    saveUninitialized: true,
-}))
-
-
 app.listen(8080, () => {
   console.log("server listening on port 8080");
 });
-
-
 
 /* Add this later to make sure we are safe. 
 const requireAuth = (req, res, next) => {
