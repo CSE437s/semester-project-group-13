@@ -10,7 +10,7 @@ import MapComponent from "./MapComponent";
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(true); //set to false once Login is fixed
   const theme = useTheme();
   const [addresses, setAddresses] = useState([]);
 
@@ -72,7 +72,7 @@ function App() {
   };
 
   useEffect(() => {
-    // checkLoginStatus();
+    // checkLoginStatus(); //uncomment when Login is fixed
   }, []);
 
   return (
