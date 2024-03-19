@@ -44,13 +44,26 @@ const Refugees = (props) => {
             console.error('Error submitting form:', error);
         });
     };
+
+    const handleEditRefugee = (formData) => {
+        const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/update'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    };
     
     const refugeeFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'country_of_origin', label: 'Country of Origin', type: 'text' },
     { name: 'gender', label: 'Gender', type: 'text' },
-    { name: 'age', label: 'Age', type: 'number' },
+    { name: 'email', label: 'Email', type: 'email' },
+    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
     { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
     { name: 'date_of_arrival_to_us', label: 'Date of Arrival [to US]', type: 'date' },
     { name: 'date_of_joining_oasis', label: 'Date of Arrival [to Oasis]', type: 'date' },
@@ -64,7 +77,12 @@ const Refugees = (props) => {
                 <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
                     Add Refugee
                 </Button>
-                <DynamicTable data={data}></DynamicTable>
+                <DynamicTable 
+                    data={data}
+                    onEdit={handleEditRefugee}
+                    editTitle={"Edit Refugee"}
+                    editFields={refugeeFields}
+                ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}

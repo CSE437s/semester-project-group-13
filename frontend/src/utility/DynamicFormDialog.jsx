@@ -15,8 +15,8 @@ import {
 } from '@chakra-ui/react';
 import theme from '../style/theme';
 
-const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
-  const [formData, setFormData] = useState({});
+const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title, existData = {}}) => {
+  const [formData, setFormData] = useState(existData);
   const [formAlert, setFormAlert] = useState(false);
 
   const theme = useTheme();
@@ -48,7 +48,8 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title}) => {
                 value={formData[field.name] || ''}
                 onChange={(e) => handleFieldChange(field.name, e.target.value)}
                 required
-              />
+              >
+              </Input>
             </FormControl>
           ))}
         </ModalBody>

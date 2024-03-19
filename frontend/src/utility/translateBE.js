@@ -19,12 +19,23 @@ let be_to_fe_dict = {
     'church_they_attend' : "Church Home",
     'donations_history' : 'Past Donations',
     'fulfilled' : "Fulfilled?",
-    'completed' : "Completed?"
+    'completed' : "Completed?",
+    'is_refugee' : "Refugee Family",
+    'is_good_neighbor' : "Eligible Good Neighbor",
+    0 : "No",
+    1 : "Yes",
+    "giving_family" : "Given By (Family)",
+    "giving_volunteer" : "Given By (Member)",
+    "recieving_family" : "Recieved By (Family)",
+    "recieving_volunteer" : "Recieved By (Member)"
+
 
 }
 
 const translateBE = (word) => {
     return be_to_fe_dict[word] ? be_to_fe_dict[word] : word;
 };
+
+
 
 export default translateBE;

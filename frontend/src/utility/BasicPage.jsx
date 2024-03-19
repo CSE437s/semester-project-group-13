@@ -11,7 +11,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useTheme
+  useTheme,
+  Flex
 } from '@chakra-ui/react';
 import theme from '../style/theme';
 
@@ -23,13 +24,12 @@ const BasicPage = (props) => {
   const onOpen = () => setIsOpen(true);
 
   return (
-    <div>
-      <CSSReset />
-      <Box textAlign="center" mt="8" flex={1}>
+    <Flex width={'inherit'}>
+      <Box textAlign="center" mt="8" flex={1} width={'100%'}>
         <Button onClick={onOpen}>{props.title}</Button>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal isOpen={isOpen} onClose={onClose} size='xl' >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{props.title}</ModalHeader>
@@ -44,7 +44,7 @@ const BasicPage = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </Flex>
   );
 };
 

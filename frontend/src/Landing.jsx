@@ -28,18 +28,27 @@ const Landing = (props) => {
       };
 
     return (
-        <div>
-            <Button bg={theme.colors.purple[800]} color={'white'} onClick={handleLogout}>
-                Logout
-            </Button>
-            <Flex>
-                <Refugees></Refugees>
-                <Volunteers></Volunteers>
-                <Donations></Donations>
-                <GoodNeighbors></GoodNeighbors>
-                <Families></Families>
+        <Flex flexDirection={'column'} width={'90vw'} height={'90vh'}>
+            <Flex id='header' flex={1} justifyContent={'flex-end'} alignItems={'center'}>
+              <Button bg={theme.colors.purple[800]} color={'white'} onClick={handleLogout}>
+                  Logout
+              </Button>
             </Flex>
-        </div>
+            <Flex flexDirection={'row'} flex={8}>
+              <Flex id='sidebar' flexDirection={'column'} flex={1}>
+                  <Refugees></Refugees>
+                  <Volunteers></Volunteers>
+                  <Donations></Donations>
+                  <GoodNeighbors></GoodNeighbors>
+                  <Families></Families>
+              </Flex>
+              <Flex id='body' flex={5}>
+                  
+              </Flex>
+            </Flex>
+
+
+        </Flex>
 
     );
 };

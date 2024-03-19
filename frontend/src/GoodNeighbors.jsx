@@ -44,6 +44,18 @@ const GoodNeighbors = (props) => {
         });
     };
 
+    const handleEditGoodNeighbor = (formData) => {
+        const endpoint  = 'http://localhost:8080/neighbor/' + formData['good_neighbor_id'] + '/update'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    };
+
     const goodNeighborFields = [
         { name: 'first_name', label: 'First Name', type: 'text' },
         { name: 'last_name', label: 'Last Name', type: 'text' },
@@ -60,7 +72,12 @@ const GoodNeighbors = (props) => {
                 <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
                     Add Good Neighbor
                 </Button>
-                <DynamicTable data={data}></DynamicTable>
+                <DynamicTable 
+                    data={data}
+                    onEdit={handleEditGoodNeighbor}
+                    editTitle={"Edit Good Neighbor"}
+                    editFields={goodNeighborFields}
+                ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
