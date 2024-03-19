@@ -56,6 +56,18 @@ const Families = (props) => {
         });
     };
 
+    const handleDeleteFamily = (formData) => {
+        const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/deleteOne'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    }
+
     const familyFields = [
         { name: 'head_of_household', label: 'Head of Household', type: 'text' },
         { name: 'last_name', label: 'Last Name', type: 'text' },
@@ -79,6 +91,7 @@ const Families = (props) => {
                     onEdit={handleEditFamily}
                     editTitle={"Edit Family"}
                     editFields={familyFields}
+                    onDelete={handleDeleteFamily}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}

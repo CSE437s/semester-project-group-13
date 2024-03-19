@@ -56,6 +56,18 @@ const Refugees = (props) => {
             console.error('Error submitting form:', error);
         });
     };
+
+    const handleDeleteRefugee = (formData) => {
+        const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/deleteOne'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    }
     
     const refugeeFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
@@ -82,6 +94,7 @@ const Refugees = (props) => {
                     onEdit={handleEditRefugee}
                     editTitle={"Edit Refugee"}
                     editFields={refugeeFields}
+                    onDelete={handleDeleteRefugee}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}

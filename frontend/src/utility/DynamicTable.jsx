@@ -26,7 +26,7 @@ const DynamicTable = (props) => {
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
-    setOpenEditDialog(true);
+    setOpenViewDialog(true);
     // props.onRowSelect()
   };
 
@@ -84,6 +84,7 @@ const DynamicTable = (props) => {
           editFields={props.editFields}
           title={props.editTitle}
           data={props.data[selectedRow]}
+          onDelete={props.onDelete}
         >
         </DynamicViewDialog>
         // <Box className="dialog">

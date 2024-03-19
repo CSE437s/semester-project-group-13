@@ -49,6 +49,10 @@ if(!data){
         setOpenEditDialog(false);
     }
 
+    const handleDeleteClick = () => {
+        onClose();
+    }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay/>
@@ -86,7 +90,7 @@ if(!data){
           ))} */}
         </ModalBody>
         <ModalFooter>
-          <Button bg={theme.colors.purple[500]} color={'white'} onClick={onDelete}>
+          <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleDeleteClick}>
             Delete
           </Button>
           <Button bg={theme.colors.purple[200]} color={'white'} onClick={handleEditClick}>

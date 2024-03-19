@@ -57,6 +57,18 @@ const Volunteers = (props) => {
         });
     };
 
+    const handleDeleteVolunteer = (formData) => {
+        const endpoint  = 'http://localhost:8080/volunteer/' + formData['volunteer_id'] + '/deleteOne'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    }
+
   const volunteerFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
@@ -79,6 +91,7 @@ const Volunteers = (props) => {
                 onEdit={handleEditVolunteer}
                 editTitle={"Edit Volunteer"}
                 editFields={volunteerFields}
+                onDelete={handleDeleteVolunteer}
             ></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}

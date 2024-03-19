@@ -57,6 +57,18 @@ const Donations = (props) => {
         });
     };
 
+    const handleDeleteDonation = (formData) => {
+        const endpoint  = 'http://localhost:8080/donation/' + formData['donation_id'] + '/deleteOne'
+        axios.post(endpoint, formData)
+        .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', formData);
+        }).catch((error) => {
+            if(error.s)
+            console.error('Error submitting form:', error);
+        });
+    }
+
   //  ITEM	QUANTITY	COMPLETED?	GIVING_FAMILY	GIVING_VOLUNTEER	RECEIVING_FAMILY	RECEIVING_REFUGEE
 
   const donationFields = [
@@ -81,6 +93,7 @@ const Donations = (props) => {
                 onEdit={handleEditDonation}
                 editTitle={"Edit Donation"}
                 editFields={donationFields}
+                onDelete={handleDeleteDonation}
             ></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
@@ -88,7 +101,6 @@ const Donations = (props) => {
                     onSubmit={handleCreateDonation}
                     formFields={donationFields}
                     title={"Record Donation"}
-
                 />   
         </BasicPage>
     );
