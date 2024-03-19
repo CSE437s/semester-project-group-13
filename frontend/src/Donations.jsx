@@ -77,9 +77,9 @@ const Donations = (props) => {
     { name: 'completed', label: 'Completed?', type: 'number'},
     { name: 'giving_family', label: 'Given By (Family)', type: 'number' },
     { name: 'giving_volunteer', label: 'Given By (Member)', type: 'number' },
-    { name: 'recieving_family', label: 'Recieved By (Family)', type: 'number' },
-    { name: 'recieving_refugee', label: 'Recieved By (Member)', type: 'number' } //in the future this shold be a search bar
-  ];
+    { name: 'recieving_family', label: 'Recieved By (Family)', type: 'number' }, //in the future this shold be a search bar
+    { name: 'user_id', label: 'User', type: 'number' },
+];
     
     return (
         <BasicPage

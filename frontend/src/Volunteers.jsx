@@ -74,6 +74,9 @@ const Volunteers = (props) => {
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
     { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+    { name: 'user_id', label: 'Family', type: 'number' },
+    { name: 'family_id', label: 'Family', type: 'number' },
+
     // { name: 'address', label: 'Street Address', type: 'text' },
     // { name: 'city', label: 'City', type: 'text' },
     // { name: 'zip', label: 'Zip Code', type: 'number' }

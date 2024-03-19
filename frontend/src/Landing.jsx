@@ -17,7 +17,7 @@ const Landing = (props) => {
     const handleLogout = () => {    
         console.log('Logout Clicked');
     
-        axios.post('http://localhost:8080/logout')
+        axios.post('http://localhost:8080/auth/logout')
           .then((response) => {
             const data = response.data;
             console.log(data);

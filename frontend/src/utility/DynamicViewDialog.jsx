@@ -50,7 +50,7 @@ if(!data){
     }
 
     const handleDeleteClick = () => {
-        onClose();
+        onDelete(data);
     }
 
   return (

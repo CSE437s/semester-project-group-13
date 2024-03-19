@@ -46,7 +46,7 @@ const Refugees = (props) => {
     };
 
     const handleEditRefugee = (formData) => {
-        const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/update'
+        const endpoint  = 'http://localhost:8080/refugee/:' + formData['refugee_id'] + '/update'
         axios.post(endpoint, formData)
         .then((response) => {
             const data = response.data;
@@ -59,10 +59,10 @@ const Refugees = (props) => {
 
     const handleDeleteRefugee = (formData) => {
         const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.post(endpoint)
         .then((response) => {
             const data = response.data;
-            console.log('Form data submitted:', formData);
+            console.log('Form data submitted:', data);
         }).catch((error) => {
             if(error.s)
             console.error('Error submitting form:', error);
@@ -79,6 +79,8 @@ const Refugees = (props) => {
     { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
     { name: 'date_of_arrival_to_us', label: 'Date of Arrival [to US]', type: 'date' },
     { name: 'date_of_joining_oasis', label: 'Date of Arrival [to Oasis]', type: 'date' },
+    { name: 'family_id', label: 'Family', type: 'number' },
+
     ];
 
     return (
