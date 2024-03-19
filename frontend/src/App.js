@@ -12,7 +12,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const theme = useTheme();
-  const [addresses, setAddresses] = useState([]);
+  //const [addresses, setAddresses] = useState([]); // Define addresses state here
 
   const apiCallTest = () => {
     axios
@@ -89,7 +89,7 @@ function App() {
           <Login onLogin={handleSuccessfulLogin} />
         )}
       </header>
-      <MapComponent addresses={addresses} /> {/* Use the MapComponent */}
+      <MapComponent /> {/* Use the MapComponent */}
     </div>
   );
 }

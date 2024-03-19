@@ -7,6 +7,7 @@ import GoodNeighbors from './GoodNeighbors';
 import Families from './Families';
 import { useTheme, Flex, Button } from '@chakra-ui/react';
 import theme from './style/theme';
+import MapComponent from './MapComponent';
 
 const Landing = (props) => {
     console.log('Landing rendered')
@@ -41,6 +42,7 @@ const Landing = (props) => {
                   <Donations></Donations>
                   <GoodNeighbors></GoodNeighbors>
                   <Families></Families>
+                  <MapComponent></MapComponent>
               </Flex>
               <Flex id='body' flex={5}>
                   
