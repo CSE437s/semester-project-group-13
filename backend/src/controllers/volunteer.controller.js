@@ -1,4 +1,6 @@
 const volunteerService = require('../services/volunteer.service');
+const donationService = require('../services/donation.service');
+
 
 async function getAll(req, res, next) {
     try {
@@ -76,26 +78,27 @@ async function update(req, res) {
 }
 
 async function deleteOne(req, res) {
-    try {
-        const { volunteer_id } = req.params;
+  try {
+    const { volunteer_id } = req.params;
 
-        // Attempt to delete the volunteer
-        await volunteerService.deleteOne(volunteer_id);
+    await donationService.updateGivingVolunteer(volunteer_id, 2);
 
-        // If deletion is successful, send success response
-        res.status(200).json({ success: true });
-    } catch (error) {
-        // Handle specific error case: foreign key constraint violation
-        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-            console.error('Error deleting volunteer: This volunteer is referenced by other records.');
-            return res.status(400).json({ error: 'This volunteer is referenced by other records and cannot be deleted.' });
-        }
+    await volunteerService.deleteOne(volunteer_id);
 
-        // Handle general error cases
-        console.error('Error deleting volunteer', error.message);
-        res.status(500).json({ error: 'Error deleting volunteer' });
+    res.status(200).json({ success: true });
+  } catch (error) {
+    // Handle specific error case: foreign key constraint violation
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      console.error('Error deleting volunteer: This volunteer is referenced by other records.');
+      return res.status(400).json({ error: 'This volunteer is referenced by other records and cannot be deleted.' });
     }
+
+    // Handle general error cases
+    console.error('Error deleting volunteer', error.message);
+    res.status(500).json({ error: 'Error deleting volunteer' });
+  }
 }
+
 
 module.exports = {
     getAll,

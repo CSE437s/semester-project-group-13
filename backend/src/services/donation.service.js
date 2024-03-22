@@ -98,16 +98,17 @@ async function deleteOne(donation_id) {
   }
 }
 
-async function updateUserId(user_idChange, donation_id) {
+async function updateGivingVolunteer(volunteer_id, new_value) {
   try {
-    const query = 'UPDATE donations SET user_id = ? WHERE user_id = ?';
-    await db.query(query, [donation_id, user_idChange]);
-    console.log('User ID updated in donations');
+    const query = 'UPDATE donations SET giving_volunteer = ? WHERE giving_volunteer = ?';
+    await db.query(query, [new_value, volunteer_id]);
+    console.log('Giving volunteer updated in donations');
   } catch (error) {
-    console.error('Error updating user ID in donations', error);
+    console.error('Error updating giving volunteer in donations', error);
     throw error;
   }
 }
+
 
 module.exports = {
   getAll,
@@ -115,5 +116,5 @@ module.exports = {
   create,
   update,
   deleteOne,
-  updateUserId,
+  updateGivingVolunteer,
 };
