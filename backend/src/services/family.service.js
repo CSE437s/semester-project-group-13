@@ -124,6 +124,18 @@ async function getOne(family_id) {
     }
   }
 
+  async function getAllRefugeesInFamily(req, res) {
+    try {
+      const { family_id } = req.params;
+      const refugees = await refugeeService.getAllByFamilyId(family_id);
+      res.json(refugees);
+    } catch (error) {
+      console.error('Error getting refugees in family', error);
+      res.status(500).json({ error: 'Error getting refugees in family' });
+    }
+  }
+  
+
 module.exports = {
     getAll,
     getOne,
@@ -132,4 +144,5 @@ module.exports = {
     deleteOne,
     updateUserId,
     updateHeadOfFamily,
+    getAllRefugeesInFamily,
 };

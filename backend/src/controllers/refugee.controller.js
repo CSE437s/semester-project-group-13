@@ -15,6 +15,17 @@ async function getAll(req, res, next) {
     }
 }
 
+async function getAllInFamily(req, res, next) {
+  try {
+      const { family_id } = req.params;
+      const refugees = await refugeeService.getAllInFamily(family_id);
+      res.json(refugees);
+  } catch (err) {
+      console.error('Error while getting all refugees in a family', err.message);
+      next(err);
+  }
+}
+
 async function getOne(req, res, next) {
     try {
         const { refugee_id } = req.params;
@@ -138,4 +149,5 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getAllInFamily,
 };

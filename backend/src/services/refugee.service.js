@@ -7,6 +7,40 @@ async function getAll() {
     };
 }
 
+
+
+async function getAllInFamily(family_id) {
+  try {
+      if (!family_id) {
+          throw new Error('Family ID is required');
+      }
+
+      // Check if the family exists
+      const family = await db.query('SELECT * FROM families WHERE family_id = ?', [family_id]);
+      if (family.length === 0) {
+          throw new Error('Family not found');
+      }
+
+      // Check if the family is a refugee family
+      const isRefugeeFamily = family[0].is_refugee === 1;
+      if (!isRefugeeFamily) {
+          throw new Error('The specified family is not a refugee family');
+      }
+
+      // Fetch all refugees in the family
+      const sql = 'SELECT * FROM refugees WHERE family_id = ?';
+      console.log('Executing query:', sql, family_id);
+
+      const rows = await db.query(sql, [family_id]);
+      return {
+          data: rows,
+      };
+  } catch (error) {
+      console.error('Error while getting all refugees in a family', error);
+      throw error;
+  }
+}
+
 async function getOne(refugee_id) {
     try {
       const sql = 'SELECT * FROM refugees WHERE refugee_id = ?';
@@ -153,4 +187,5 @@ module.exports = {
     deleteOne,
     updateUserId,
     updateFamilyId,
+    getAllInFamily,
 };
