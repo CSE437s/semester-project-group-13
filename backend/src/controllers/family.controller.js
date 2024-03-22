@@ -35,6 +35,10 @@ async function create(req, res) {
         user_id,
       } = req.body;
   
+      if (!head_of_household_id || !head_of_household || !last_name || !address || !city || !zip || !user_id) {
+        console.error('Error Creating Family: Missing required inputs');
+        return res.status(400).json({ error: 'Missing required inputs' });
+    }
       const result = await familyService.create({
         head_of_household_id,
         head_of_household,
@@ -57,7 +61,7 @@ async function create(req, res) {
 
   async function update(req, res) {
     try {
-      const { family_id } = req.params; // Get family_id from URL path params
+      const { family_id } = req.params; 
       const {
         head_of_household,
         last_name,
@@ -69,6 +73,10 @@ async function create(req, res) {
         user_id,
       } = req.body;
   
+      if (!head_of_household || !last_name || !address || !city || !zip || !user_id) {
+        console.error('Error Updating Family: Missing required inputs');
+        return res.status(400).json({ error: 'Missing required inputs' });
+    }
       const result = await familyService.update({
         family_id,
         head_of_household,
@@ -83,10 +91,15 @@ async function create(req, res) {
   
       res.status(200).json(result);
     } catch (error) {
+      if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+          console.error('Error Updating Family: This family is referenced by other records.');
+          return res.status(400).json({ error: 'This family is referenced by other records and cannot be updated.' });
+      }
+
       console.error('Error Updating Family', error);
       res.status(500).json({ error: 'Error updating family' });
-    }
   }
+}
 
 async function deleteOne(req, res) {
   try {
@@ -94,9 +107,14 @@ async function deleteOne(req, res) {
     await familyService.deleteOne(family_id);
     res.status(200).json({ success: true });
   } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+        console.error('Error Deleting Family: This family is referenced by other records.');
+        return res.status(400).json({ error: 'This family is referenced by other records and cannot be deleted.' });
+    }
+
     console.error('Error deleting family', error);
     res.status(500).json({ error: 'Error deleting family' });
-  }
+}
 }
 
 async function getAllAddresses(req, res, next) {
