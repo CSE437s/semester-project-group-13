@@ -69,17 +69,32 @@ const Volunteers = (props) => {
         });
     }
 
-  const volunteerFields = [
+
+  const volunteerCreateFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
     { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'user_id', label: 'Family', type: 'number' },
     { name: 'family_id', label: 'Family', type: 'number' },
 
     // { name: 'address', label: 'Street Address', type: 'text' },
     // { name: 'city', label: 'City', type: 'text' },
     // { name: 'zip', label: 'Zip Code', type: 'number' }
+  ];
+
+  const volunteerEditFields = [
+    { name: 'first_name', label: 'First Name', type: 'text' },
+    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+    { name: 'family_id', label: 'Family', type: 'number' },
+  ];
+
+  const volunteerViewFields = [
+    { name: 'first_name', label: 'First Name', type: 'text' },
+    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
+    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+    { name: 'family_id', label: 'Family', type: 'number' },
   ];
     
     return (
@@ -94,14 +109,15 @@ const Volunteers = (props) => {
                 onEdit={handleEditVolunteer}
                 editTitle={"Edit Volunteer"}
                 viewTitle={"View Volunteer"}
-                editFields={volunteerFields}
+                editFields={volunteerEditFields}
+                viewFields={volunteerViewFields}
                 onDelete={handleDeleteVolunteer}
             ></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateVolunteer}
-                    formFields={volunteerFields}
+                    formFields={volunteerCreateFields}
                     title={"Add Volunteer"}
                 />
         </BasicPage>

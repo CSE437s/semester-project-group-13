@@ -55,7 +55,6 @@ async function update(req, res) {
     const {
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
       user_id,
       family_id
@@ -64,7 +63,6 @@ async function update(req, res) {
     await volunteerService.update(volunteer_id, {
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
       user_id,
       family_id

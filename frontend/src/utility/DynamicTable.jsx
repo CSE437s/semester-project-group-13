@@ -77,6 +77,7 @@ const DynamicTable = (props) => {
           onClose={handleCloseViewDialog}
           onEdit={props.onEdit}
           editFields={props.editFields}
+          viewFields={props.viewFields}
           editTitle={props.editTitle}
           viewTitle={props.viewTitle}
           data={props.data[selectedRow]}

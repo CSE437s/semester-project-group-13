@@ -68,8 +68,8 @@ const Refugees = (props) => {
             console.error('Error submitting form:', error);
         });
     }
-    
-    const refugeeFields = [
+
+    const refugeeCreateFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'country_of_origin', label: 'Country of Origin', type: 'text' },
@@ -82,6 +82,30 @@ const Refugees = (props) => {
     { name: 'family_id', label: 'Family', type: 'number' },
 
     ];
+
+    const refugeeEditFields = [
+        { name: 'first_name', label: 'First Name', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'gender', label: 'Gender', type: 'text' },
+        { name: 'email', label: 'Email', type: 'email' },
+        { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+        { name: 'family_id', label: 'Family', type: 'number' },
+    
+        ];
+
+        const refugeeViewFields = [
+            { name: 'first_name', label: 'First Name', type: 'text' },
+            { name: 'last_name', label: 'Last Name', type: 'text' },
+            { name: 'country_of_origin', label: 'Country of Origin', type: 'text' },
+            { name: 'gender', label: 'Gender', type: 'text' },
+            { name: 'email', label: 'Email', type: 'email' },
+            { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+            { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
+            { name: 'date_of_arrival_to_us', label: 'Date of Arrival [to US]', type: 'date' },
+            { name: 'date_of_joining_oasis', label: 'Date of Arrival [to Oasis]', type: 'date' },
+            { name: 'family_id', label: 'Family', type: 'number' },
+        
+            ];
 
     return (
         <div>
@@ -96,14 +120,15 @@ const Refugees = (props) => {
                     onEdit={handleEditRefugee}
                     editTitle={"Edit Refugee"}
                     viewTitle={"View Refugee"}
-                    editFields={refugeeFields}
+                    editFields={refugeeEditFields}
+                    viewFields={refugeeViewFields}
                     onDelete={handleDeleteRefugee}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateRefugee}
-                    formFields={refugeeFields}
+                    formFields={refugeeCreateFields}
                     title={"Add Refugee"}
                 />
             </BasicPage>

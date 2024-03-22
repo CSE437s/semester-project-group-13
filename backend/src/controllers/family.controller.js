@@ -23,7 +23,7 @@ async function getOne(req, res, next) {
 async function create(req, res) {
     try {
       const {
-        head_of_household_id,
+        //head_of_household_id,
         head_of_household,
         last_name,
         address,
@@ -36,7 +36,7 @@ async function create(req, res) {
       } = req.body;
   
       const result = await familyService.create({
-        head_of_household_id,
+        //head_of_household_id,
         head_of_household,
         last_name,
         address,

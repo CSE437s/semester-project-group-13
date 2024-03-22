@@ -62,11 +62,7 @@ async function update(req, res) {
     const {
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
-      country_of_origin,
-      date_of_arrival_to_us,
-      date_of_joining_oasis,
       gender,
       email,
       family_id
@@ -75,11 +71,7 @@ async function update(req, res) {
     await refugeeService.update(refugee_id, {
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
-      country_of_origin,
-      date_of_arrival_to_us,
-      date_of_joining_oasis,
       gender,
       email,
       family_id

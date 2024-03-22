@@ -32,7 +32,17 @@ let be_to_fe_dict = {
 
 }
 
+function isValidDateFormat(dateString) {
+    // Regular expression to match the format 'YYYY-MM-DDTHH:MM:SS.MSZ'
+    const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+    return regex.test(dateString);
+}
+
 const translateBE = (word) => {
+    if(isValidDateFormat(word)){
+        const formattedDate = new Date(word);
+        return formattedDate.toDateString();
+    }
     return be_to_fe_dict[word] ? be_to_fe_dict[word] : word;
 };
 

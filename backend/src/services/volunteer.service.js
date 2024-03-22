@@ -50,18 +50,17 @@ async function create({
     throw error;
   }
 }
-async function update(volunteer_id, { first_name, last_name, date_of_birth, phone_number, user_id, family_id }) {
+async function update(volunteer_id, { first_name, last_name, phone_number, user_id, family_id }) {
   try {
     const query = `
       UPDATE volunteers 
-      SET first_name = ?, last_name = ?, date_of_birth = ?, phone_number = ?, user_id = ?, family_id = ?
+      SET first_name = ?, last_name = ?, phone_number = ?, user_id = ?, family_id = ?
       WHERE volunteer_id = ?
     `;
 
     const results = await db.query(query, [
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
       user_id,
       family_id,

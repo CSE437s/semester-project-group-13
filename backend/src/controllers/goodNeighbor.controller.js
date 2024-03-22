@@ -26,14 +26,12 @@ async function create(req, res) {
         refugee_family_id,
         host_family_id,
         match_date,
-        neighbor_id
       } = req.body;
   
       const result = await neighborService.create({
         refugee_family_id,
         host_family_id,
         match_date,
-        neighbor_id
       });
   
       res.status(200).json(result);

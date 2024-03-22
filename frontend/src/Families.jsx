@@ -68,7 +68,27 @@ const Families = (props) => {
         });
     }
 
-    const familyFields = [
+    const familyCreateFields = [
+        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'address', label: 'Street Address', type: 'text' },
+        { name: 'city', label: 'City', type: 'text' },
+        { name: 'zip', label: 'Zip Code', type: 'number' },
+        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
+        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+      ];
+
+      const familyEditFields = [
+        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'address', label: 'Street Address', type: 'text' },
+        { name: 'city', label: 'City', type: 'text' },
+        { name: 'zip', label: 'Zip Code', type: 'number' },
+        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
+        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+      ];
+
+      const familyViewFields = [
         { name: 'head_of_household', label: 'Head of Household', type: 'text' },
         { name: 'last_name', label: 'Last Name', type: 'text' },
         { name: 'address', label: 'Street Address', type: 'text' },
@@ -91,14 +111,15 @@ const Families = (props) => {
                     onEdit={handleEditFamily}
                     editTitle={"Edit Family"}
                     viewTitle={"View Family"}
-                    editFields={familyFields}
+                    editFields={familyEditFields}
+                    viewFields={familyViewFields}
                     onDelete={handleDeleteFamily}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateFamily}
-                    formFields={familyFields}
+                    formFields={familyCreateFields}
                     title={"Add Family"}
                 />
             </BasicPage>

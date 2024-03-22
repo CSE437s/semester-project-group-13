@@ -32,12 +32,13 @@ async function create({
   giving_family,
   giving_volunteer,
   receiving_family,
+  receiving_refugee,
   user_id,
 }) {
   try {
     const query = `
-      INSERT INTO donations (item, quantity, completed, giving_family, giving_volunteer, receiving_family, user_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO donations (item, quantity, completed, giving_family, giving_volunteer, receiving_family, receiving_refugee, user_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const results = await db.query(query, [
@@ -47,6 +48,7 @@ async function create({
       giving_family,
       giving_volunteer,
       receiving_family,
+      receiving_refugee,
       user_id,
     ]);
 
@@ -59,11 +61,11 @@ async function create({
   }
 }
 
-async function update({ donation_id, item, quantity, completed, giving_family, giving_volunteer, receiving_family, user_id }) {
+async function update({ donation_id, item, quantity, completed}) {
   try {
     const query = `
       UPDATE donations 
-      SET item = ?, quantity = ?, completed = ?, giving_family = ?, giving_volunteer = ?, receiving_family = ?, user_id = ?
+      SET item = ?, quantity = ?, completed = ?
       WHERE donation_id = ?
     `;
 
@@ -71,10 +73,6 @@ async function update({ donation_id, item, quantity, completed, giving_family, g
       item,
       quantity,
       completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      user_id,
       donation_id
     ]);
 

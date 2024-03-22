@@ -10,6 +10,7 @@ import {
   Button,
   Text,
   useTheme,
+  propNames,
 } from '@chakra-ui/react';
 import theme from '../style/theme';
 import DynamicFormDialog from './DynamicFormDialog';
@@ -53,6 +54,25 @@ if(!data){
         onDelete(data);
     }
 
+    const handleInfoContext  = (field, data) => {
+      let value = "";
+
+      switch(field.type){
+        default:
+          value = field.label + ": " + data[field.name]
+          break;
+        case "date":
+          const formattedDate = new Date(data[field.name]);
+          value = field.label + ": " + formattedDate.toDateString();
+          break
+      }
+
+      return (
+        <Text key={field.name}>
+          {value}
+        </Text>
+      )
+    }
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay/>
@@ -61,11 +81,9 @@ if(!data){
         <ModalCloseButton />
         <ModalBody>
         {
-            Object.entries(data).map(([key, value]) => (
-                <Text key={key}>
-                    {key + ": " + value}
-              </Text>
-            ))
+          viewFields.map((field) => (
+            handleInfoContext(field, data)
+          ))
         }
         <DynamicFormDialog
             isOpen={openEditDialog}
