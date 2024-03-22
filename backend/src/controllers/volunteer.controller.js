@@ -69,14 +69,14 @@ async function update(req, res) {
       throw new Error('No fields provided for update. Please provide at least one field to update.');
       }
 
-        await volunteerService.update(volunteer_id, {
-            first_name,
-            last_name,
-            date_of_birth,
-            phone_number,
-            user_id,
-            family_id
-        });
+    await volunteerService.update(volunteer_id, {
+      first_name,
+      last_name,
+      date_of_birth,
+      phone_number,
+      user_id,
+      family_id
+    });
 
         res.status(200).json({ success: true });
     } catch (error) {

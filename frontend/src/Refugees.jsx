@@ -46,8 +46,8 @@ const Refugees = (props) => {
     };
 
     const handleEditRefugee = (formData) => {
-        const endpoint  = 'http://localhost:8080/refugee/:' + formData['refugee_id'] + '/update'
-        axios.post(endpoint, formData)
+        const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/update'
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -59,7 +59,7 @@ const Refugees = (props) => {
 
     const handleDeleteRefugee = (formData) => {
         const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/deleteOne'
-        axios.post(endpoint)
+        axios.delete(endpoint)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', data);
@@ -68,8 +68,8 @@ const Refugees = (props) => {
             console.error('Error submitting form:', error);
         });
     }
-    
-    const refugeeFields = [
+
+    const refugeeCreateFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
     { name: 'last_name', label: 'Last Name', type: 'text' },
     { name: 'country_of_origin', label: 'Country of Origin', type: 'text' },
@@ -83,6 +83,30 @@ const Refugees = (props) => {
 
     ];
 
+    const refugeeEditFields = [
+        { name: 'first_name', label: 'First Name', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'gender', label: 'Gender', type: 'text' },
+        { name: 'email', label: 'Email', type: 'email' },
+        { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+        { name: 'family_id', label: 'Family', type: 'number' },
+    
+        ];
+
+        const refugeeViewFields = [
+            { name: 'first_name', label: 'First Name', type: 'text' },
+            { name: 'last_name', label: 'Last Name', type: 'text' },
+            { name: 'country_of_origin', label: 'Country of Origin', type: 'text' },
+            { name: 'gender', label: 'Gender', type: 'text' },
+            { name: 'email', label: 'Email', type: 'email' },
+            { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+            { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
+            { name: 'date_of_arrival_to_us', label: 'Date of Arrival [to US]', type: 'date' },
+            { name: 'date_of_joining_oasis', label: 'Date of Arrival [to Oasis]', type: 'date' },
+            { name: 'family_id', label: 'Family', type: 'number' },
+        
+            ];
+
     return (
         <div>
             <BasicPage
@@ -95,14 +119,16 @@ const Refugees = (props) => {
                     data={data}
                     onEdit={handleEditRefugee}
                     editTitle={"Edit Refugee"}
-                    editFields={refugeeFields}
+                    viewTitle={"View Refugee"}
+                    editFields={refugeeEditFields}
+                    viewFields={refugeeViewFields}
                     onDelete={handleDeleteRefugee}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateRefugee}
-                    formFields={refugeeFields}
+                    formFields={refugeeCreateFields}
                     title={"Add Refugee"}
                 />
             </BasicPage>

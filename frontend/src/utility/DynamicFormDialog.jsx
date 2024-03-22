@@ -31,7 +31,28 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title, exist
     onClose();
   };
 
+  const handleInputContext = (type, name, formData) => {
+    let value = "";
+    switch(type){
+      default:
+        value = formData[name] || '';
+        break;
+      case "date":
+        const formattedDate = new Date(formData[name]);
+        value = formattedDate.toDateString() || '';
+        break
+    }
 
+    return (
+      <Input
+      type={type}
+      value={value}
+      onChange={(e) => handleFieldChange(name, e.target.value)}
+      required
+      >
+      </Input>
+    )
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -43,13 +64,8 @@ const DynamicFormDialog = ({ isOpen, onClose, onSubmit, formFields, title, exist
           {formFields.map((field) => (
             <FormControl key={field.name} mb={4}>
               <FormLabel>{field.label}</FormLabel>
-              <Input
-                type={field.type}
-                value={formData[field.name] || ''}
-                onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                required
-              >
-              </Input>
+
+              {handleInputContext(field.type, field.name, formData, )}
             </FormControl>
           ))}
         </ModalBody>

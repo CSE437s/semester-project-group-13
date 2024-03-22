@@ -29,7 +29,7 @@ async function getOne(req, res, next) {
 async function create(req, res) {
     try {
       const {
-        head_of_household_id,
+        //head_of_household_id,
         head_of_household,
         last_name,
         address,
@@ -46,7 +46,7 @@ async function create(req, res) {
         return res.status(400).json({ error: 'Missing required inputs' });
     }
       const result = await familyService.create({
-        head_of_household_id,
+        //head_of_household_id,
         head_of_household,
         last_name,
         address,

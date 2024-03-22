@@ -38,6 +38,7 @@ async function create(req, res) {
       giving_family,
       giving_volunteer,
       receiving_family,
+      receiving_refugee,
       user_id,
     } = req.body;
 
@@ -48,6 +49,7 @@ async function create(req, res) {
       giving_family,
       giving_volunteer,
       receiving_family,
+      receiving_refugee,
       user_id,
     });
 
@@ -65,21 +67,13 @@ async function update(req, res) {
       item,
       quantity,
       completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      user_id,
     } = req.body;
 
     const result = await donationService.update({
       donation_id,
       item,
       quantity,
-      completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      user_id,
+      completed
     });
 
     res.status(200).json(result);

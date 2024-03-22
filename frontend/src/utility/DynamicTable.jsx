@@ -30,20 +30,35 @@ const DynamicTable = (props) => {
     // props.onRowSelect()
   };
 
-  const handleCloseEditDialog = () => {
-    setOpenEditDialog(false);
-    setSelectedRow(-1);
-  };
-
   const handleCloseViewDialog = () => {
     setOpenViewDialog(false);
     setSelectedRow(-1);
   };
 
+  const handleDelete = (formData) => {
+    props.onDelete(formData);
+    handleCloseViewDialog()
+  }
+
   const columns = Object.keys(props.data[0]);
   const filteredColumns = columns.filter(
     (column) => !column.toLowerCase().endsWith("id")
   );
+
+  const handleColumnContext = (column) => {
+    console.log("handleColCOntext")
+
+    return (
+        <Th key={column}>{translateBE(column)}</Th>
+    )
+  }
+
+  const handleRowContext = (row, column) => {
+    console.log("handleORwCOntext")
+    return (
+        <Td key={column}>{translateBE(row[column])}</Td>
+    )
+  }
 
   return (
     <Box>
@@ -51,7 +66,7 @@ const DynamicTable = (props) => {
         <Thead>
           <Tr>
             {filteredColumns.map((column) => (
-              <Th key={column}>{translateBE(column)}</Th>
+              handleColumnContext(column)
             ))}
           </Tr>
         </Thead>
@@ -59,7 +74,7 @@ const DynamicTable = (props) => {
           {props.data.map((row, rowIndex) => (
             <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
               {filteredColumns.map((column) => (
-                <Td key={column}>{translateBE(row[column])}</Td>
+                handleRowContext(row, column)
               ))}
             </Tr>
           ))}
@@ -67,30 +82,18 @@ const DynamicTable = (props) => {
       </Table>
 
       {selectedRow !== -1 && (
-        //isOpen, onClose, onDelete, onEdit, data, editFields, editTitle
-        // <DynamicFormDialog
-        //   isOpen={openEditDialog}
-        //   onClose={handleCloseEditDialog}
-        //   onSubmit={props.onEdit}
-        //   formFields={props.editFields}
-        //   title={props.editTitle}
-        //   existData={props.data[selectedRow]}
-        // >
-        // </DynamicFormDialog>
         <DynamicViewDialog
           isOpen={openViewDialog}
           onClose={handleCloseViewDialog}
           onEdit={props.onEdit}
           editFields={props.editFields}
-          title={props.editTitle}
+          viewFields={props.viewFields}
+          editTitle={props.editTitle}
+          viewTitle={props.viewTitle}
           data={props.data[selectedRow]}
-          onDelete={props.onDelete}
+          onDelete={handleDelete}
         >
         </DynamicViewDialog>
-        // <Box className="dialog">
-        //   <p>Row details: {JSON.stringify(data[selectedRow])}</p>
-        //   <Button onClick={handleCloseDialog}>Close</Button>
-        // </Box>
       )}
     </Box>
   );

@@ -46,7 +46,7 @@ const Families = (props) => {
 
     const handleEditFamily = (formData) => {
         const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/update'
-        axios.post(endpoint, formData)
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -58,7 +58,7 @@ const Families = (props) => {
 
     const handleDeleteFamily = (formData) => {
         const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -68,7 +68,27 @@ const Families = (props) => {
         });
     }
 
-    const familyFields = [
+    const familyCreateFields = [
+        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'address', label: 'Street Address', type: 'text' },
+        { name: 'city', label: 'City', type: 'text' },
+        { name: 'zip', label: 'Zip Code', type: 'number' },
+        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
+        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+      ];
+
+      const familyEditFields = [
+        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
+        { name: 'last_name', label: 'Last Name', type: 'text' },
+        { name: 'address', label: 'Street Address', type: 'text' },
+        { name: 'city', label: 'City', type: 'text' },
+        { name: 'zip', label: 'Zip Code', type: 'number' },
+        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
+        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+      ];
+
+      const familyViewFields = [
         { name: 'head_of_household', label: 'Head of Household', type: 'text' },
         { name: 'last_name', label: 'Last Name', type: 'text' },
         { name: 'address', label: 'Street Address', type: 'text' },
@@ -90,14 +110,16 @@ const Families = (props) => {
                     data={data}
                     onEdit={handleEditFamily}
                     editTitle={"Edit Family"}
-                    editFields={familyFields}
+                    viewTitle={"View Family"}
+                    editFields={familyEditFields}
+                    viewFields={familyViewFields}
                     onDelete={handleDeleteFamily}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateFamily}
-                    formFields={familyFields}
+                    formFields={familyCreateFields}
                     title={"Add Family"}
                 />
             </BasicPage>

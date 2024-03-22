@@ -59,7 +59,7 @@ const Donations = (props) => {
 
     const handleDeleteDonation = (formData) => {
         const endpoint  = 'http://localhost:8080/donation/' + formData['donation_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -69,16 +69,40 @@ const Donations = (props) => {
         });
     }
 
-  //  ITEM	QUANTITY	COMPLETED?	GIVING_FAMILY	GIVING_VOLUNTEER	RECEIVING_FAMILY	RECEIVING_REFUGEE
+//   const {
+//     item,
+//     quantity,
+//     completed,
+//     giving_family,
+//     giving_volunteer,
+//     receiving_family,
+//     user_id,
+//   } = req.body;
 
-  const donationFields = [
+  const donationCreateFields = [
+    { name: 'item', label: 'Item', type: 'text' },
+    { name: 'quantity', label: 'Quantity', type: 'number' },
+    { name: 'completed', label: 'Completed?', type: 'number'}, //needs unique typing
+    { name: 'giving_family', label: 'Given By (Family)', type: 'number' },
+    { name: 'giving_volunteer', label: 'Given By (Member)', type: 'number' },
+    { name: 'recieving_family', label: 'Recieved By (Family)', type: 'number' }, //in the future this shold be a search bar
+    { name: 'recieving_family', label: 'Recieved By (Family)', type: 'number' }, 
+    { name: 'user_id', label: 'User', type: 'number' },
+];
+
+  const donationEditFields = [
+    { name: 'item', label: 'Item', type: 'text' },
+    { name: 'quantity', label: 'Quantity', type: 'number' },
+    { name: 'completed', label: 'Completed?', type: 'number'},
+];
+
+const donationViewFields = [
     { name: 'item', label: 'Item', type: 'text' },
     { name: 'quantity', label: 'Quantity', type: 'number' },
     { name: 'completed', label: 'Completed?', type: 'number'},
     { name: 'giving_family', label: 'Given By (Family)', type: 'number' },
     { name: 'giving_volunteer', label: 'Given By (Member)', type: 'number' },
     { name: 'recieving_family', label: 'Recieved By (Family)', type: 'number' }, //in the future this shold be a search bar
-    { name: 'user_id', label: 'User', type: 'number' },
 ];
     
     return (
@@ -92,14 +116,16 @@ const Donations = (props) => {
                 data={donationData}
                 onEdit={handleEditDonation}
                 editTitle={"Edit Donation"}
-                editFields={donationFields}
+                viewTitle={"View Donation"}
+                viewFields={donationViewFields}
+                editFields={donationEditFields}
                 onDelete={handleDeleteDonation}
             ></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateDonation}
-                    formFields={donationFields}
+                    formFields={donationCreateFields}
                     title={"Record Donation"}
                 />   
         </BasicPage>

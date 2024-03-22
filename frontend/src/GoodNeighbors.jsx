@@ -46,7 +46,7 @@ const GoodNeighbors = (props) => {
 
     const handleEditGoodNeighbor = (formData) => {
         const endpoint  = 'http://localhost:8080/neighbor/' + formData['good_neighbor_id'] + '/update'
-        axios.post(endpoint, formData)
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -58,7 +58,7 @@ const GoodNeighbors = (props) => {
 
     const handleDeleteGoodNeighbor = (formData) => {
         const endpoint  = 'http://localhost:8080/neighbor/' + formData['good_neighbor_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -68,12 +68,22 @@ const GoodNeighbors = (props) => {
         });
     }
 
-    const goodNeighborFields = [
-        { name: 'first_name', label: 'First Name', type: 'text' },
-        { name: 'last_name', label: 'Last Name', type: 'text' },
-        { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+    const goodNeighborCreateFields = [
         { name: 'refugee_family_id', label: 'Refugee Family ID', type: 'number' }, //in the future this shold be a search bar
-        { name: 'church_they_attend', label: 'Church Home', type: 'text' }
+        { name: 'host_family_id', label: 'Host Family ID', type: 'number' }, //in the future this shold be a search bar
+        { name: 'match_date', label: 'Date Matched', type: 'date' }, //in the future this shold be a search bar
+      ];
+
+      const goodNeighborEditFields = [
+        { name: 'refugee_family_id', label: 'Refugee Family ID', type: 'number' }, //in the future this shold be a search bar
+        { name: 'host_family_id', label: 'Host Family ID', type: 'number' }, //in the future this shold be a search bar
+        { name: 'match_date', label: 'Date Matched', type: 'date' }, //in the future this shold be a search bar
+      ];
+
+      const goodNeighborViewFields = [
+        { name: 'refugee_family_id', label: 'Refugee Family ID', type: 'number' }, //in the future this shold be a search bar
+        { name: 'host_family_id', label: 'Host Family ID', type: 'number' }, //in the future this shold be a search bar
+        { name: 'match_date', label: 'Date Matched', type: 'date' }, //in the future this shold be a search bar
       ];
 
     return (
@@ -88,14 +98,16 @@ const GoodNeighbors = (props) => {
                     data={data}
                     onEdit={handleEditGoodNeighbor}
                     editTitle={"Edit Good Neighbor"}
-                    editFields={goodNeighborFields}
+                    viewTitle={"View Good Neighbor"}
+                    editFields={goodNeighborEditFields}
+                    viewFields={goodNeighborViewFields}
                     onDelete={handleDeleteGoodNeighbor}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleCreateGoodNeighbor}
-                    formFields={goodNeighborFields}
+                    formFields={goodNeighborCreateFields}
                     title={"Add Good Neighbor"}
                 />
             </BasicPage>

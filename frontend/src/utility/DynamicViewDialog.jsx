@@ -10,11 +10,12 @@ import {
   Button,
   Text,
   useTheme,
+  propNames,
 } from '@chakra-ui/react';
 import theme from '../style/theme';
 import DynamicFormDialog from './DynamicFormDialog';
 
-const DynamicViewDialog = ({ title, isOpen, onClose, onDelete, onEdit, data, editFields, editTitle}) => {
+const DynamicViewDialog = ({ isOpen, onClose, onDelete, onEdit, data, viewFields, editFields, viewTitle, editTitle}) => {
 //   const [formData, setFormData] = useState(existData);
 //   const [formAlert, setFormAlert] = useState(false);
 const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -53,21 +54,38 @@ if(!data){
         onDelete(data);
     }
 
+    const handleInfoContext  = (field, data) => {
+      let value = "";
+
+      switch(field.type){
+        default:
+          value = field.label + ": " + data[field.name]
+          break;
+        case "date":
+          const formattedDate = new Date(data[field.name]);
+          value = field.label + ": " + formattedDate.toDateString();
+          break
+      }
+
+      return (
+        <Text key={field.name}>
+          {value}
+        </Text>
+      )
+    }
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay/>
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+        <ModalHeader>{viewTitle}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
         {
-            Object.entries(data).map(([key, value]) => (
-                <Text key={key}>
-                    {key + ": " + value}
-              </Text>
-            ))
+          viewFields.map((field) => (
+            handleInfoContext(field, data)
+          ))
         }
-        {<DynamicFormDialog
+        <DynamicFormDialog
             isOpen={openEditDialog}
             onClose={handleCloseEditDialog}
             onSubmit={onEdit}
@@ -75,19 +93,7 @@ if(!data){
             title={editTitle}
             existData={data}
         >
-        </DynamicFormDialog>}
-          {/* {formFields.map((field) => (
-            <FormControl key={field.name} mb={4}>
-              <FormLabel>{field.label}</FormLabel>
-              <Input
-                type={field.type}
-                value={formData[field.name] || ''}
-                onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                required
-              >
-              </Input>
-            </FormControl>
-          ))} */}
+        </DynamicFormDialog>
         </ModalBody>
         <ModalFooter>
           <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleDeleteClick}>

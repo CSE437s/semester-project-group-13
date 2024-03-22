@@ -96,11 +96,7 @@ async function create({
 async function update(refugee_id, {
   first_name,
   last_name,
-  date_of_birth,
   phone_number,
-  country_of_origin,
-  date_of_arrival_to_us,
-  date_of_joining_oasis,
   gender,
   email,
   family_id
@@ -111,11 +107,7 @@ async function update(refugee_id, {
        SET 
          first_name = ?, 
          last_name = ?, 
-         date_of_birth = ?, 
          phone_number = ?, 
-         country_of_origin = ?, 
-         date_of_arrival_to_us = ?, 
-         date_of_joining_oasis = ?, 
          gender = ?, 
          email = ?, 
          family_id = ? 
@@ -124,11 +116,7 @@ async function update(refugee_id, {
     const results = await db.query(query, [
       first_name,
       last_name,
-      date_of_birth,
       phone_number,
-      country_of_origin,
-      date_of_arrival_to_us,
-      date_of_joining_oasis,
       gender,
       email,
       family_id,

@@ -18,7 +18,9 @@ async function getOne(family_id) {
       console.error('Error while getting one family', error);
       throw error;
     }
-  }async function create({
+  }
+  
+  async function create({
     head_of_household,
     last_name,
     address,
