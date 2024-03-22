@@ -98,10 +98,24 @@ async function deleteOne(request_id) {
   }
 }
 
+
+async function updateUserId(user_idToChange, request_id) {
+    try {
+      const query = 'UPDATE requests SET user_id = ? WHERE user_id = ?';
+      await db.query(query, [request_id, user_idToChange]);
+      console.log('User ID updated in notes');
+    } catch (error) {
+      console.error('Error updating user ID in notes', error);
+      throw error;
+    }
+  }
+  
+
 module.exports = {
   getAll,
   getOne,
   create,
   update,
   deleteOne,
+  updateUserId,
 };
