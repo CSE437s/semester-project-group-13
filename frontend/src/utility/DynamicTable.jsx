@@ -30,11 +30,6 @@ const DynamicTable = (props) => {
     // props.onRowSelect()
   };
 
-  const handleCloseEditDialog = () => {
-    setOpenEditDialog(false);
-    setSelectedRow(-1);
-  };
-
   const handleCloseViewDialog = () => {
     setOpenViewDialog(false);
     setSelectedRow(-1);
@@ -50,24 +45,36 @@ const DynamicTable = (props) => {
     (column) => !column.toLowerCase().endsWith("id")
   );
 
+  const handleColumnContext = () => {
+    return (
+      <Tr>
+      {filteredColumns.map((column) => (
+        <Th key={column}>{translateBE(column)}</Th>
+      ))}
+    </Tr>
+    )
+  }
+
+  const handleRowContext = (row, rowIndex) => {
+    return (
+      <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
+      {filteredColumns.map((column) => (
+        <Td key={column}>{translateBE(row[column])}</Td>
+      ))}
+    </Tr>
+    )
+  }
+
   return (
     <Box>
       <Table variant="simple">
         <Thead>
-          <Tr>
-            {filteredColumns.map((column) => (
-              <Th key={column}>{translateBE(column)}</Th>
-            ))}
-          </Tr>
+          handleColumnContext();
         </Thead>
         <Tbody>
-          {props.data.map((row, rowIndex) => (
-            <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
-              {filteredColumns.map((column) => (
-                <Td key={column}>{translateBE(row[column])}</Td>
-              ))}
-            </Tr>
-          ))}
+          {props.data.map((row, rowIndex) => {
+            handleRowContext(row, rowIndex)
+          })}
         </Tbody>
       </Table>
 
