@@ -121,6 +121,19 @@ async function updateUserId(user_idToChange, request_id) {
     }
   }
 
+  
+async function updateFamilyId(familyIdToChange, new_value) {
+    try {
+      const query = 'UPDATE requests SET family_id = ? WHERE family_id = ?';
+      await db.query(query, [new_value, familyIdToChange]);
+      console.log('Family ID updated in requests');
+    } catch (error) {
+      console.error('Error updating Family ID in requests', error);
+      throw error;
+    }
+  }
+  
+
 module.exports = {
   getAll,
   getOne,
@@ -129,4 +142,5 @@ module.exports = {
   deleteOne,
   updateUserId,
   updateRefugeeId,
+  updateFamilyId,
 };

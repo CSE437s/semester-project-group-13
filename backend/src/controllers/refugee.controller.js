@@ -3,6 +3,7 @@ const donationService = require('../services/donation.service');
 const noteService = require('../services/notes.service');
 const requestService = require('../services/requests.service');
 const goodNeighborService = require('../services/goodNeighbor.service')
+const familyService = require('../services/family.service');
 
 
 async function getAll(req, res, next) {
@@ -112,7 +113,8 @@ async function deleteOne(req, res) {
           donationService.updateRefugeeId(refugee_id, 2),
           goodNeighborService.updateRefugeeId(refugee_id, 2),
           requestService.updateRefugeeId(refugee_id, 2),
-          noteService.updateRefugeeId(refugee_id, 2)
+          noteService.updateRefugeeId(refugee_id, 2),
+          familyService.updateHeadOfFamily(refugee_id, 2),
         ]);
 
         await refugeeService.deleteOne(refugee_id);
@@ -127,6 +129,8 @@ async function deleteOne(req, res) {
         res.status(500).json({ error: 'Error deleting refugee' });
     }
 }
+
+
 
 module.exports = {
     getAll,

@@ -124,12 +124,35 @@ async function updateRefugeeId(refugeeIdToChange, new_value) {
   try {
     const query = 'UPDATE donations SET receiving_refugee = ? WHERE receiving_refugee = ?';
     await db.query(query, [new_value, refugeeIdToChange]);
-    console.log('User ID updated in donations');
+    console.log('Refugee ID updated in donations');
   } catch (error) {
-    console.error('Error updating user ID in donations', error);
+    console.error('Error updating Refugee ID in donations', error);
     throw error;
   }
 }
+
+async function updateGivingFamilyId(familyIdToChange, new_value) {
+  try {
+    const query = 'UPDATE donations SET giving_family = ? WHERE giving_family = ?';
+    await db.query(query, [new_value, familyIdToChange]);
+    console.log('Family ID updated in donations');
+  } catch (error) {
+    console.error('Error updating Family ID in donations', error);
+    throw error;
+  }
+}
+
+async function updateRecievingFamilyId(familyIdToChange, new_value) {
+  try {
+    const query = 'UPDATE donations SET receiving_family = ? WHERE receiving_family = ?';
+    await db.query(query, [new_value, familyIdToChange]);
+    console.log('Family ID updated in donations');
+  } catch (error) {
+    console.error('Error updating Family ID in donations', error);
+    throw error;
+  }
+}
+
 
 module.exports = {
   getAll,
@@ -140,4 +163,6 @@ module.exports = {
   updateGivingVolunteer,
   updateUserId,
   updateRefugeeId,
+  updateGivingFamilyId,
+  updateRecievingFamilyId,
 };

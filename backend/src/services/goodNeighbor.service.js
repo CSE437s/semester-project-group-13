@@ -107,6 +107,30 @@ async function getOne(neighbor_id) {
     }
   }
 
+
+async function updateHostingFamilyId(familyIdToChange, new_value) {
+  try {
+    const query = 'UPDATE good_neighbors SET host_family_id = ? WHERE host_family_id = ?';
+    await db.query(query, [new_value, familyIdToChange]);
+    console.log('Family ID updated in good_neighbors');
+  } catch (error) {
+    console.error('Error updating Family ID in good_neighbors', error);
+    throw error;
+  }
+}
+
+async function updateRefugeeFamilyId(familyIdToChange, new_value) {
+  try {
+    const query = 'UPDATE good_neighbors SET refugee_family_id = ? WHERE refugee_family_id = ?';
+    await db.query(query, [new_value, familyIdToChange]);
+    console.log('Family ID updated in good_neighbors');
+  } catch (error) {
+    console.error('Error updating Family ID in good_neighbors', error);
+    throw error;
+  }
+}
+
+
   
 module.exports = {
     getAll,
@@ -115,4 +139,6 @@ module.exports = {
     update,
     deleteOne,
     updateRefugeeId,
+    updateHostingFamilyId,
+    updateRefugeeFamilyId,
 };

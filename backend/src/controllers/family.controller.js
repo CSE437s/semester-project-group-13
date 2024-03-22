@@ -1,5 +1,11 @@
 const familyService = require('../services/family.service');
 
+const donationService = require('../services/donation.service');
+const refugeeService = require('../services/refugee.service');
+const volunteerService = require('../services/volunteer.service');
+const requestService = require('../services/requests.service');
+const goodNeighborService = require('../services/goodNeighbor.service')
+
 
 async function getAll(req, res, next) {
     try {
@@ -104,6 +110,25 @@ async function create(req, res) {
 async function deleteOne(req, res) {
   try {
     const { family_id } = req.params;
+
+    const family = await familyService.getOne(family_id);
+
+
+    if (family && family.is_refugee) {
+      await Promise.all([
+        donationService.updateRecievingFamilyId(family_id, 1),
+        requestService.updateFamilyId(family_id, 1),
+        goodNeighborService.updateRefugeeFamilyId(family_id, 1),
+        refugeeService.updateFamilyId(family_id, 1)
+      ]);
+    } else {
+      await Promise.all([
+        donationService.updateGivingFamilyId(family_id, 2),
+        volunteerService.updateFamilyId(family_id, 2),
+        goodNeighborService.updateHostingFamilyId(family_id, 2),
+      ]);
+    }
+
     await familyService.deleteOne(family_id);
     res.status(200).json({ success: true });
   } catch (error) {

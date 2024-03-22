@@ -112,8 +112,18 @@ async function getOne(family_id) {
       throw error;
     }
   }
+    
+  async function updateHeadOfFamily(familyIdToChange, new_value) {
+    try {
+      const query = 'UPDATE families SET head_of_household = ? WHERE head_of_household = ?';
+      await db.query(query, [new_value, familyIdToChange]);
+      console.log('Head ID updated in families');
+    } catch (error) {
+      console.error('Error updating Head ID in donations', error);
+      throw error;
+    }
+  }
 
-  
 module.exports = {
     getAll,
     getOne,
@@ -121,4 +131,5 @@ module.exports = {
     update,
     deleteOne,
     updateUserId,
+    updateHeadOfFamily,
 };
