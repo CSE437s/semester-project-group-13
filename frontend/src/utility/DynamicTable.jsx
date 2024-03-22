@@ -45,23 +45,18 @@ const DynamicTable = (props) => {
     (column) => !column.toLowerCase().endsWith("id")
   );
 
-  const handleColumnContext = () => {
+  const handleColumnContext = (column) => {
+    console.log("handleColCOntext")
+
     return (
-      <Tr>
-      {filteredColumns.map((column) => (
         <Th key={column}>{translateBE(column)}</Th>
-      ))}
-    </Tr>
     )
   }
 
-  const handleRowContext = (row, rowIndex) => {
+  const handleRowContext = (row, column) => {
+    console.log("handleORwCOntext")
     return (
-      <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
-      {filteredColumns.map((column) => (
         <Td key={column}>{translateBE(row[column])}</Td>
-      ))}
-    </Tr>
     )
   }
 
@@ -69,12 +64,20 @@ const DynamicTable = (props) => {
     <Box>
       <Table variant="simple">
         <Thead>
-          handleColumnContext();
+          <Tr>
+            {filteredColumns.map((column) => (
+              handleColumnContext(column)
+            ))}
+          </Tr>
         </Thead>
         <Tbody>
-          {props.data.map((row, rowIndex) => {
-            handleRowContext(row, rowIndex)
-          })}
+          {props.data.map((row, rowIndex) => (
+            <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
+              {filteredColumns.map((column) => (
+                handleRowContext(row, column)
+              ))}
+            </Tr>
+          ))}
         </Tbody>
       </Table>
 
