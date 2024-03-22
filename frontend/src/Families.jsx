@@ -46,7 +46,7 @@ const Families = (props) => {
 
     const handleEditFamily = (formData) => {
         const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/update'
-        axios.post(endpoint, formData)
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -58,7 +58,7 @@ const Families = (props) => {
 
     const handleDeleteFamily = (formData) => {
         const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -90,6 +90,7 @@ const Families = (props) => {
                     data={data}
                     onEdit={handleEditFamily}
                     editTitle={"Edit Family"}
+                    viewTitle={"View Family"}
                     editFields={familyFields}
                     onDelete={handleDeleteFamily}
                 ></DynamicTable>

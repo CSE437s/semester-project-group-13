@@ -46,8 +46,8 @@ const Refugees = (props) => {
     };
 
     const handleEditRefugee = (formData) => {
-        const endpoint  = 'http://localhost:8080/refugee/:' + formData['refugee_id'] + '/update'
-        axios.post(endpoint, formData)
+        const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/update'
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -59,7 +59,7 @@ const Refugees = (props) => {
 
     const handleDeleteRefugee = (formData) => {
         const endpoint  = 'http://localhost:8080/refugee/' + formData['refugee_id'] + '/deleteOne'
-        axios.post(endpoint)
+        axios.delete(endpoint)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', data);
@@ -95,6 +95,7 @@ const Refugees = (props) => {
                     data={data}
                     onEdit={handleEditRefugee}
                     editTitle={"Edit Refugee"}
+                    viewTitle={"View Refugee"}
                     editFields={refugeeFields}
                     onDelete={handleDeleteRefugee}
                 ></DynamicTable>

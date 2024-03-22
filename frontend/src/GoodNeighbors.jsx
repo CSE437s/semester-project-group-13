@@ -46,7 +46,7 @@ const GoodNeighbors = (props) => {
 
     const handleEditGoodNeighbor = (formData) => {
         const endpoint  = 'http://localhost:8080/neighbor/' + formData['good_neighbor_id'] + '/update'
-        axios.post(endpoint, formData)
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -58,7 +58,7 @@ const GoodNeighbors = (props) => {
 
     const handleDeleteGoodNeighbor = (formData) => {
         const endpoint  = 'http://localhost:8080/neighbor/' + formData['good_neighbor_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -88,6 +88,7 @@ const GoodNeighbors = (props) => {
                     data={data}
                     onEdit={handleEditGoodNeighbor}
                     editTitle={"Edit Good Neighbor"}
+                    viewTitle={"View Good Neighbor"}
                     editFields={goodNeighborFields}
                     onDelete={handleDeleteGoodNeighbor}
                 ></DynamicTable>

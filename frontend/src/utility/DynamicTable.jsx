@@ -40,6 +40,11 @@ const DynamicTable = (props) => {
     setSelectedRow(-1);
   };
 
+  const handleDelete = (formData) => {
+    props.onDelete(formData);
+    handleCloseViewDialog()
+  }
+
   const columns = Object.keys(props.data[0]);
   const filteredColumns = columns.filter(
     (column) => !column.toLowerCase().endsWith("id")
@@ -67,30 +72,17 @@ const DynamicTable = (props) => {
       </Table>
 
       {selectedRow !== -1 && (
-        //isOpen, onClose, onDelete, onEdit, data, editFields, editTitle
-        // <DynamicFormDialog
-        //   isOpen={openEditDialog}
-        //   onClose={handleCloseEditDialog}
-        //   onSubmit={props.onEdit}
-        //   formFields={props.editFields}
-        //   title={props.editTitle}
-        //   existData={props.data[selectedRow]}
-        // >
-        // </DynamicFormDialog>
         <DynamicViewDialog
           isOpen={openViewDialog}
           onClose={handleCloseViewDialog}
           onEdit={props.onEdit}
           editFields={props.editFields}
-          title={props.editTitle}
+          editTitle={props.editTitle}
+          viewTitle={props.viewTitle}
           data={props.data[selectedRow]}
-          onDelete={props.onDelete}
+          onDelete={handleDelete}
         >
         </DynamicViewDialog>
-        // <Box className="dialog">
-        //   <p>Row details: {JSON.stringify(data[selectedRow])}</p>
-        //   <Button onClick={handleCloseDialog}>Close</Button>
-        // </Box>
       )}
     </Box>
   );

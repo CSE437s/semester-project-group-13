@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.use(
   cors({
     origin: ["http://localhost:3000", "http://localhost:8080"],
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

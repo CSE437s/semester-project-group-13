@@ -14,7 +14,7 @@ import {
 import theme from '../style/theme';
 import DynamicFormDialog from './DynamicFormDialog';
 
-const DynamicViewDialog = ({ title, isOpen, onClose, onDelete, onEdit, data, editFields, editTitle}) => {
+const DynamicViewDialog = ({ isOpen, onClose, onDelete, onEdit, data, viewFields, editFields, viewTitle, editTitle}) => {
 //   const [formData, setFormData] = useState(existData);
 //   const [formAlert, setFormAlert] = useState(false);
 const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -57,7 +57,7 @@ if(!data){
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay/>
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+        <ModalHeader>{viewTitle}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
         {
@@ -67,7 +67,7 @@ if(!data){
               </Text>
             ))
         }
-        {<DynamicFormDialog
+        <DynamicFormDialog
             isOpen={openEditDialog}
             onClose={handleCloseEditDialog}
             onSubmit={onEdit}
@@ -75,19 +75,7 @@ if(!data){
             title={editTitle}
             existData={data}
         >
-        </DynamicFormDialog>}
-          {/* {formFields.map((field) => (
-            <FormControl key={field.name} mb={4}>
-              <FormLabel>{field.label}</FormLabel>
-              <Input
-                type={field.type}
-                value={formData[field.name] || ''}
-                onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                required
-              >
-              </Input>
-            </FormControl>
-          ))} */}
+        </DynamicFormDialog>
         </ModalBody>
         <ModalFooter>
           <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleDeleteClick}>

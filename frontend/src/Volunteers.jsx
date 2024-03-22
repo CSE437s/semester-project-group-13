@@ -47,7 +47,7 @@ const Volunteers = (props) => {
 
     const handleEditVolunteer = (formData) => {
         const endpoint  = 'http://localhost:8080/volunteer/' + formData['volunteer_id'] + '/update'
-        axios.post(endpoint, formData)
+        axios.put(endpoint, formData)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -59,7 +59,7 @@ const Volunteers = (props) => {
 
     const handleDeleteVolunteer = (formData) => {
         const endpoint  = 'http://localhost:8080/volunteer/' + formData['volunteer_id'] + '/deleteOne'
-        axios.post(endpoint, formData)
+        axios.delete(endpoint)
         .then((response) => {
             const data = response.data;
             console.log('Form data submitted:', formData);
@@ -93,6 +93,7 @@ const Volunteers = (props) => {
                 data={volunteerData}
                 onEdit={handleEditVolunteer}
                 editTitle={"Edit Volunteer"}
+                viewTitle={"View Volunteer"}
                 editFields={volunteerFields}
                 onDelete={handleDeleteVolunteer}
             ></DynamicTable>
