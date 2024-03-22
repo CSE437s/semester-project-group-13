@@ -7,7 +7,6 @@ const noteService = require('../services/notes.service');
 const requestService = require('../services/requests.service');
 
 
-
 async function getAll(req, res, next) {
   try {
     const users = await userService.getAll();

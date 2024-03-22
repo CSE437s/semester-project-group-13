@@ -1,4 +1,9 @@
 const refugeeService = require('../services/refugee.service');
+const donationService = require('../services/donation.service');
+const noteService = require('../services/notes.service');
+const requestService = require('../services/requests.service');
+const goodNeighborService = require('../services/goodNeighbor.service')
+
 
 async function getAll(req, res, next) {
     try {
@@ -102,6 +107,14 @@ async function update(req, res) {
 async function deleteOne(req, res) {
     try {
         const { refugee_id } = req.params;
+
+        await Promise.all([
+          donationService.updateRefugeeId(refugee_id, 2),
+          goodNeighborService.updateRefugeeId(refugee_id, 2),
+          requestService.updateRefugeeId(refugee_id, 2),
+          noteService.updateRefugeeId(refugee_id, 2)
+        ]);
+
         await refugeeService.deleteOne(refugee_id);
         res.status(200).json({ success: true });
     } catch (error) {

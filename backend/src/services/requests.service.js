@@ -110,6 +110,16 @@ async function updateUserId(user_idToChange, request_id) {
     }
   }
   
+  async function updateRefugeeId(refugeeIdToChange, new_value) {
+    try {
+      const query = 'UPDATE requests SET refugee_id = ? WHERE refugee_id = ?';
+      await db.query(query, [new_value, refugeeIdToChange]);
+      console.log('Refugee ID updated in requests');
+    } catch (error) {
+      console.error('Error updating refugee ID in requests', error);
+      throw error;
+    }
+  }
 
 module.exports = {
   getAll,
@@ -118,4 +128,5 @@ module.exports = {
   update,
   deleteOne,
   updateUserId,
+  updateRefugeeId,
 };

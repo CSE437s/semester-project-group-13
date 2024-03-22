@@ -120,6 +120,17 @@ async function updateUserId(user_idToChange, new_value) {
   }
 }
 
+async function updateRefugeeId(refugeeIdToChange, new_value) {
+  try {
+    const query = 'UPDATE donations SET receiving_refugee = ? WHERE receiving_refugee = ?';
+    await db.query(query, [new_value, refugeeIdToChange]);
+    console.log('User ID updated in donations');
+  } catch (error) {
+    console.error('Error updating user ID in donations', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
@@ -128,4 +139,5 @@ module.exports = {
   deleteOne,
   updateGivingVolunteer,
   updateUserId,
+  updateRefugeeId,
 };
