@@ -27,6 +27,9 @@ async function getOne(req, res, next) {
 async function create(req, res) {
   try {
     const { username, password, email, first_name, last_name } = req.body;
+    if (!username || !password || !email || !first_name || !last_name) {
+      throw new Error('Incomplete user data. Please provide all required fields.');
+    }
     const result = await userService.create({
       username,
       password,
@@ -45,6 +48,10 @@ async function update(req, res) {
   try {
     const { user_id } = req.params;
     const { username, password, email, first_name, last_name } = req.body;
+
+    if (!username && !password && !email && !first_name && !last_name) {
+      throw new Error('No data provided for update. Please provide at least one field to update.');
+    }
 
     const result = await userService.update({
       user_id,

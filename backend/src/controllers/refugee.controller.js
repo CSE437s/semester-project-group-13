@@ -34,6 +34,10 @@ async function create(req, res) {
             family_id
         } = req.body;
 
+        if (!first_name || !last_name || !date_of_birth || !phone_number || !country_of_origin || !date_of_arrival_to_us || !date_of_joining_oasis || !gender || !email || !family_id) {
+          throw new Error('Incomplete refugee data. Please provide all required fields.');
+      }
+
         const result = await refugeeService.create({
             first_name,
             last_name,
@@ -69,6 +73,11 @@ async function update(req, res) {
             email,
             family_id
         } = req.body;
+
+        if (!first_name && !last_name && !date_of_birth && !phone_number && !country_of_origin && !date_of_arrival_to_us && !date_of_joining_oasis && !gender && !email && !family_id) {
+          throw new Error('No data provided for update. Please provide at least one field to update.');
+      }
+
 
         await refugeeService.update(refugee_id, {
             first_name,

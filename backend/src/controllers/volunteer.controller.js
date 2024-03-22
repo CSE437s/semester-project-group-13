@@ -32,6 +32,10 @@ async function create(req, res) {
             family_id
         } = req.body;
 
+        if (!first_name || !last_name || !date_of_birth || !phone_number || !user_id || !family_id) {
+          throw new Error('Missing required fields. Please provide all required data.');
+      }
+
         const result = await volunteerService.create({
             first_name,
             last_name,
@@ -60,6 +64,10 @@ async function update(req, res) {
             user_id,
             family_id
         } = req.body;
+
+      if (!first_name && !last_name && !date_of_birth && !phone_number && !user_id && !family_id) {
+      throw new Error('No fields provided for update. Please provide at least one field to update.');
+      }
 
         await volunteerService.update(volunteer_id, {
             first_name,

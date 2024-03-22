@@ -28,6 +28,10 @@ async function create(req, res) {
       neighbor_id
     } = req.body;
 
+    if (!refugee_family_id || !host_family_id || !match_date || !neighbor_id) {
+      throw new Error('Incomplete neighbor data. Please provide all required fields.');
+  }
+
     const result = await neighborService.create({
       refugee_family_id,
       host_family_id,
@@ -50,6 +54,10 @@ async function update(req, res) {
       host_family_id,
       match_date,
     } = req.body;
+
+    if (!refugee_family_id && !host_family_id && !match_date) {
+      throw new Error('No data provided for update. Please provide at least one field to update.');
+  }
 
     const result = await neighborService.update({
       neighbor_id,
