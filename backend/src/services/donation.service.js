@@ -109,6 +109,16 @@ async function updateGivingVolunteer(volunteer_id, new_value) {
   }
 }
 
+async function updateUserId(user_idToChange, new_value) {
+  try {
+    const query = 'UPDATE donations SET giving_family = ? WHERE giving_family = ?';
+    await db.query(query, [new_value, user_idToChange]);
+    console.log('User ID updated in donations');
+  } catch (error) {
+    console.error('Error updating user ID in donations', error);
+    throw error;
+  }
+}
 
 module.exports = {
   getAll,
@@ -117,4 +127,5 @@ module.exports = {
   update,
   deleteOne,
   updateGivingVolunteer,
+  updateUserId,
 };

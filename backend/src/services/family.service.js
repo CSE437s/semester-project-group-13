@@ -112,6 +112,8 @@ async function getOne(family_id) {
       throw error;
     }
   }
+
+  
 module.exports = {
     getAll,
     getOne,

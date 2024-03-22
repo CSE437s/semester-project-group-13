@@ -90,10 +90,23 @@ async function deleteOne(volunteer_id) {
 }
 
 
+async function updateUserId(user_idToChange, volunteer_id) {
+  try {
+    const query = 'UPDATE volunteers SET user_id = ? WHERE user_id = ?';
+    await db.query(query, [volunteer_id, user_idToChange]);
+    console.log('User ID updated in volunteers');
+  } catch (error) {
+    console.error('Error updating user ID in volunteers', error);
+    throw error;
+  }
+}
+
+
 module.exports = {
     getAll,
     getOne,
     create,
     update,
     deleteOne,
+    updateUserId,
 };

@@ -8,6 +8,10 @@ const neighborRouter = require('./src/routes/goodNeighbor.route')
 const donationRouter = require('./src/routes/donation.route')
 const userRouter = require('./src/routes/user.route')
 const volunteerRouter = require('./src/routes/volunteer.route')
+const requestRouter = require('./src/routes/requests.route')
+const notesRouter = require('./src/routes/notes.route')
+
+
 
 const session = require("express-session");
 const cors = require("cors");
@@ -31,12 +35,15 @@ app.use(session({
 }))
 
 app.use("/auth", authRouter);
+app.use("/requests", requestRouter);
 app.use('/refugee', refugeeRouter);
 app.use('/family', familyRouter);
 app.use('/neighbor', neighborRouter);
 app.use('/donation', donationRouter);
 app.use('/user', userRouter);
 app.use('/volunteer', volunteerRouter);
+app.use('/notes', notesRouter);
+
 
 app.get('/cors', (req, res) => {
   res.send({ "msg": "This has CORS enabled 🎈" })
