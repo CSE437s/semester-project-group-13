@@ -3,7 +3,7 @@ import DynamicTable from './utility/DynamicTable';
 import axios from 'axios';
 import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
-import { useTheme, Button } from '@chakra-ui/react';
+import { useTheme, Button, Spacer } from '@chakra-ui/react';
 import DynamicFormDialog from './utility/DynamicFormDialog';
 import {ContextProvider} from './utility/contexts/ContextProvider';
 
@@ -40,9 +40,10 @@ const Families = (props) => {
             <BasicPage
                 title="Families"
             >            
-                <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
+                <Button variant={'solid'} onClick={handleOpenCreateDialog}>
                     Add Family
                 </Button>
+                <Spacer height={'5vh'}/>
                 <DynamicTable 
                     data={data}
                     context={context}

@@ -63,6 +63,7 @@ const VolunteerContext = {
     type: "volunteer",
     id: "volunteer_id",
     getAllEndpoint: "http://localhost:8080/volunteer",
+    getOneEndpoint: (id) => `http://localhost:8080/volunteer/${id}`,
     create: handleCreateVolunteer,
     edit: handleEditVolunteer,
     delete: handleDeleteVolunteer,

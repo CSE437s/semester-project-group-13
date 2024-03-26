@@ -4,7 +4,7 @@ import axios from "axios";
 import BasicPage from "./utility/BasicPage";
 import DynamicFormDialog from "./utility/DynamicFormDialog";
 import theme from "./style/theme";
-import { Button, useTheme } from "@chakra-ui/react";
+import { Button, useTheme, Spacer } from "@chakra-ui/react";
 import {ContextProvider} from "./utility/contexts/ContextProvider";
 
 const Refugees = (props) => {
@@ -41,12 +41,12 @@ const Refugees = (props) => {
     <div>
       <BasicPage title="Refugees">
         <Button
-          bg={theme.colors.purple[300]}
-          color={"white"}
+        variant={"solid"}
           onClick={handleOpenCreateDialog}
         >
           Add Refugee
         </Button>
+        <Spacer height={'5vh'}/>
         <DynamicTable
           data={data}
           context={context}

@@ -31,7 +31,7 @@ const Landing = (props) => {
     return (
         <Flex flexDirection={'column'} width={'90vw'} height={'90vh'}>
             <Flex id='header' flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-              <Button bg={theme.colors.purple[800]} color={'white'} onClick={handleLogout}>
+              <Button variant={'dark'} onClick={handleLogout}>
                   Logout
               </Button>
             </Flex>

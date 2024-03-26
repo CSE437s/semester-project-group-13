@@ -31,7 +31,9 @@ export function getDisplayString(context, data) {
       displayString = `${data.first_name} ${data.last_name}`
       break;
     case 'family':
-      displayString = `${data.head_of_household} ${data.last_name}`
+      if(data.head_of_household){
+        displayString = `${data.head_of_household} ${data.last_name}`
+      }
       break;
     case 'donation':
       displayString = `${data.item} ${data.quantity}`

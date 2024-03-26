@@ -58,7 +58,7 @@ const Login = (props) => {
               required
             />
           </FormControl>
-          <Button type="submit" bg={theme.colors.purple[500]} mr={3}>
+          <Button type="submit" variant={'dark'} mr={3}>
             Login
           </Button>
         </form>

@@ -64,6 +64,7 @@ const DonationContext = {
     type: "donation",
     id: "donation_id",
     getAllEndpoint: "http://localhost:8080/donation",
+    getOneEndpoint: (id) => `http://localhost:8080/donation/${id}`,
     create: handleCreateDonation,
     edit: handleEditDonation,
     delete: handleDeleteDonation,

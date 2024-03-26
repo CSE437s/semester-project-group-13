@@ -57,6 +57,7 @@ const goodNeighborCreateFields = [
     type: "good_neighbor",
     id: "good_neighbor_id",
     getAllEndpoint: "http://localhost:8080/neighbor",
+    getOneEndpoint: (id) => `http://localhost:8080/neighbor/${id}`,
     create: handleCreateGoodNeighbor,
     edit: handleEditGoodNeighbor,
     delete: handleDeleteGoodNeighbor,

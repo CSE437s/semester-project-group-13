@@ -121,7 +121,6 @@ const DynamicTable = (props) => {
         console.log(fieldContexts)
 
         let displayString = columnData[fieldContexts[column]][row[column]]
-        console.log("table ds", displayString)
         return <Td key={column}>{displayString}</Td>;
       }
       console.log(columnData)
@@ -129,9 +128,25 @@ const DynamicTable = (props) => {
     }
   };
 
+
+  const prepareViewData = (data) => {
+    const viewDataDict = {};
+    Object.keys(data).forEach((key) => {
+      if (viewFieldNames.includes(key)) {
+        if (contextLadenFieldNames.includes(key) && columnData.hasOwnProperty(fieldContexts[key])) {
+          viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
+        } else {
+          viewDataDict[key] = data[key];
+        }
+      }
+    });
+    return viewDataDict;
+  };
+  
+
   return (
     <Box>
-      <Table variant="simple">
+      <Table variant="main">
         <Thead>
           <Tr>
             {filteredColumns.map((column) => handleColumnContext(column))}
@@ -152,6 +167,9 @@ const DynamicTable = (props) => {
           onClose={handleCloseViewDialog}
           context={props.context}
           data={props.data[selectedRow]}
+          viewData={prepareViewData(props.data[selectedRow])}
+          contextLadenFieldNames={contextLadenFieldNames}
+          fieldContexts={fieldContexts}
         ></DynamicViewDialog>
       )}
     </Box>

@@ -24,22 +24,55 @@ const theme = extendTheme({
     mono: 'Menlo, monospace',
   },
   components: {
+    Table: {
+      variants: {
+        main: {
+          th: {
+            backgroundColor: 'primary.600',
+            color: 'white',
+            padding: '8px',
+            borderBottom: '2px solid white',
+          },
+          td: {
+            padding: '8px',
+            borderBottom: '1px solid #ddd',
+          },
+          table: {
+            borderRadius: 'md', // Rounded edges
+          },
+          tbody: {
+            tr: {
+              _hover: {
+                bg: 'primary.50', // Background color on hover
+              },
+            },
+          },
+        },
+      },
+    },
     Button: {
       variants: {
-        solid: {
-          bg: 'primary.500',
+        dark: {
+          bg: 'primary.800',
           color: 'white',
           _hover: {
             bg: 'primary.600',
           },
         },
+        solid: {
+          bg: 'primary.600',
+          color: 'white',
+          _hover: {
+            bg: 'primary.400',
+          },
+        },
         outline: {
-            border: 'solid primary.500 2px',
-            bg: 'primary.100',
-            color: 'white',
-            _hover: {
-                bg: 'primary.2000',
-            },
+          border: 'solid primary.800 2px',
+          bg: 'primary.300',
+          color: 'white',
+          _hover: {
+            bg: 'primary.200',
+          },
         },
       },
     },

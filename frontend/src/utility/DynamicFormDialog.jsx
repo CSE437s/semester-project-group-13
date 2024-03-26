@@ -12,6 +12,7 @@ import {
   FormControl,
   FormLabel,
   useTheme,
+  Spacer,
   propNames,
 } from "@chakra-ui/react";
 import theme from "../style/theme";
@@ -30,7 +31,6 @@ const DynamicFormDialog = ({
   const [formAlert, setFormAlert] = useState(false);
 
   const theme = useTheme();
-  console.log("theme", theme);
 
   const handleFieldChange = (field, value) => {
     console.log("field", field, "value", value)
@@ -54,8 +54,8 @@ const DynamicFormDialog = ({
         break;
       case "id":
         const fieldContext = ContextProvider(field.contextType)
-        if(existData && existData[fieldContext.id]){
-          value = {value: existData[fieldContext.id], label: getDisplayString(fieldContext, existData)}
+        if(formData && formData[fieldContext.id]){
+          value = {value: formData[fieldContext.id], label: getDisplayString(fieldContext, formData)}
         } else {
           value = {}
         }
@@ -102,19 +102,24 @@ const DynamicFormDialog = ({
           {formFields.map((field) => (handleInputContext(field)))}
         </ModalBody>
         <ModalFooter>
+            <Spacer/>         
+            <Spacer/>
+            <Spacer/>
+            <Spacer/>         
+            <Spacer/>
+            <Spacer/>
           <Button
-            bg={theme.colors.purple[500]}
-            color={"white"}
-            onClick={handleFormSubmit}
-          >
-            Submit
-          </Button>
-          <Button
-            bg={"white"}
-            color={theme.colors.purple[500]}
+            variant={"outline"}
             onClick={onClose}
           >
             Cancel
+          </Button>
+            <Spacer/>
+          <Button
+            variant={"solid"}
+            onClick={handleFormSubmit}
+          >
+            Submit
           </Button>
         </ModalFooter>
       </ModalContent>

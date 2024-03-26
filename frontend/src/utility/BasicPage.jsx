@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Box,
   Button,
-  ChakraProvider,
   CSSReset,
   Modal,
   ModalOverlay,
@@ -25,7 +24,7 @@ const BasicPage = (props) => {
 
   return (
     <Flex width={'inherit'}>
-      <Box textAlign="center" mt="8" flex={1} width={'100%'}>
+      <Box textAlign="center" variant={'solid'} mt="8" flex={1} width={'100%'}>
         <Button onClick={onOpen}>{props.title}</Button>
       </Box>
 
@@ -38,7 +37,7 @@ const BasicPage = (props) => {
             {props.children}
           </ModalBody>
           <ModalFooter>
-            <Button bg={'white'} color={theme.colors.purple[500]} mr={3} onClick={onClose}>
+            <Button variant={'outline'} mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>

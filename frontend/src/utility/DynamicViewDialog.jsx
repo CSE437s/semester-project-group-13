@@ -11,35 +11,19 @@ import {
   Text,
   useTheme,
   propNames,
+  Spacer
 } from "@chakra-ui/react";
 import theme from "../style/theme";
 import DynamicFormDialog from "./DynamicFormDialog";
-import { ContextProvider } from "./contexts/ContextProvider";
+import { getDisplayString } from "./contexts/ContextProvider";
 
 const DynamicViewDialog = (props) => {
-  //   const [formData, setFormData] = useState(existData);
-  //   const [formAlert, setFormAlert] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const theme = useTheme();
-  console.log("theme", theme);
 
   if (!props.data) {
     return <p>No Data Found</p>;
   }
-
-  //   const handleFieldChange = (field, value) => {
-  //     setFormData((prevData) => ({ ...prevData, [field]: value }));
-  //   };
-
-  //   const handleFormSubmit = () => {
-  //     onSubmit(formData);
-  //     onClose();
-  //   };
-
-  //   const handleEdit = () => {
-  //     onSubmit(formData);
-  //     onClose();
-  //   };
 
   const handleEditClick = () => {
     setOpenEditDialog(true);
@@ -65,6 +49,10 @@ const DynamicViewDialog = (props) => {
         const formattedDate = new Date(props.data[field.name]);
         value = field.label + ": " + formattedDate.toDateString();
         break;
+      case "id":
+        console.log("viewData", props.viewData)
+        value = field.label + ": " + props.viewData[field.name]
+        break;
     }
 
     return <Text key={field.name}>{value}</Text>;
@@ -74,7 +62,7 @@ const DynamicViewDialog = (props) => {
     <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{props.context.viewTitle}</ModalHeader>
+        <ModalHeader>{getDisplayString(props.context, props.data) || props.context.viewTitle}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {props.context.viewFields.map((field) =>
@@ -91,23 +79,27 @@ const DynamicViewDialog = (props) => {
           ></DynamicFormDialog>
         </ModalBody>
         <ModalFooter>
+        <Spacer/>         
+        <Spacer/>
+        <Spacer/>
+        <Spacer/>
+        <Spacer/>
           <Button
-            bg={theme.colors.purple[500]}
-            color={"white"}
+            variant={'dark'}
             onClick={handleDeleteClick}
           >
             Delete
           </Button>
+          <Spacer/>
           <Button
-            bg={theme.colors.purple[200]}
-            color={"white"}
+            variant={'solid'}
             onClick={handleEditClick}
           >
             Edit
           </Button>
+          <Spacer/>
           <Button
-            bg={"white"}
-            color={theme.colors.purple[500]}
+            variant={'outline'}
             onClick={props.onClose}
           >
             Cancel

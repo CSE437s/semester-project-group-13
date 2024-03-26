@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DynamicTable from './utility/DynamicTable';
 import axios from 'axios';
 import DynamicFormDialog from './utility/DynamicFormDialog';
-import { Button, useTheme } from '@chakra-ui/react';
+import { Button, useTheme, Spacer} from '@chakra-ui/react';
 import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
 import { ContextProvider } from './utility/contexts/ContextProvider';
@@ -41,9 +41,10 @@ const Volunteers = (props) => {
         <BasicPage
             title="Volunteers"
         >
-            <Button bg={theme.colors.purple[300]} color={'white'} onClick={handleOpenCreateDialog}>
+            <Button variant={'solid'} onClick={handleOpenCreateDialog}>
                 Add Volunteer
             </Button>
+            <Spacer height={'5vh'}/>
             <DynamicTable 
                 data={volunteerData}
                 context={context}
