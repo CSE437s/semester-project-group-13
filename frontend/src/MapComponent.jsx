@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import maplibregl from "maplibre-gl";
 import axios from "axios";
 import { Button, useTheme, Flex } from "@chakra-ui/react";
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
@@ -53,30 +54,13 @@ const MapComponent = (props) => {
   const initializeMap = () => {
     const mapInstance = new maplibregl.Map({
       container: "map",
-      style: 'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL', // style URL
+      style: 'https://api.maptiler.com/maps/streets/style.json?key=cTPmLVGEtC2TtjsUeqHc', // style URL
       center: [-90.1994, 38.627],
-      zoom: 8
+      zoom: 9
     });  
     
     setMap(mapInstance);
   };
-
-  // Test Markers
-  useEffect(() => {
-    if (map) {
-      let marker = new maplibregl.Marker({
-        color: "#FF0000",
-        draggable: true
-      }).setLngLat([0, 50])
-      .addTo(map);
-  
-      const marker1 = new maplibregl.Marker()
-        .setLngLat([12.550343, 55.665957])
-        .addTo(map);
-      console.log("KO");
-      console.log(map);
-    }
-  }, [map]);
 
   // Creates Markers for each family address
   useEffect(() => {
@@ -84,7 +68,7 @@ const MapComponent = (props) => {
   
     coords.forEach((coord) => {
       new maplibregl.Marker({color: "#FF0000"})
-        .setLngLat([-90, 38])
+        .setLngLat([coord.lon, coord.lat])
         .addTo(map);
     });
   
@@ -93,7 +77,7 @@ const MapComponent = (props) => {
   return (
     props.variant === "mainDisplay" ? (
       <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" p={2}>
-        <div id="map" style={{ width: "100%", height: "500px" }} />
+        <div id="map" style={{ width: "calc(100% - 30%)", height: "500px" }} />
         <Button
           mt={4}
           colorScheme="purple"
@@ -104,7 +88,7 @@ const MapComponent = (props) => {
       </Flex>
     ) : (
       <Flex flexDirection="column" alignItems="center">
-        <div id="map" style={{ width: "100%", height: "500px" }} />
+        <div id="map" style={{ width: "calc(100% - 30%)", height: "500px" }} />
         <Button
           mt={4}
           colorScheme="purple"
