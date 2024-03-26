@@ -98,7 +98,7 @@ const Landing = (props) => {
 
 
               {activeTab !== "mapComponent"?
-                <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" marginLeft="15vw" p={2}>
+                <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" marginLeft="15vw" p={2} overflowX={'auto'} overflowY={'auto'}>
                   <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}

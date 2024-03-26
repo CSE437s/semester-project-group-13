@@ -40,7 +40,8 @@ const theme = extendTheme({
         main: {
           table: {
             mt: '2px',
-            width: '100%'
+            width: '100%',
+            overflow: 'hidden'
           },
           th: {
             backgroundColor: 'primary.600',
