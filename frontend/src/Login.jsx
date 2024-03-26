@@ -27,7 +27,7 @@ const Login = (props) => {
         setUsername(data.username);
         setPassword(data.password);
         setLoginAlert(false)
-        props.onLogin();
+        props.onLogin(data.user_id);
       })
       .catch((error) => {
         setLoginAlert(true);
@@ -65,7 +65,7 @@ const Login = (props) => {
         </form>
       </Box>
       {loginAlert && (
-        <Alert status="warning" bg={theme.colors.purple[900]} mt={4}>
+        <Alert status="warning" bg={theme.colors.primary[700]} mt={4}>
           <AlertTitle mr={2}>Login failed! Try Again.  </AlertTitle>
           <CloseButton onClick={() => setLoginAlert(false)} position="absolute" right="2px" top="2px" scale={.1} />
         </Alert>

@@ -13,9 +13,9 @@ import {
   propNames,
   Spacer
 } from "@chakra-ui/react";
-import theme from "../style/theme";
+import theme from "../../style/theme";
 import DynamicFormDialog from "./DynamicFormDialog";
-import { getDisplayString } from "./contexts/ContextProvider";
+import { getDisplayString } from "../contexts/ContextProvider";
 
 const DynamicViewDialog = (props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);

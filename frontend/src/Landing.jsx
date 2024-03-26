@@ -2,11 +2,11 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import { useTheme, Flex, Button, Spacer } from '@chakra-ui/react';
 import theme from './style/theme';
-import DynamicTable from './utility/DynamicTable';
+import DynamicTable from './utility/dynamicComponents/DynamicTable';
 import TabButton from './utility/TabButton'; // Assuming you have a custom TabButton component
 import { ContextProvider, getAllContexts } from './utility/contexts/ContextProvider';
 import MapComponent from './MapComponent';
-import DynamicFormDialog from './utility/DynamicFormDialog';
+import DynamicFormDialog from './utility/dynamicComponents/DynamicFormDialog';
 
 const Landing = (props) => {
   const theme = useTheme();
@@ -90,7 +90,7 @@ const Landing = (props) => {
             </Flex>
 
 
-              {activeTab !== "mapComponent" ?
+              {activeTab !== "mapComponent"?
                 <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" marginLeft="15vw" p={2}>
                   <DynamicFormDialog
                     isOpen={openCreateDialog}

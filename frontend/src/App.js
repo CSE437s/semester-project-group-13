@@ -44,10 +44,11 @@ function App() {
     console.log("Current Password:", password);
   };
 
-  const handleSuccessfulLogin = () => {
+  const handleSuccessfulLogin = (user_id) => {
     const loginData = {
       //TODO: when we add auth token tables & set up token tables in db
       //token: 'your-auth-token',
+      user_id: user_id,
       expiration: Date.now() + 3600000, //expires in 1 hour
     };
     localStorage.setItem("loginData", JSON.stringify(loginData));

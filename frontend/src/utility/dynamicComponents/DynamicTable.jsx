@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
-import translateBE from "./translateBE";
+import translateBE from "../translateBE";
 import DynamicFormDialog from "./DynamicFormDialog";
 import DynamicViewDialog from "./DynamicViewDialog";
-import { ContextProvider, getDisplayString } from "./contexts/ContextProvider";
+import { ContextProvider, getDisplayString } from "../contexts/ContextProvider";
 import axios from "axios";
-import LoadingPage from "./LoadingPage";
+import LoadingPage from "../LoadingPage";
 
 const DynamicTable = (props) => {
   const [selectedRow, setSelectedRow] = useState(-1);

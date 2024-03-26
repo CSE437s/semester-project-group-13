@@ -43,7 +43,7 @@ const donationCreateFields = [
 { name: 'giving_volunteer', label: 'Given By (Member)', type: 'id', contextType: "volunteer"},
 { name: 'recieving_family', label: 'Recieved By (Family)', type: 'id', contextType: "family"},
 { name: 'recieving_refugee', label: 'Recieved By (Member)', type: 'id', contextType: "refugee"}, 
-{ name: 'user_id', label: 'User', type: 'number' },
+{ name: 'user_id', label: 'User', type: 'id' },
 ];
 
 const donationEditFields = [
