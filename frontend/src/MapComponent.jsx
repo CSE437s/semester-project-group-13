@@ -76,7 +76,7 @@ const MapComponent = (props) => {
 
   return (
     props.variant === "mainDisplay" ? (
-      <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" p={2}>
+      <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" p={2} marginLeft={'15vw'}>
         <div id="map" style={{ width: "calc(100% - 30%)", height: "500px" }} />
         <Button
           mt={4}
