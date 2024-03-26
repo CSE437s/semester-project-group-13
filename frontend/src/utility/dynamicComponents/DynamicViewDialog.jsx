@@ -46,6 +46,9 @@ const DynamicViewDialog = (props) => {
       default:
         value = field.label + ": " + props.data[field.name];
         break;
+      case "bool":
+        value = field.label + ": " + (props.data[field.name] == 0 ? "No" : "Yes");
+        break;
       case "date":
         const formattedDate = new Date(props.data[field.name]);
         value = field.label + ": " + formattedDate.toDateString();

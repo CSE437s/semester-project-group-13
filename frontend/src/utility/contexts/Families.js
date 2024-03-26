@@ -41,8 +41,8 @@ const familyCreateFields = [
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
     { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
+    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
   ];
 
   const familyEditFields = [
@@ -51,8 +51,8 @@ const familyCreateFields = [
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
     { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
+    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
   ];
 
   const familyViewFields = [
@@ -61,8 +61,8 @@ const familyCreateFields = [
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
     { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
+    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
+    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
   ];
 
   const FamilyContext = {

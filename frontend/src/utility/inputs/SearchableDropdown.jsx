@@ -52,7 +52,7 @@ const SearchableDropdown = (props) => {
         options={options}
         onChange={handleSelectChange}
         isSearchable={true}
-        value={selectedOption || props.value}
+        defaultValue={selectedOption || props.value}
         required
       />
     </FormControl>

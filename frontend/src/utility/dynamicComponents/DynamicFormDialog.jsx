@@ -16,6 +16,9 @@ import {
   Alert,
   AlertTitle,
   CloseButton,
+  RadioGroup,
+  Stack,
+  Radio
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import theme from "../../style/theme";
@@ -103,69 +106,69 @@ const DynamicFormDialog = ({
   const handleInputContext = (field) => {
     let value = "";
     switch (field.type) {
-      default:
-        value = formData[field.name] || "";
-        break;
+      case "bool":
+        value = formData[field.name] ? formData[field.name] : ""; // Assuming the value is either true or false
+        return (
+          <FormControl key={field.name} mb={4}>
+            <FormLabel>{field.label}</FormLabel>
+            <RadioGroup onChange={(e) => handleFieldChange(field, e)} defaultValue={value}>
+              <Stack direction="row">
+                <Radio value="1">Yes</Radio>
+                <Radio value="0">No</Radio>
+              </Stack>
+            </RadioGroup>
+          </FormControl>
+        );
+      case "date":
+        return (
+          <FormControl key={field.name} mb={4}>
+            <FormLabel>{field.label}</FormLabel>
+            <DatePicker
+              selected={formData[field.name] ? new Date(formData[field.name]) : null}
+              onChange={(date) => handleFieldChange(field, date)}
+              dateFormat="MM/dd/yyyy"
+              isClearable
+              placeholderText="MM/DD/YYYY"
+            />
+          </FormControl>
+        );
       case "id":
-        if(field.name == "user_id"){
-          if(localStorage.getItem('loginData')){
-            formData[field.name] = JSON.parse(localStorage.getItem('loginData')).user_id;
+        if (field.name === "user_id") {
+          if (localStorage.getItem("loginData")) {
+            formData[field.name] = JSON.parse(localStorage.getItem("loginData")).user_id;
           }
           break;
         }
-        const fieldContext = ContextProvider(field.contextType)
-        if(formData && formData[fieldContext.id]){
-          value = {value: formData[fieldContext.id], label: getDisplayString(fieldContext, formData)}
+        const fieldContext = ContextProvider(field.contextType);
+        if (formData && formData[fieldContext.id]) {
+          value = { value: formData[fieldContext.id], label: getDisplayString(fieldContext, formData) };
         } else {
-          value = {}
+          value = {};
         }
-        console.log(formData)
-        break;
+        console.log(formData);
+        return (
+          <SearchableDropdown
+            contextType={field.contextType}
+            label={field.label}
+            onChange={(selectedOption) => handleFieldChange(field, selectedOption)}
+            defaultValue={value}
+            key={field.name}
+          />
+        );
+      default:
+        value = formData[field.name] || "";
+        return (
+          <FormControl key={field.name} mb={4}>
+            <FormLabel>{field.label}</FormLabel>
+            <Input
+              type={field.type}
+              defaultValue={value}
+              onChange={(e) => handleFieldChange(field, e.target.value)}
+              required
+            />
+          </FormControl>
+        );
     }
-
-    return (() => {
-      switch (field.type) {
-        case "date":
-          return (
-            <FormControl key={field.name} mb={4}>
-              <FormLabel>{field.label}</FormLabel>
-              <DatePicker
-                selected={formData[field.name] ? new Date(formData[field.name]) : null}                
-                onChange={(date) => handleFieldChange(field, date)}
-                dateFormat="MM/dd/yyyy"
-                isClearable
-                placeholderText="MM/DD/YYYY"
-              />
-            </FormControl>
-          );
-        case "id":
-          if(field.name == 'user_id'){
-            return;
-          }
-          return (
-            <SearchableDropdown
-              contextType={field.contextType}
-              label={field.label}
-              onChange={(selectedOption) => handleFieldChange(field, selectedOption)}
-              value={value}
-              key={field.name}
-            >
-            </SearchableDropdown>
-          );
-        default:
-          return (
-            <FormControl key={field.name} mb={4}>
-              <FormLabel>{field.label}</FormLabel>
-              <Input
-                type={field.type}
-                value={value}
-                onChange={(e) => handleFieldChange(field, e.target.value)}
-                required
-              />
-            </FormControl>
-          );
-      }
-    })();
   };
 
   return (

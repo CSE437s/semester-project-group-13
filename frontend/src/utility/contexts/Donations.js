@@ -38,7 +38,7 @@ const handleDeleteDonation = (formData) => {
 const donationCreateFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'quantity', label: 'Quantity', type: 'number' },
-{ name: 'completed', label: 'Completed?', type: 'number'}, //needs unique typing
+{ name: 'completed', label: 'Completed?', type: 'bool'}, //needs unique typing
 { name: 'giving_family', label: 'Given By (Family)', type: 'id', contextType: "family"},
 { name: 'giving_volunteer', label: 'Given By (Member)', type: 'id', contextType: "volunteer"},
 { name: 'recieving_family', label: 'Recieved By (Family)', type: 'id', contextType: "family"},
@@ -49,13 +49,13 @@ const donationCreateFields = [
 const donationEditFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'quantity', label: 'Quantity', type: 'number' },
-{ name: 'completed', label: 'Completed?', type: 'number'},
+{ name: 'completed', label: 'Completed?', type: 'bool'},
 ];
 
 const donationViewFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'quantity', label: 'Quantity', type: 'number' },
-{ name: 'completed', label: 'Completed?', type: 'number'},
+{ name: 'completed', label: 'Completed?', type: 'bool'},
 { name: 'giving_family', label: 'Given By (Family)', type: 'id', contextType: "family"},
 { name: 'recieving_family', label: 'Recieved By (Family)', type: 'id', contextType: "family"},
 ];
