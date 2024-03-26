@@ -24,9 +24,23 @@ const theme = extendTheme({
     mono: 'Menlo, monospace',
   },
   components: {
+    Flex : {
+      variants: {
+        mainDisplay : {
+          id: "mainDisplay",
+          maxWidth: '85vw',
+          width: '85vw',
+          flexDir: 'column',
+          justifyContent: 'flex-start'
+        }
+      }
+    },
     Table: {
       variants: {
         main: {
+          table: {
+            width: '100%'
+          },
           th: {
             backgroundColor: 'primary.600',
             color: 'white',
@@ -44,6 +58,7 @@ const theme = extendTheme({
             tr: {
               _hover: {
                 bg: 'primary.50', // Background color on hover
+                color: 'gray'
               },
             },
           },

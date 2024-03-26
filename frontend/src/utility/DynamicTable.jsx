@@ -22,9 +22,7 @@ const DynamicTable = (props) => {
   useEffect(() => {
     if(props.data && props.data.length){
       contextLadenFields.forEach((entry) => {
-        console.log("in the for each")
         const fieldContext = ContextProvider(entry.contextType);
-        console.log(fieldContext)
         axios
           .get(fieldContext.getAllEndpoint)
           .then((response) => {
@@ -34,12 +32,6 @@ const DynamicTable = (props) => {
               console.error("dataFromApi is not a non-empty array");
               return;
             }
-            // setColumnData((prevData) => ({
-            //   ...prevData,
-            //   [fieldContext.type]: dataFromApi.map((entry) => ({
-            //     [entry[fieldContext.id]]: getDisplayString(fieldContext, entry),
-            //   })),
-            // }));
 
             setColumnData((prevData) => ({
               ...prevData,
@@ -57,6 +49,7 @@ const DynamicTable = (props) => {
   }, [props.data]);
 
   if (!props.data || !props.data.length) {
+    console.log("props", props.data, props.context)
     return <p>No props.data available</p>;
   }
 
@@ -70,11 +63,6 @@ const DynamicTable = (props) => {
     setSelectedRow(-1);
   };
 
-  // const handleDelete = (formData) => {
-  //   props.context.onDelete(formData);
-  //   handleCloseViewDialog()
-  // }
-
   const columns = Object.keys(props.data[0]);
   const filteredColumns = columns.filter(
     (column) => column != props.context.id
@@ -82,33 +70,6 @@ const DynamicTable = (props) => {
 
   const handleColumnContext = (column) => {
     if(viewFieldNames.includes(column)){
-      // if(props.context.viewFields[viewFieldNames.indexOf(column)].hasOwnProperty('contextType')){
-      //   let fieldContext = ContextProvider(props.context.viewFields[viewFieldNames.indexOf(column)].contextType)
-      //   if(columnData.hasOwnProperty(fieldContext.type)){
-      //     return <Th key={column}>{translateBE(column)}</Th>;
-      //   } else {
-      //     useEffect(() => {
-      //       axios
-      //         .get(fieldContext.getAllEndpoint)
-      //         .then((response) => {
-      //           console.log(response);
-      //           const dataFromApi = response.data.data;
-      //           console.log("pulled Data", dataFromApi)
-      //           let displ = [];
-      //           if(!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-      //             console.error("dataFromApi is not a non-empty array");
-      //           }
-      //           setColumnData((prevData) => ({
-      //             ...prevData,
-      //             [fieldContext.type]: dataFromApi.map((entry) => getDisplayString(fieldContext, entry))
-      //           }));
-      //         })
-      //         .catch((error) => {
-      //           console.error("Error making API call:", error);
-      //         });
-      //     });
-      //   }
-      // }
       return <Th key={column}>{translateBE(column)}</Th>;
     }
   };
@@ -117,13 +78,9 @@ const DynamicTable = (props) => {
 
     if(viewFieldNames.includes(column)){
       if(contextLadenFieldNames.includes(column) && columnData.hasOwnProperty(fieldContexts[column])){
-        //let displayString = columnData[contextLadenFields[contextLadenFieldNames.indexOf(column)].contextType][rowIndex] || "";
-        console.log(fieldContexts)
-
         let displayString = columnData[fieldContexts[column]][row[column]]
         return <Td key={column}>{displayString}</Td>;
       }
-      console.log(columnData)
       return <Td key={column}>{translateBE(row[column])}</Td>;
     }
   };
@@ -146,7 +103,7 @@ const DynamicTable = (props) => {
 
   return (
     <Box>
-      <Table variant="main">
+      <Table variant="main" px={1} py={2}>
         <Thead>
           <Tr>
             {filteredColumns.map((column) => handleColumnContext(column))}

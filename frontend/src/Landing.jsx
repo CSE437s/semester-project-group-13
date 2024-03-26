@@ -1,58 +1,126 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import Refugees from './Refugees';
-import Volunteers from './Volunteers';
-import Donations from './Donations';
-import GoodNeighbors from './GoodNeighbors';
-import Families from './Families';
-import { useTheme, Flex, Button } from '@chakra-ui/react';
+import { useTheme, Flex, Button, Spacer } from '@chakra-ui/react';
 import theme from './style/theme';
+import DynamicTable from './utility/DynamicTable';
+import TabButton from './utility/TabButton'; // Assuming you have a custom TabButton component
+import { ContextProvider, getAllContexts } from './utility/contexts/ContextProvider';
 import MapComponent from './MapComponent';
+import DynamicFormDialog from './utility/DynamicFormDialog';
 
 const Landing = (props) => {
-    console.log('Landing rendered')
-    const theme = useTheme();
-    console.log('theme', theme)
+  const theme = useTheme();
+  const contexts = getAllContexts();
+  const defaultPage = "refugee";
 
-    const handleLogout = () => {    
-        console.log('Logout Clicked');
-    
-        axios.post('http://localhost:8080/auth/logout')
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState(defaultPage);
+  const [context, setContext] = useState(contexts[defaultPage])
+  const [data, setData] = useState({})
+
+  const handleTabChange = (tab) => {
+    setActiveTab(prevTab => {
+      console.log(data)
+      if(tab != 'mapComponent'){
+        setContext(contexts[tab]);
+      }
+      return tab;
+    });
+  };
+
+  const handleLogout = () => {    
+      axios.post('http://localhost:8080/auth/logout')
+        .then((response) => {
+          const data = response.data;
+          props.onLogout();
+        })
+        .catch((error) => {
+          console.error('Error making API call:', error);
+        });
+    };
+
+    const handleOpenCreateDialog = () => {
+      setOpenCreateDialog(true);
+    };
+  
+    const handleCloseCreateDialog = () => {
+      setOpenCreateDialog(false);
+    };
+
+  useEffect(() => {
+      Object.entries(contexts).forEach((entry) => {
+        axios
+          .get(entry[1].getAllEndpoint)
           .then((response) => {
-            const data = response.data;
-            console.log(data);
-            props.onLogout();
+            console.log("succesful api")
+            const dataFromApi = response.data.data;
+            if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+              console.error("dataFromApi is not a non-empty array");
+              return;
+            }
+
+            setData((prevData) => ({
+              ...prevData,
+              [entry[0]]: dataFromApi
+            }));
           })
           .catch((error) => {
-            console.error('Error making API call:', error);
+            console.error("Error making API call:", error);
           });
-      };
+        });
+  }, []);
 
-    return (
-        <Flex flexDirection={'column'} width={'90vw'} height={'90vh'}>
-            <Flex id='header' flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-              <Button variant={'dark'} onClick={handleLogout}>
-                  Logout
-              </Button>
+  return (
+      <Flex flexDirection="column" width="100vw" height="100vh">
+          <Flex id="header" justifyContent="flex-end" alignItems="center" bg="primary.900" p={4} height={'10vh'}>
+            <Button variant="dark" onClick={handleLogout}>
+                Logout
+            </Button>
+          </Flex>
+          
+          <Flex id="body" flexDirection="row" flex={8} height={'90vh'}>
+            {/* Sidebar */}
+            <Flex id="sidebar" flexDirection="column" flex={1} maxWidth={'15vw'} px={1}>
+              <TabButton onClick={() => handleTabChange('refugee')} isActive={activeTab === 'refugee'}>Refugees</TabButton>
+              <TabButton onClick={() => handleTabChange('volunteer')} isActive={activeTab === 'volunteer'}>Volunteers</TabButton>
+              <TabButton onClick={() => handleTabChange('donation')} isActive={activeTab === 'donation'}>Donations</TabButton>
+              <TabButton onClick={() => handleTabChange('goodNeighbor')} isActive={activeTab === 'goodNeighbor'}>Good Neighbors</TabButton>
+              <TabButton onClick={() => handleTabChange('family')} isActive={activeTab === 'family'}>Families</TabButton>
+              <TabButton onClick={() => handleTabChange('mapComponent')} isActive={activeTab === 'mapComponent'}>Map Component</TabButton>
             </Flex>
-            <Flex flexDirection={'row'} flex={8}>
-              <Flex id='sidebar' flexDirection={'column'} flex={1}>
-                  <Refugees></Refugees>
-                  <Volunteers></Volunteers>
-                  <Donations></Donations>
-                  <GoodNeighbors></GoodNeighbors>
-                  <Families></Families>
-                  <MapComponent></MapComponent>
-              </Flex>
-              <Flex id='body' flex={5}>
-                  
-              </Flex>
-            </Flex>
 
 
-        </Flex>
+              {activeTab !== "mapComponent" ?
+                <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start">
+                  <DynamicFormDialog
+                    isOpen={openCreateDialog}
+                    onClose={handleCloseCreateDialog}
+                    onSubmit={context.create}
+                    formFields={context.createFields}
+                    title={context.createTitle}
+                  />
+                  <DynamicTable
+                    context={context}
+                    data={data[activeTab]}
+                  ></DynamicTable>
+                  <Button width={'20%'} my={2} 
+                  variant={"solid"}
+                    onClick={handleOpenCreateDialog}
+                  >
+                    {context.createTitle}
+                  </Button>
+                </Flex>
+              :
+                <MapComponent
+                  variant={"mainDisplay"}
+                ></MapComponent>
+              }
 
-    );
+
+
+          </Flex>
+      </Flex>
+  );
 };
-
+ 
 export default Landing;

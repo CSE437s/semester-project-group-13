@@ -47,5 +47,15 @@ export function getDisplayString(context, data) {
   return displayString
 }
 
+export function getAllContexts(){
+  return {
+    refugee: RefugeeContext,
+    volunteer: VolunteerContext,
+    family: FamilyContext,
+    donation: DonationContext,
+    goodNeighbor: GoodNeighborContext
+  }
+}
+
 
 
