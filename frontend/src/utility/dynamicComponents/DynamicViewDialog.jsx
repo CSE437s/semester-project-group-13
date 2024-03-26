@@ -34,7 +34,8 @@ const DynamicViewDialog = (props) => {
   };
 
   const handleDeleteClick = () => {
-    props.context.onDelete(props.data);
+    props.context.delete(props.data);
+    props.onSubmit();
     props.onClose();
   };
 
@@ -72,7 +73,10 @@ const DynamicViewDialog = (props) => {
             isOpen={openEditDialog}
             onClose={handleCloseEditDialog}
             context={props.context}
-            onSubmit={props.context.edit}
+            onSubmit={(formData) => {
+              props.onSubmit();
+              props.context.edit(formData)
+            }}
             formFields={props.context.editFields}
             title={props.context.editTitle}
             existData={props.data}

@@ -17,6 +17,8 @@ const Landing = (props) => {
   const [activeTab, setActiveTab] = useState(defaultPage);
   const [context, setContext] = useState(contexts[defaultPage])
   const [data, setData] = useState({})
+  const [formSubmit, setFormSubmit] = useState(false)
+
 
   const handleTabChange = (tab) => {
     setActiveTab(prevTab => {
@@ -47,6 +49,10 @@ const Landing = (props) => {
       setOpenCreateDialog(false);
     };
 
+  const handleFormSubmit = () => {
+    setFormSubmit(true);
+  }
+
   useEffect(() => {
       Object.entries(contexts).forEach((entry) => {
         axios
@@ -63,12 +69,13 @@ const Landing = (props) => {
               ...prevData,
               [entry[0]]: dataFromApi
             }));
+            setFormSubmit(false);
           })
           .catch((error) => {
             console.error("Error making API call:", error);
           });
         });
-  }, []);
+  }, [formSubmit]);
 
   return (
       <Flex flexDirection="column" width="100vw" height="100vh">
@@ -95,13 +102,17 @@ const Landing = (props) => {
                   <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
-                    onSubmit={context.create}
+                    onSubmit={(formData) =>{
+                      handleFormSubmit()
+                      context.create(formData)
+                    }}
                     formFields={context.createFields}
                     title={context.createTitle}
                   />
                   <DynamicTable
                     context={context}
                     data={data[activeTab]}
+                    onSubmit={handleFormSubmit}
                   ></DynamicTable>
                   <Button width={'20%'} my={2} 
                   variant={"solid"}

@@ -17,10 +17,13 @@ import {
   AlertTitle,
   CloseButton,
 } from "@chakra-ui/react";
+import DatePicker from "react-datepicker";
 import theme from "../../style/theme";
 import SearchableDropdown from "../inputs/SearchableDropdown";
 import { ContextProvider, getDisplayString } from "../contexts/ContextProvider";
 import translateBE from "../translateBE";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const DynamicFormDialog = ({
   isOpen,
@@ -37,8 +40,13 @@ const DynamicFormDialog = ({
   const theme = useTheme();
 
   const handleFieldChange = (field, value) => {
-    console.log("field", field, "value", value)
-    setFormData((prevData) => ({ ...prevData, [field]: value }));
+    console.log("field", field.name, "value", value)
+    if(field.type == "date"){
+      value = value.toISOString().split('T')[0]
+      console.log('date', value)
+    }
+    setFormData((prevData) => ({ ...prevData, [field.name]: value }));
+
   };
   
   const validateField = (field, value) => {
@@ -98,13 +106,11 @@ const DynamicFormDialog = ({
       default:
         value = formData[field.name] || "";
         break;
-      case "date":
-        const formattedDate = new Date(formData[field.name]);
-        value = formData[field.name] ? formattedDate.toDateString() : "";
-        break;
       case "id":
         if(field.name == "user_id"){
-          formData[field.name] = JSON.parse(localStorage.getItem('loginData')).user_id;
+          if(localStorage.getItem('loginData')){
+            formData[field.name] = JSON.parse(localStorage.getItem('loginData')).user_id;
+          }
           break;
         }
         const fieldContext = ContextProvider(field.contextType)
@@ -119,6 +125,19 @@ const DynamicFormDialog = ({
 
     return (() => {
       switch (field.type) {
+        case "date":
+          return (
+            <FormControl key={field.name} mb={4}>
+              <FormLabel>{field.label}</FormLabel>
+              <DatePicker
+                selected={formData[field.name] ? new Date(formData[field.name]) : null}                
+                onChange={(date) => handleFieldChange(field, date)}
+                dateFormat="MM/dd/yyyy"
+                isClearable
+                placeholderText="MM/DD/YYYY"
+              />
+            </FormControl>
+          );
         case "id":
           if(field.name == 'user_id'){
             return;
@@ -127,7 +146,7 @@ const DynamicFormDialog = ({
             <SearchableDropdown
               contextType={field.contextType}
               label={field.label}
-              onChange={(selectedOption) => handleFieldChange(field.name, selectedOption)}
+              onChange={(selectedOption) => handleFieldChange(field, selectedOption)}
               value={value}
               key={field.name}
             >
@@ -140,7 +159,7 @@ const DynamicFormDialog = ({
               <Input
                 type={field.type}
                 value={value}
-                onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                onChange={(e) => handleFieldChange(field, e.target.value)}
                 required
               />
             </FormControl>

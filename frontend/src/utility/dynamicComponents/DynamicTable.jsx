@@ -125,6 +125,7 @@ const DynamicTable = (props) => {
           onClose={handleCloseViewDialog}
           context={props.context}
           data={props.data[selectedRow]}
+          onSubmit={props.onSubmit}
           viewData={prepareViewData(props.data[selectedRow])}
           contextLadenFieldNames={contextLadenFieldNames}
           fieldContexts={fieldContexts}
