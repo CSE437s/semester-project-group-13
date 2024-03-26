@@ -72,6 +72,7 @@ const DynamicFormDialog = ({
               label={field.label}
               onChange={(selectedOption) => handleFieldChange(field.name, selectedOption)}
               value={value}
+              key={field.name}
             >
             </SearchableDropdown>
           );

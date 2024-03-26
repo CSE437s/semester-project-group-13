@@ -35,7 +35,7 @@ const SearchableDropdown = (props) => {
           let displayString = getDisplayString(context, entry)
 
           console.log('displayString', displayString)
-          optionsFromApi.push({ value: entry[context.id], label: displayString });
+          optionsFromApi.push({ key:entry[context.id], value: entry[context.id], label: displayString });
         });
         console.log(dataFromApi);
         setOptions(optionsFromApi);
@@ -43,10 +43,10 @@ const SearchableDropdown = (props) => {
       .catch((error) => {
         console.error("Error making API call:", error);
       });
-  });
+  }, []);
 
   return (
-    <FormControl>
+    <FormControl key={props.key}>
       <FormLabel>{props.label}</FormLabel>
       <Select
         options={options}

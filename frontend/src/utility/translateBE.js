@@ -26,8 +26,12 @@ let be_to_fe_dict = {
   1: "Yes",
   giving_family: "Given By (Family)",
   giving_volunteer: "Given By (Member)",
-  recieving_family: "Recieved By (Family)",
-  recieving_volunteer: "Recieved By (Member)",
+  receiving_family: "Received By (Family)",
+  receiving_refugee: "Received By (Member)",
+  match_date: "Match Date",
+  host_family_id: "Host Family",
+  refugee_family_id: "Refugee Family",
+  family_id: "Family"
 };
 
 function isValidDateFormat(dateString) {
