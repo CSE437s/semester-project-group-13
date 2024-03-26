@@ -5,6 +5,7 @@ import DynamicFormDialog from "./DynamicFormDialog";
 import DynamicViewDialog from "./DynamicViewDialog";
 import { ContextProvider, getDisplayString } from "./contexts/ContextProvider";
 import axios from "axios";
+import LoadingPage from "./LoadingPage";
 
 const DynamicTable = (props) => {
   const [selectedRow, setSelectedRow] = useState(-1);
@@ -50,7 +51,7 @@ const DynamicTable = (props) => {
 
   if (!props.data || !props.data.length) {
     console.log("props", props.data, props.context)
-    return <p>No props.data available</p>;
+    return <LoadingPage></LoadingPage>;
   }
 
   const handleRowClick = (index) => {

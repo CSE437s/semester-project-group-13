@@ -92,7 +92,7 @@ const MapComponent = (props) => {
 
   return (
     props.variant === "mainDisplay" ? (
-      <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start">
+      <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" p={2}>
         <div id="map" style={{ width: "100%", height: "500px" }} />
         <Button
           mt={4}

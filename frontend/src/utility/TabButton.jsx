@@ -13,7 +13,7 @@ const TabButton = ({ children, isActive, onClick }) => (
       _focus={{ boxShadow: 'none' }}
       mt={1}
       py={3}
-      px={4}
+      px={7}
       textAlign="left"
       width="100%"
       whiteSpace="nowrap"

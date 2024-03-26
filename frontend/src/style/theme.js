@@ -39,6 +39,7 @@ const theme = extendTheme({
       variants: {
         main: {
           table: {
+            mt: '2px',
             width: '100%'
           },
           th: {
@@ -46,6 +47,7 @@ const theme = extendTheme({
             color: 'white',
             padding: '8px',
             borderBottom: '2px solid white',
+            maxHeight: '4vh'
           },
           td: {
             padding: '8px',

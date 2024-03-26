@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Heading, useTheme, Alert, AlertIcon, AlertTitle, CloseButton, Flex} from '@chakra-ui/react';
 import theme from './style/theme';
 import axios from 'axios';
+import LoadingPage from './utility/LoadingPage';
 
 const Login = (props) => {
 
@@ -19,7 +20,6 @@ const Login = (props) => {
     console.log('Password:', password);
 
     const credentials = { username: username, password: password }; //we should hash the password before sending it (it should be hashed on registration)
-
     axios.post('http://localhost:8080/auth/login', credentials)
       .then((response) => {
         const data = response.data;
@@ -33,6 +33,7 @@ const Login = (props) => {
         setLoginAlert(true);
         console.error('Error making API call:', error);
       });
+    return <LoadingPage></LoadingPage>
   };
 
   return (

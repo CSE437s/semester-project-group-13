@@ -72,15 +72,15 @@ const Landing = (props) => {
 
   return (
       <Flex flexDirection="column" width="100vw" height="100vh">
-          <Flex id="header" justifyContent="flex-end" alignItems="center" bg="primary.900" p={4} height={'10vh'}>
-            <Button variant="dark" onClick={handleLogout}>
+          <Flex id="header" justifyContent="flex-end" alignItems="center" bg="primary.900" p={4} height={'10vh'} position="fixed" width="100%" zIndex="999">
+              <Button variant="dark" onClick={handleLogout}>
                 Logout
             </Button>
           </Flex>
           
-          <Flex id="body" flexDirection="row" flex={8} height={'90vh'}>
+          <Flex id="body" flexDirection="row" flex={8} height={'90vh'} marginTop="10vh">
             {/* Sidebar */}
-            <Flex id="sidebar" flexDirection="column" flex={1} maxWidth={'15vw'} px={1}>
+            <Flex id="sidebar" flexDirection="column" flex={1} maxWidth={'15vw'} position="fixed" height="90vh" overflowY="auto">
               <TabButton onClick={() => handleTabChange('refugee')} isActive={activeTab === 'refugee'}>Refugees</TabButton>
               <TabButton onClick={() => handleTabChange('volunteer')} isActive={activeTab === 'volunteer'}>Volunteers</TabButton>
               <TabButton onClick={() => handleTabChange('donation')} isActive={activeTab === 'donation'}>Donations</TabButton>
@@ -91,7 +91,7 @@ const Landing = (props) => {
 
 
               {activeTab !== "mapComponent" ?
-                <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start">
+                <Flex id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" marginLeft="15vw" p={2}>
                   <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
