@@ -142,17 +142,6 @@ async function deleteOne(req, res) {
 }
 }
 
-async function getAllAddresses(req, res, next) {
-  try {
-    const families = await familyService.getAll();
-    const addresses = families.map(family => family.address);
-    res.json(addresses);
-  } catch (err) {
-    console.error('Error while getting all addresses', err.message);
-    next(err);
-  }
-}
-
 async function getAllRefugeesInFamily(req, res) {
   try {
     const { family_id } = req.params;
@@ -170,7 +159,6 @@ module.exports = {
     create,
     update,
     deleteOne,
-    getAllAddresses,
     getAllRefugeesInFamily,
 
 };
