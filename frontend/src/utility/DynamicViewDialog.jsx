@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -11,98 +11,107 @@ import {
   Text,
   useTheme,
   propNames,
-} from '@chakra-ui/react';
-import theme from '../style/theme';
-import DynamicFormDialog from './DynamicFormDialog';
+} from "@chakra-ui/react";
+import theme from "../style/theme";
+import DynamicFormDialog from "./DynamicFormDialog";
+import { ContextProvider } from "./contexts/ContextProvider";
 
-const DynamicViewDialog = ({ isOpen, onClose, onDelete, onEdit, data, viewFields, editFields, viewTitle, editTitle}) => {
-//   const [formData, setFormData] = useState(existData);
-//   const [formAlert, setFormAlert] = useState(false);
-const [openEditDialog, setOpenEditDialog] = useState(false);
-const theme = useTheme();
-console.log('theme', theme)
+const DynamicViewDialog = (props) => {
+  //   const [formData, setFormData] = useState(existData);
+  //   const [formAlert, setFormAlert] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const theme = useTheme();
+  console.log("theme", theme);
 
-if(!data){
-    return (<p>No Data Found</p>)
-}
+  if (!props.data) {
+    return <p>No Data Found</p>;
+  }
 
+  //   const handleFieldChange = (field, value) => {
+  //     setFormData((prevData) => ({ ...prevData, [field]: value }));
+  //   };
 
+  //   const handleFormSubmit = () => {
+  //     onSubmit(formData);
+  //     onClose();
+  //   };
 
-//   const handleFieldChange = (field, value) => {
-//     setFormData((prevData) => ({ ...prevData, [field]: value }));
-//   };
+  //   const handleEdit = () => {
+  //     onSubmit(formData);
+  //     onClose();
+  //   };
 
-//   const handleFormSubmit = () => {
-//     onSubmit(formData);
-//     onClose();
-//   };
+  const handleEditClick = () => {
+    setOpenEditDialog(true);
+  };
 
-//   const handleEdit = () => {
-//     onSubmit(formData);
-//     onClose();
-//   };
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+  };
 
-    const handleEditClick = () => {
-        setOpenEditDialog(true);
+  const handleDeleteClick = () => {
+    props.context.onDelete(props.data);
+    props.onClose();
+  };
+
+  const handleInfoContext = (field) => {
+    let value = "";
+
+    switch (field.type) {
+      default:
+        value = field.label + ": " + props.data[field.name];
+        break;
+      case "date":
+        const formattedDate = new Date(props.data[field.name]);
+        value = field.label + ": " + formattedDate.toDateString();
+        break;
     }
 
-    const handleCloseEditDialog = () => {
-        setOpenEditDialog(false);
-    }
+    return <Text key={field.name}>{value}</Text>;
+  };
 
-    const handleDeleteClick = () => {
-        onDelete(data);
-    }
-
-    const handleInfoContext  = (field, data) => {
-      let value = "";
-
-      switch(field.type){
-        default:
-          value = field.label + ": " + data[field.name]
-          break;
-        case "date":
-          const formattedDate = new Date(data[field.name]);
-          value = field.label + ": " + formattedDate.toDateString();
-          break
-      }
-
-      return (
-        <Text key={field.name}>
-          {value}
-        </Text>
-      )
-    }
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay/>
+    <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
+      <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{viewTitle}</ModalHeader>
+        <ModalHeader>{props.context.viewTitle}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-        {
-          viewFields.map((field) => (
-            handleInfoContext(field, data)
-          ))
-        }
-        <DynamicFormDialog
+          {props.context.viewFields.map((field) =>
+            handleInfoContext(field)
+          )}
+          <DynamicFormDialog
             isOpen={openEditDialog}
             onClose={handleCloseEditDialog}
-            onSubmit={onEdit}
-            formFields={editFields}
-            title={editTitle}
-            existData={data}
-        >
-        </DynamicFormDialog>
+            context={props.context}
+            onSubmit={props.context.edit}
+            formFields={props.context.editFields}
+            title={props.context.editTitle}
+            existData={props.data}
+          ></DynamicFormDialog>
         </ModalBody>
         <ModalFooter>
-          <Button bg={theme.colors.purple[500]} color={'white'} onClick={handleDeleteClick}>
+          <Button
+            bg={theme.colors.purple[500]}
+            color={"white"}
+            onClick={handleDeleteClick}
+          >
             Delete
           </Button>
-          <Button bg={theme.colors.purple[200]} color={'white'} onClick={handleEditClick}>
+          <Button
+            bg={theme.colors.purple[200]}
+            color={"white"}
+            onClick={handleEditClick}
+          >
             Edit
           </Button>
-          <Button bg={'white'} color={theme.colors.purple[500]} onClick={onClose}>Cancel</Button>
+          <Button
+            bg={"white"}
+            color={theme.colors.purple[500]}
+            onClick={props.onClose}
+          >
+            Cancel
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

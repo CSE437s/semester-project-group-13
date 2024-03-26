@@ -5,6 +5,7 @@ import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
 import { useTheme, Button } from '@chakra-ui/react';
 import DynamicFormDialog from './utility/DynamicFormDialog';
+import {ContextProvider} from './utility/contexts/ContextProvider';
 
 const Families = (props) => {
     console.log('Families Page clicked');
@@ -12,9 +13,10 @@ const Families = (props) => {
     const [data, setData] = useState([]);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
     const theme = useTheme();
+    const context = ContextProvider("family");
 
     useEffect(() => {
-        axios.get('http://localhost:8080/family')
+        axios.get(context.getAllEndpoint)
             .then((response) => {
                 const dataFromApi = response.data.data;
                 console.log(dataFromApi);
@@ -33,71 +35,6 @@ const Families = (props) => {
         setOpenCreateDialog(false);
     };
 
-    const handleCreateFamily = (formData) => {
-        axios.post('http://localhost:8080/family/create', formData)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    };
-
-    const handleEditFamily = (formData) => {
-        const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/update'
-        axios.put(endpoint, formData)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    };
-
-    const handleDeleteFamily = (formData) => {
-        const endpoint  = 'http://localhost:8080/family/' + formData['family_id'] + '/deleteOne'
-        axios.delete(endpoint, formData)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    }
-
-    const familyCreateFields = [
-        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-        { name: 'last_name', label: 'Last Name', type: 'text' },
-        { name: 'address', label: 'Street Address', type: 'text' },
-        { name: 'city', label: 'City', type: 'text' },
-        { name: 'zip', label: 'Zip Code', type: 'number' },
-        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
-      ];
-
-      const familyEditFields = [
-        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-        { name: 'last_name', label: 'Last Name', type: 'text' },
-        { name: 'address', label: 'Street Address', type: 'text' },
-        { name: 'city', label: 'City', type: 'text' },
-        { name: 'zip', label: 'Zip Code', type: 'number' },
-        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
-      ];
-
-      const familyViewFields = [
-        { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-        { name: 'last_name', label: 'Last Name', type: 'text' },
-        { name: 'address', label: 'Street Address', type: 'text' },
-        { name: 'city', label: 'City', type: 'text' },
-        { name: 'zip', label: 'Zip Code', type: 'number' },
-        { name: 'is_refugee', label: 'Is Refugee?', type: 'checkbox' },
-        { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'checkbox' }
-      ];
-
     return (
         <div>
             <BasicPage
@@ -108,19 +45,14 @@ const Families = (props) => {
                 </Button>
                 <DynamicTable 
                     data={data}
-                    onEdit={handleEditFamily}
-                    editTitle={"Edit Family"}
-                    viewTitle={"View Family"}
-                    editFields={familyEditFields}
-                    viewFields={familyViewFields}
-                    onDelete={handleDeleteFamily}
+                    context={context}
                 ></DynamicTable>
                 <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
-                    onSubmit={handleCreateFamily}
-                    formFields={familyCreateFields}
-                    title={"Add Family"}
+                    onSubmit={context.create}
+                    formFields={context.createFields}
+                    title={context.createTitle}
                 />
             </BasicPage>
         </div>

@@ -5,11 +5,13 @@ import DynamicFormDialog from './utility/DynamicFormDialog';
 import { Button, useTheme } from '@chakra-ui/react';
 import BasicPage from './utility/BasicPage';
 import theme from './style/theme';
+import { ContextProvider } from './utility/contexts/ContextProvider';
 
 
 const Volunteers = (props) => {
     console.log('Volunteers Page clicked');
     const theme = useTheme();
+    const context = ContextProvider('volunteer')
 
     const [volunteerData, setVolunteerData] = useState([]);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -34,68 +36,6 @@ const Volunteers = (props) => {
         setOpenCreateDialog(false);
     };
 
-    const handleCreateVolunteer = (formData) => {
-        axios.post('http://localhost:8080/volunteer/create', formData)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    };
-
-    const handleEditVolunteer = (formData) => {
-        const endpoint  = 'http://localhost:8080/volunteer/' + formData['volunteer_id'] + '/update'
-        axios.put(endpoint, formData)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    };
-
-    const handleDeleteVolunteer = (formData) => {
-        const endpoint  = 'http://localhost:8080/volunteer/' + formData['volunteer_id'] + '/deleteOne'
-        axios.delete(endpoint)
-        .then((response) => {
-            const data = response.data;
-            console.log('Form data submitted:', formData);
-        }).catch((error) => {
-            if(error.s)
-            console.error('Error submitting form:', error);
-        });
-    }
-
-
-  const volunteerCreateFields = [
-    { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
-    { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
-    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'family_id', label: 'Family', type: 'number' },
-
-    // { name: 'address', label: 'Street Address', type: 'text' },
-    // { name: 'city', label: 'City', type: 'text' },
-    // { name: 'zip', label: 'Zip Code', type: 'number' }
-  ];
-
-  const volunteerEditFields = [
-    { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
-    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'family_id', label: 'Family', type: 'number' },
-  ];
-
-  const volunteerViewFields = [
-    { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
-    { name: 'date_of_birth', label: 'Date of Birth', type: 'date' },
-    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'family_id', label: 'Family', type: 'number' },
-  ];
     
     return (
         <BasicPage
@@ -106,19 +46,14 @@ const Volunteers = (props) => {
             </Button>
             <DynamicTable 
                 data={volunteerData}
-                onEdit={handleEditVolunteer}
-                editTitle={"Edit Volunteer"}
-                viewTitle={"View Volunteer"}
-                editFields={volunteerEditFields}
-                viewFields={volunteerViewFields}
-                onDelete={handleDeleteVolunteer}
+                context={context}
             ></DynamicTable>
             <DynamicFormDialog
                     isOpen={openCreateDialog}
                     onClose={handleCloseCreateDialog}
-                    onSubmit={handleCreateVolunteer}
-                    formFields={volunteerCreateFields}
-                    title={"Add Volunteer"}
+                    onSubmit={context.create}
+                    formFields={context.createFields}
+                    title={context.createTitle}
                 />
         </BasicPage>
     );
