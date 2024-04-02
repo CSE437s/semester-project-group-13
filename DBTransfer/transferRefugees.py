@@ -24,8 +24,8 @@ def insert_family(cursor, family_data, old_id):
     # Extract family data
     user_id = 1
     old_id = old_id
-    IsRefugeeFamily = False
-    IsOpenToHaveGoodNeighbor = False
+    IsRefugeeFamily = True
+    IsOpenToHaveGoodNeighbor = True if family_data.get('comfortableGN', '').lower() == 'yes' else False
     IsGoodNeighbor = False
     DesiresToBeGoodNeighbor = False
     FamilyName = family_data.get('familyName', '')
@@ -34,24 +34,17 @@ def insert_family(cursor, family_data, old_id):
     DateCreated = family_data.get('dateCreated', None)
     EnteredBy = family_data.get('enteredBy', '')
     Scheduled = family_data.get('scheduled', '')
-    ArrivalDate = None
-    CountryOfOrigin = family_data.get('CountryOfOrigin', '')
+    ArrivalDate = family_data.get('arrival', '') 
+    CountryOfOrigin = family_data.get('country', '')
     members = family_data['members']
     if isinstance(members, dict):  # Check if members is an object (dictionary)
         address = members.get('headOfHouse', {}).get('address', '')
         zip_code = members.get('headOfHouse', {}).get('zip', '')
         city = members.get('headOfHouse', {}).get('city', '')
-    elif isinstance(members, list):  # Check if members is an array (list)
-        if members:
-            head_of_house = members[0]
-            address = head_of_house.get('address', '')
-            zip_code = head_of_house.get('zip', '')
-            city = head_of_house.get('city', '')
     else:
         address = ''
         zip_code = ''
         city = ''
-
 
     # Execute the insert query
     cursor.execute(insert_query, (
@@ -60,56 +53,46 @@ def insert_family(cursor, family_data, old_id):
         ArrivalDate, EnteredBy, Scheduled, CountryOfOrigin, address, zip_code, city
     ))
 
-
-def insert_members(cursor, family_id, members_data):
-    # Define the insert query for members
+def insert_refugee(cursor, family_id, member_data):
+    # Define the insert query for refugees
     insert_query = """
-    INSERT INTO donators (
-        is_head_of_house, family_id,
-        address, phone_number, birthday, city, first_name, last_name,
-        gender, relation_to_head, zip_code, email
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO refugees (
+        last_name, family_id, is_head_of_house, birthday,
+        first_name, gender, relation_to_head, phone
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
-    # Extract head of household data
-    head_of_house_data = members_data.get('headOfHouse', {})
-    print(head_of_house_data)
-    # Insert head of household into the database
-    is_head_of_house = True
-    address = head_of_house_data.get('address', '')
-    phone_number = head_of_house_data.get('phoneNum', '')  # Adjust the key for phone number
-    birthday = head_of_house_data.get('birthdate', None)  # Adjust the key for birthday
-    city = head_of_house_data.get('city', '')
-    print(city)
-    first_name = head_of_house_data.get('firstName', '')
-    last_name = head_of_house_data.get('lastName', '')
-    gender = head_of_house_data.get('gender', 'N/A')
-    relation_to_head = head_of_house_data.get('relation', 'Head Of House')  # Adjust the key for relation to head
-    zip_code = head_of_house_data.get('zip', '')  # Adjust the key for zip code
-    email = ''  # Adjust the key for email (not available in the provided data)
-    cursor.execute(insert_query, (
-        is_head_of_house, family_id,
-        address, phone_number, birthday, city, first_name, last_name,
-        gender, relation_to_head, zip_code, email
-    ))
     
-    # Iterate over additional members (0, 1, 2, etc.)
-    for member_key, member_data in members_data.items():
+    # Extract head of household data
+    head_of_house_data = member_data.get('headOfHouse', {})
+    last_name_head = head_of_house_data.get('lastName', '')
+    is_head_of_house_head = True
+    birthday_head = head_of_house_data.get('birthdate', None)
+    first_name_head = head_of_house_data.get('firstName', '')
+    gender_head = head_of_house_data.get('gender', '')
+    relation_to_head_head = head_of_house_data.get('relation', '')
+    phone_head = head_of_house_data.get('phoneNum', '')
+
+    # Execute the insert query for head of household
+    cursor.execute(insert_query, (
+        last_name_head, family_id, is_head_of_house_head, birthday_head,
+        first_name_head, gender_head, relation_to_head_head, phone_head
+    ))
+
+    # Iterate through each member (excluding head of household)
+    for member_key, member_data in member_data.items():
         if member_key.isdigit():  # Check if the key is a digit (indicating an additional member)
-            is_head_of_house = False
-            address = member_data.get('address', '')
-            phone_number = member_data.get('phoneNum', '')  # Adjust the key for phone number
-            birthday = member_data.get('birthdate', None)  # Adjust the key for birthday
-            city = member_data.get('city', '')
-            first_name = member_data.get('firstName', '')
             last_name = member_data.get('lastName', '')
+            is_head_of_house = False
+            birthday = member_data.get('birthdate', None)
+            first_name = member_data.get('firstName', '')
             gender = member_data.get('gender', '')
-            relation_to_head = member_data.get('relation', '')  # Adjust the key for relation to head
-            zip_code = member_data.get('zip', '')  # Adjust the key for zip code
-            email = ''  # Adjust the key for email (not available in the provided data)
+            relation_to_head = member_data.get('relation', '')
+            phone = member_data.get('phoneNum', '')
+
+            # Execute the insert query for additional members
             cursor.execute(insert_query, (
-                is_head_of_house, family_id,
-                address, phone_number, birthday, city, first_name, last_name,
-                gender, relation_to_head, zip_code, email
+                last_name, family_id, is_head_of_house, birthday,
+                first_name, gender, relation_to_head, phone
             ))
 
 
@@ -119,18 +102,18 @@ try:
     cursor = cnx.cursor()
 
     # Read data from the JSON file
-    with open('smallerDonators.json') as f:
+    with open('smallerRefugees.json') as f:
         json_data = json.load(f)
 
-        # Insert data into the families and donators table
+        # Insert data into the families and refugees table
         for family_id, family_data in json_data.items():
             
             # Insert family into families table
             inserted_family_id = insert_family(cursor, family_data, family_id)
             
-            # Insert members into donators table
+            # Insert members into refugees table
             if 'members' in family_data:
-                insert_members(cursor, inserted_family_id, family_data['members'])
+                insert_refugee(cursor, inserted_family_id, family_data['members'])
 
         # Commit changes and close the cursor and connection
         cnx.commit()

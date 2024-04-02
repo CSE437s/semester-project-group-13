@@ -19,31 +19,8 @@ try:
 
     # Define the table creation query
     create_table_query = """
-    CREATE TABLE refugees (
-    refugee_id INT AUTO_INCREMENT PRIMARY KEY,
-    arrival_date DATE,
-    country VARCHAR(255),
-    date_created DATE,
-    last_name VARCHAR(255),
-    languages TEXT,
-    latest_date_at_oasis DATE,
-    family_id INT,
-    is_head_of_house ENUM('yes', 'no'),
-    address VARCHAR(255),
-    old_id VARCHAR(255),
-    zip VARCHAR(20),
-    city VARCHAR(255),
-    state VARCHAR(255),
-    birthday DATE,
-    first_name VARCHAR(255),
-    gender ENUM('Male', 'Female', 'Other'),
-    relation_to_head VARCHAR(255),
-    phone VARCHAR(20),
-    user_id_who_created INT,
-    FOREIGN KEY (family_id) REFERENCES families(family_id),
-    FOREIGN KEY (user_id_who_created) REFERENCES users(user_id)
-);
-
+    ALTER TABLE refugees
+MODIFY COLUMN gender VARCHAR(255);
     """
 
     # Execute the table creation query
