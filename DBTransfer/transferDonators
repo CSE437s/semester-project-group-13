@@ -36,22 +36,23 @@ def insert_family(cursor, family_data, old_id):
     Scheduled = family_data.get('scheduled', '')
     ArrivalDate = None
     CountryOfOrigin = family_data.get('CountryOfOrigin', '')
-    members = family_data['members']
-    if isinstance(members, dict):  # Check if members is an object (dictionary)
-        address = members.get('headOfHouse', {}).get('address', '')
-        zip_code = members.get('headOfHouse', {}).get('zip', '')
-        city = members.get('headOfHouse', {}).get('city', '')
-    elif isinstance(members, list):  # Check if members is an array (list)
-        if members:
-            head_of_house = members[0]
-            address = head_of_house.get('address', '')
-            zip_code = head_of_house.get('zip', '')
-            city = head_of_house.get('city', '')
-    else:
-        address = ''
-        zip_code = ''
-        city = ''
-
+    
+    # Extract address details
+    address = ''
+    zip_code = ''
+    city = ''
+    members = family_data.get('members', None)
+    if members:
+        if isinstance(members, dict):  # Check if members is an object (dictionary)
+            address = members.get('headOfHouse', {}).get('address', '')
+            zip_code = members.get('headOfHouse', {}).get('zip', '')
+            city = members.get('headOfHouse', {}).get('city', '')
+        elif isinstance(members, list):  # Check if members is an array (list)
+            if members:
+                head_of_house = members[0]
+                address = head_of_house.get('address', '')
+                zip_code = head_of_house.get('zip', '')
+                city = head_of_house.get('city', '')
 
     # Execute the insert query
     cursor.execute(insert_query, (
@@ -60,6 +61,9 @@ def insert_family(cursor, family_data, old_id):
         ArrivalDate, EnteredBy, Scheduled, CountryOfOrigin, address, zip_code, city
     ))
     return cursor.lastrowid
+
+# Rest of your code remains the same...
+
 
 def insert_events(cursor, family_id, events_data, old_id):
     # Define the insert query for events
@@ -110,9 +114,17 @@ def insert_donations(cursor, family_id, donations_data, old_id):
                 completed = donation_data.get('completed', False)
                 date = donation_data.get('date', None)
                 user_id = 1
-                cursor.execute(insert_query, (
-                    family_id, old_id, item, amount, completed, date, user_id
-                ))
+                try:
+                    cursor.execute(insert_query, (
+                        family_id, old_id, item, amount, completed, date, user_id
+                    ))
+                except mysql.connector.Error as err:
+                    if err.errno == 1264:  # Check for 'Out of range' error
+                        cursor.execute(insert_query, (
+                            family_id, old_id, item, None, completed, date, user_id
+                        ))
+                    else:
+                        print("Error:", err)
     elif isinstance(donations_data, list):
         for donation_data in donations_data:
             if donation_data is not None:  # Skip None values
@@ -123,12 +135,18 @@ def insert_donations(cursor, family_id, donations_data, old_id):
                 completed = donation_data.get('completed', False)
                 date = donation_data.get('date', None)
                 user_id = 1
-                cursor.execute(insert_query, (
-                    family_id, old_id, item, amount, completed, date, user_id
-                ))
+                try:
+                    cursor.execute(insert_query, (
+                        family_id, old_id, item, amount, completed, date, user_id
+                    ))
+                except mysql.connector.Error as err:
+                    if err.errno == 1264:  # Check for 'Out of range' error
+                        cursor.execute(insert_query, (
+                            family_id, old_id, item, None, completed, date, user_id
+                        ))
+                    else:
+                        print("Error:", err)
 
-
-    
 
 
 def insert_members(cursor, family_id, members_data, old_id):
@@ -192,20 +210,26 @@ try:
 
         # Insert data into the families and donators table
         for family_id, family_data in json_data.items():
-            
             # Insert family into families table
             inserted_family_id = insert_family(cursor, family_data, family_id)
             
             # Insert members into donators table
             if 'members' in family_data:
                 insert_members(cursor, inserted_family_id, family_data['members'], family_id)
+            else:
+                print("No members data found for family_id:", family_id)
 
+            # Insert events into events table
             if 'events' in family_data:
                 insert_events(cursor, inserted_family_id, family_data['events'], family_id)
+            else:
+                print("No events data found for family_id:", family_id)
 
+            # Insert donations into donations table
             if 'donations' in family_data:
                 insert_donations(cursor, inserted_family_id, family_data['donations'], family_id)
-
+            else:
+                print("No donations data found for family_id:", family_id)
 
         # Commit changes and close the cursor and connection
         cnx.commit()

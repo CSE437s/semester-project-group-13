@@ -15,16 +15,6 @@ try:
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
 
-    # Temporarily disable foreign key checks
-    cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
-
-    # Drop the existing table if it exists
-    drop_table_query = "DROP TABLE IF EXISTS donators"
-    cursor.execute(drop_table_query)
-
-    # Re-enable foreign key checks
-    cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
-
     # Define the table creation query
     create_table_query = """
     CREATE TABLE donators (

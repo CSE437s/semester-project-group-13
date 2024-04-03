@@ -53,36 +53,39 @@ def insert_family(cursor, family_data, old_id):
         ArrivalDate, EnteredBy, Scheduled, CountryOfOrigin, address, zip_code, city
     ))
     return cursor.lastrowid
-
-def insert_requests(cursor, family_id, requests_data, old_family_id):
+def insert_requests(cursor, family_id, requests_data):
     # Define the insert query for requests
     insert_query = """
     INSERT INTO requests (
-        family_id, old_id, item, completed, amount, date, user_id
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        family_id, old_id, item, amount, date, user_id
+    ) VALUES (%s, %s, %s, %s, %s, %s)
     """
     # Insert each request into the database
     if isinstance(requests_data, dict):
         for request_id, request_data in requests_data.items():
             if request_data is not None:  # Skip None values
+                old_id = family_id
                 item = request_data.get('item', "")
                 amount = request_data.get('amount', 0)
-                completed = request_data.get("completed", False)
                 date = request_data.get('date', None)
+                if date == '':
+                    date = None  # Set date to None if it's an empty string
                 user_id = 1
                 cursor.execute(insert_query, (
-                    family_id, old_family_id, item, completed, amount, date, user_id
+                    family_id, old_id, item, amount, date, user_id
                 ))
     elif isinstance(requests_data, list):
         for request_data in requests_data:
             if request_data is not None:  # Skip None values
+                old_id = family_id
                 item = request_data.get('item', "")
-                completed = request_data.get("completed", False)
                 amount = request_data.get('amount', 0)
                 date = request_data.get('date', None)
+                if date == '':
+                    date = None  # Set date to None if it's an empty string
                 user_id = 1
                 cursor.execute(insert_query, (
-                    family_id, old_family_id, item, completed, amount, date, user_id
+                    family_id, old_id, item, amount, date, user_id
                 ))
 
 def insert_events(cursor, family_id, events_data, old_id):
@@ -165,7 +168,7 @@ try:
     cursor = cnx.cursor()
 
     # Read data from the JSON file
-    with open('smallerRefugees.json') as f:
+    with open('oasisfamilies.json') as f:
         json_data = json.load(f)
 
         # Insert data into the families and refugees table

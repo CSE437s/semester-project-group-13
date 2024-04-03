@@ -16,10 +16,6 @@ try:
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
 
-    # Drop the existing table if it exists
-    drop_table_query = "DROP TABLE IF EXISTS refugees"
-    cursor.execute(drop_table_query)
-
     # Define the table creation query
     create_table_query = """
     CREATE TABLE refugees (

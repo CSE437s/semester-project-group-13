@@ -139,7 +139,7 @@ try:
     cursor = cnx.cursor()
 
     # Read data from the JSON file
-    with open('smallerGood.json') as f:
+    with open('oasisneighbors.json') as f:
         json_data = json.load(f)
 
         # Insert data into the families and refugees table
