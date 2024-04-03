@@ -17,3 +17,9 @@ cd frontend
 
 npm start
 
+
+
+For DB To Migrate: 
+Do Transfer Protoype
+Do Transfer Family
+Then Do Transfer Refugee

@@ -1,6 +1,4 @@
 import mysql.connector
-import json
-
 
 # Define your database connection parameters
 config = {
@@ -16,21 +14,25 @@ try:
     # Establish a connection to the database
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
-
-    # Define the table creation query
+    
+    # Define the table creation query with foreign key constraints
     create_table_query = """
     CREATE TABLE good_neighbors (
-    neighbor_id INT AUTO_INCREMENT PRIMARY KEY,
-    family_id_for_refugee INT,
-    old_id VARCHAR(255),
-    family_id_for_good_neighbor_family INT,
-    date_created DATE,
-    user_id_who_created INT,
-    FOREIGN KEY (family_id_for_refugee) REFERENCES families(family_id),
-    FOREIGN KEY (family_id_for_good_neighbor_family) REFERENCES families(family_id),
-    FOREIGN KEY (user_id_who_created) REFERENCES users(user_id)
-);
-
+        NeighborID INT AUTO_INCREMENT PRIMARY KEY,
+        RefugeeID INT,
+        OldRefugeeID VARCHAR(255),
+        FamilyID INT,
+        Birthday DATE,
+        Email VARCHAR(255),
+        FirstName VARCHAR(255),
+        LastName VARCHAR(255),
+        Gender VARCHAR(255),
+        PhoneNumber VARCHAR(20),
+        Relation VARCHAR(255),
+        is_head_of_house TINYINT(1),
+        FOREIGN KEY (RefugeeID) REFERENCES refugees(refugee_id),
+        FOREIGN KEY (FamilyID) REFERENCES families(family_id)
+    )
     """
 
     # Execute the table creation query
@@ -43,4 +45,3 @@ try:
     print("Table created successfully.")
 except mysql.connector.Error as err:
     print("Error:", err)
-

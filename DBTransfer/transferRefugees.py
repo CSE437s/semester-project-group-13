@@ -52,6 +52,7 @@ def insert_family(cursor, family_data, old_id):
         DesiresToBeGoodNeighbor, Languages, FamilyName, LatestDateAtOasis, DateCreated,
         ArrivalDate, EnteredBy, Scheduled, CountryOfOrigin, address, zip_code, city
     ))
+    return cursor.lastrowid
 
 def insert_refugee(cursor, family_id, member_data):
     # Define the insert query for refugees
