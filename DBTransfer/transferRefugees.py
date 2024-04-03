@@ -54,7 +54,7 @@ def insert_family(cursor, family_data, old_id):
     ))
     return cursor.lastrowid
 
-def insert_requests(cursor, family_id, requests_data):
+def insert_requests(cursor, family_id, requests_data, old_family_id):
     # Define the insert query for requests
     insert_query = """
     INSERT INTO requests (
@@ -65,29 +65,27 @@ def insert_requests(cursor, family_id, requests_data):
     if isinstance(requests_data, dict):
         for request_id, request_data in requests_data.items():
             if request_data is not None:  # Skip None values
-                old_id = family_id
                 item = request_data.get('item', "")
                 amount = request_data.get('amount', 0)
                 completed = request_data.get("completed", False)
                 date = request_data.get('date', None)
                 user_id = 1
                 cursor.execute(insert_query, (
-                    family_id, old_id, item, completed, amount, date, user_id
+                    family_id, old_family_id, item, completed, amount, date, user_id
                 ))
     elif isinstance(requests_data, list):
         for request_data in requests_data:
             if request_data is not None:  # Skip None values
-                old_id = family_id
                 item = request_data.get('item', "")
                 completed = request_data.get("completed", False)
                 amount = request_data.get('amount', 0)
                 date = request_data.get('date', None)
                 user_id = 1
                 cursor.execute(insert_query, (
-                    family_id, old_id, item, completed, amount, date, user_id
+                    family_id, old_family_id, item, completed, amount, date, user_id
                 ))
 
-def insert_events(cursor, family_id, events_data):
+def insert_events(cursor, family_id, events_data, old_id):
     # Define the insert query for events
     insert_query = """
     INSERT INTO notes (
@@ -98,7 +96,6 @@ def insert_events(cursor, family_id, events_data):
     if isinstance(events_data, dict):
         for event_id, event_data in events_data.items():
             date = event_data.get('date', None)
-            old_id = family_id
             description = event_data.get('description', '')
             event_type = event_data.get('type', '')
             refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
@@ -109,7 +106,6 @@ def insert_events(cursor, family_id, events_data):
     elif isinstance(events_data, list):
         for event_data in events_data:
             date = event_data.get('date', None)
-            old_id = family_id
             description = event_data.get('description', '')
             event_type = event_data.get('type', '')
             refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
@@ -183,10 +179,10 @@ try:
                 insert_refugee(cursor, inserted_family_id, family_data['members'])
 
             if 'events' in family_data:
-                insert_events(cursor, inserted_family_id, family_data['events'])
+                insert_events(cursor, inserted_family_id, family_data['events'], family_id)
 
             if 'requests' in family_data:
-                insert_requests(cursor, inserted_family_id, family_data['requests'])
+                insert_requests(cursor, inserted_family_id, family_data['requests'], family_id)
         # Commit changes and close the cursor and connection
         cnx.commit()
         cursor.close()
