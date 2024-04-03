@@ -14,14 +14,15 @@ try:
     # Establish a connection to the database
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
-    
+
     # Define the table creation query with foreign key constraints
     create_table_query = """
     CREATE TABLE good_neighbors (
         NeighborID INT AUTO_INCREMENT PRIMARY KEY,
-        RefugeeID INT,
-        OldRefugeeID VARCHAR(255),
+        RefugeeFamilyID INT,
+        OldRefugeeFamilyID VARCHAR(255),
         FamilyID INT,
+        OldFamilyID VARCHAR(255),
         Birthday DATE,
         Email VARCHAR(255),
         FirstName VARCHAR(255),
@@ -30,7 +31,7 @@ try:
         PhoneNumber VARCHAR(20),
         Relation VARCHAR(255),
         is_head_of_house TINYINT(1),
-        FOREIGN KEY (RefugeeID) REFERENCES refugees(refugee_id),
+        FOREIGN KEY (RefugeeFamilyID) REFERENCES families(family_id),
         FOREIGN KEY (FamilyID) REFERENCES families(family_id)
     )
     """

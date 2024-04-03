@@ -56,7 +56,7 @@ def insert_family(cursor, family_data, old_id):
 
 
 
-def insert_events(cursor, family_id, events_data):
+def insert_events(cursor, family_id, events_data, old_id):
     # Define the insert query for events
     insert_query = """
     INSERT INTO notes (
@@ -67,7 +67,6 @@ def insert_events(cursor, family_id, events_data):
     if isinstance(events_data, dict):
         for event_id, event_data in events_data.items():
             date = event_data.get('date', None)
-            old_id = family_id
             description = event_data.get('description', '')
             event_type = event_data.get('type', '')
             refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
@@ -78,7 +77,6 @@ def insert_events(cursor, family_id, events_data):
     elif isinstance(events_data, list):
         for event_data in events_data:
             date = event_data.get('date', None)
-            old_id = family_id
             description = event_data.get('description', '')
             event_type = event_data.get('type', '')
             refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
@@ -89,13 +87,13 @@ def insert_events(cursor, family_id, events_data):
 
 
 
-def insert_neighbor(cursor, family_id, member_data, paired_data):
+def insert_neighbor(cursor, family_id, member_data, paired_data, oldFamilyID):
     # Define the insert query for refugees
     insert_query = """
     INSERT INTO good_neighbors (
-        is_head_of_house, OldRefugeeID, FamilyID, Birthday, Email,
+        is_head_of_house, OldRefugeeFamilyID, FamilyID, OldFamilyID, Birthday, Email,
         FirstName, LastName, Gender, PhoneNumber, Relation
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     OldRefugeeID = paired_data
     # Extract head of household data
@@ -111,7 +109,7 @@ def insert_neighbor(cursor, family_id, member_data, paired_data):
 
     # Execute the insert query for head of household
     cursor.execute(insert_query, (
-        is_head_of_house_head, OldRefugeeID, family_id, birthday_head, email_head,
+        is_head_of_house_head, OldRefugeeID, family_id, oldFamilyID, birthday_head, email_head,
         first_name_head, last_name_head, gender_head, phone_head, relation_to_head_head
     ))
 
@@ -120,6 +118,7 @@ def insert_neighbor(cursor, family_id, member_data, paired_data):
         if member_key.isdigit():  # Check if the key is a digit (indicating an additional member)
             last_name = member_data.get('lastName', '')
             is_head_of_house = False
+            OldRefugeeID = paired_data
             email = member_data.get('email', "")
             birthday = member_data.get('birthdate', None)
             first_name = member_data.get('firstName', '')
@@ -129,7 +128,7 @@ def insert_neighbor(cursor, family_id, member_data, paired_data):
 
             # Execute the insert query for additional members
             cursor.execute(insert_query, (
-                is_head_of_house, OldRefugeeID, family_id, birthday, email,
+                is_head_of_house, OldRefugeeID, family_id, oldFamilyID, birthday, email,
                 first_name, last_name, gender, phone, relation_to_head
             ))
 
@@ -151,10 +150,10 @@ try:
             
             # Insert members into refugees table
             if 'members' in family_data:
-                insert_neighbor(cursor, inserted_family_id, family_data['members'], family_data['pairedFamily'])
+                insert_neighbor(cursor, inserted_family_id, family_data['members'], family_data['pairedFamily'], family_id)
 
             if 'events' in family_data:
-                insert_events(cursor, inserted_family_id, family_data['events'])
+                insert_events(cursor, inserted_family_id, family_data['events'], family_id)
         # Commit changes and close the cursor and connection
         cnx.commit()
         cursor.close()
