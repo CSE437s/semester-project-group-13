@@ -54,6 +54,41 @@ def insert_family(cursor, family_data, old_id):
     ))
     return cursor.lastrowid
 
+
+
+def insert_events(cursor, family_id, events_data):
+    # Define the insert query for events
+    insert_query = """
+    INSERT INTO notes (
+        date, old_id, description, type, refugee_id, donator_id, family_id, user_id
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    # Insert each event into the database
+    if isinstance(events_data, dict):
+        for event_id, event_data in events_data.items():
+            date = event_data.get('date', None)
+            old_id = family_id
+            description = event_data.get('description', '')
+            event_type = event_data.get('type', '')
+            refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
+            donator_id = event_data.get('donator_id', None)  # Adjust based on your data
+            cursor.execute(insert_query, (
+                date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
+            ))
+    elif isinstance(events_data, list):
+        for event_data in events_data:
+            date = event_data.get('date', None)
+            old_id = family_id
+            description = event_data.get('description', '')
+            event_type = event_data.get('type', '')
+            refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
+            donator_id = event_data.get('donator_id', None)  # Adjust based on your data
+            cursor.execute(insert_query, (
+                date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
+            ))
+
+
+
 def insert_refugee(cursor, family_id, member_data):
     # Define the insert query for refugees
     insert_query = """
@@ -116,6 +151,8 @@ try:
             if 'members' in family_data:
                 insert_refugee(cursor, inserted_family_id, family_data['members'])
 
+            if 'events' in family_data:
+                insert_events(cursor, inserted_family_id, family_data['events'])
         # Commit changes and close the cursor and connection
         cnx.commit()
         cursor.close()
