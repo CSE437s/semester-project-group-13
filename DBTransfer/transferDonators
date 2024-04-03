@@ -93,6 +93,41 @@ def insert_events(cursor, family_id, events_data):
             ))
 
 
+def insert_donations(cursor, family_id, donations_data):
+    # Define the insert query for donations
+    insert_query = """
+    INSERT INTO donations (
+        family_id, old_id, item, amount, completed, date, user_id
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
+    # Insert each donation into the database
+    if isinstance(donations_data, dict):
+        for donation_id, donation_data in donations_data.items():
+            if donation_data is not None:  # Skip None values
+                old_id = family_id
+                item = donation_data.get('item', "")
+                amount = donation_data.get('amount', 0)
+                completed = donation_data.get('completed', False)
+                date = donation_data.get('date', None)
+                user_id = 1
+                cursor.execute(insert_query, (
+                    family_id, old_id, item, amount, completed, date, user_id
+                ))
+    elif isinstance(donations_data, list):
+        for donation_data in donations_data:
+            if donation_data is not None:  # Skip None values
+                old_id = family_id
+                item = donation_data.get('item', "")
+                amount = donation_data.get('amount', 0)
+                completed = donation_data.get('completed', False)
+                date = donation_data.get('date', None)
+                user_id = 1
+                cursor.execute(insert_query, (
+                    family_id, old_id, item, amount, completed, date, user_id
+                ))
+
+
+    
 
 
 def insert_members(cursor, family_id, members_data):
@@ -168,6 +203,10 @@ try:
 
             if 'events' in family_data:
                 insert_events(cursor, inserted_family_id, family_data['events'])
+
+            if 'donations' in family_data:
+                insert_donations(cursor, inserted_family_id, family_data['donations'])
+
 
         # Commit changes and close the cursor and connection
         cnx.commit()

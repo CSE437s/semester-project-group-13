@@ -1,7 +1,6 @@
 import mysql.connector
 import json
 
-
 # Define your database connection parameters
 config = {
     'user': 'avnadmin',
@@ -20,16 +19,16 @@ try:
     # Define the table creation query
     create_table_query = """
     CREATE TABLE donations (
-    donation_id INT AUTO_INCREMENT PRIMARY KEY,
-    old_id VARCHAR(255),  # Add a column for the old ID
-    amount INT,
-    completed BOOLEAN,
-    items TEXT,
-    date DATE,
-    donator_id INT,
-    user_id_who_created INT,
-    FOREIGN KEY (donator_id) REFERENCES donators(donator_id),
-    FOREIGN KEY (user_id_who_created) REFERENCES users(user_id)
+        donation_id INT AUTO_INCREMENT PRIMARY KEY,
+        family_id INT, 
+        old_id VARCHAR(255),
+        item VARCHAR(255),
+        amount INT,
+        completed BOOLEAN,
+        date DATE,
+        user_id INT,
+        FOREIGN KEY (family_id) REFERENCES families(family_id),
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
     )
     """
 
@@ -43,5 +42,3 @@ try:
     print("Table created successfully.")
 except mysql.connector.Error as err:
     print("Error:", err)
-
-
