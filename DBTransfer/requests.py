@@ -20,19 +20,17 @@ try:
     # Define the table creation query
     create_table_query = """
    CREATE TABLE requests (
-    request_id INT AUTO_INCREMENT PRIMARY KEY,
-    amount INT,
-    completed BOOLEAN,
-    items TEXT,
-    date DATE,
-    old_id VARCHAR(255),
-    family_id INT,
-    refugee_id INT,
-    user_id_who_created INT,
-    FOREIGN KEY (family_id) REFERENCES families(family_id),
-    FOREIGN KEY (refugee_id) REFERENCES refugees(refugee_id),
-    FOREIGN KEY (user_id_who_created) REFERENCES donators(donator_id)
-);
+        request_id INT AUTO_INCREMENT PRIMARY KEY,
+        family_id INT, 
+        old_id VARCHAR(255),
+        item VARCHAR(255),
+        amount INT,
+        completed BOOLEAN,
+        date DATE,
+        user_id INT,
+        FOREIGN KEY (family_id) REFERENCES families(family_id),
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
 
     """
 

@@ -31,6 +31,7 @@ try:
         donator_id INT AUTO_INCREMENT PRIMARY KEY,
         is_head_of_house TINYINT(1),
         family_id INT,
+        old_id VARCHAR(255),
         address VARCHAR(255),
         phone_number VARCHAR(15),
         birthday DATE,
