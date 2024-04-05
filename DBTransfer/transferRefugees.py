@@ -33,8 +33,8 @@ def insert_family(cursor, family_data, old_id):
     LatestDateAtOasis = family_data.get('latestDate', None)
     DateCreated = family_data.get('dateCreated', None)
     EnteredBy = family_data.get('enteredBy', '')
-    Scheduled = family_data.get('scheduled', '')
-    ArrivalDate = family_data.get('arrival', '') 
+    Scheduled = family_data.get('scheduled', False)
+    ArrivalDate = family_data.get('arrival', None) 
     CountryOfOrigin = family_data.get('country', '')
     members = family_data['members']
     if isinstance(members, dict):  # Check if members is an object (dictionary)
@@ -53,40 +53,54 @@ def insert_family(cursor, family_data, old_id):
         ArrivalDate, EnteredBy, Scheduled, CountryOfOrigin, address, zip_code, city
     ))
     return cursor.lastrowid
-def insert_requests(cursor, family_id, requests_data):
+def insert_requests(cursor, family_id, requests_data, old_id):
     # Define the insert query for requests
     insert_query = """
     INSERT INTO requests (
-        family_id, old_id, item, amount, date, user_id
-    ) VALUES (%s, %s, %s, %s, %s, %s)
+        family_id, old_id, item, amount, completed, date, user_id
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
     # Insert each request into the database
     if isinstance(requests_data, dict):
         for request_id, request_data in requests_data.items():
             if request_data is not None:  # Skip None values
-                old_id = family_id
                 item = request_data.get('item', "")
                 amount = request_data.get('amount', 0)
+                completed = request_data.get('completed', False)
                 date = request_data.get('date', None)
-                if date == '':
-                    date = None  # Set date to None if it's an empty string
                 user_id = 1
-                cursor.execute(insert_query, (
-                    family_id, old_id, item, amount, date, user_id
-                ))
+                try:
+                    cursor.execute(insert_query, (
+                        family_id, old_id, item, amount, completed, date, user_id
+                    ))
+                except mysql.connector.Error as err:
+                    if err.errno == 1264:  # Check for 'Out of range' error
+                        cursor.execute(insert_query, (
+                            family_id, old_id, item, None, completed, date, user_id
+                        ))
+                    else:
+                        print("Error:", err)
+            
     elif isinstance(requests_data, list):
         for request_data in requests_data:
             if request_data is not None:  # Skip None values
-                old_id = family_id
                 item = request_data.get('item', "")
                 amount = request_data.get('amount', 0)
+                completed = request_data.get('completed', False)
                 date = request_data.get('date', None)
-                if date == '':
-                    date = None  # Set date to None if it's an empty string
                 user_id = 1
-                cursor.execute(insert_query, (
-                    family_id, old_id, item, amount, date, user_id
-                ))
+                try:
+                    cursor.execute(insert_query, (
+                        family_id, old_id, item, amount, completed, date, user_id
+                    ))
+                except mysql.connector.Error as err:
+                    if err.errno == 1264:  # Check for 'Out of range' error
+                        cursor.execute(insert_query, (
+                            family_id, old_id, item, amount, completed, date, user_id
+                        ))
+                    else:
+                        print("Error:", err)
+
 
 def insert_events(cursor, family_id, events_data, old_id):
     # Define the insert query for events
@@ -96,27 +110,33 @@ def insert_events(cursor, family_id, events_data, old_id):
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     # Insert each event into the database
-    if isinstance(events_data, dict):
-        for event_id, event_data in events_data.items():
-            date = event_data.get('date', None)
-            description = event_data.get('description', '')
-            event_type = event_data.get('type', '')
-            refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
-            donator_id = event_data.get('donator_id', None)  # Adjust based on your data
-            cursor.execute(insert_query, (
-                date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
-            ))
-    elif isinstance(events_data, list):
-        for event_data in events_data:
-            date = event_data.get('date', None)
-            description = event_data.get('description', '')
-            event_type = event_data.get('type', '')
-            refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
-            donator_id = event_data.get('donator_id', None)  # Adjust based on your data
-            cursor.execute(insert_query, (
-                date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
-            ))
-
+    if events_data is not None:  # Check if events_data is not None
+        if isinstance(events_data, dict):
+            for event_id, event_data in events_data.items():
+                try:
+                    date = event_data.get('date', None) if event_data.get('date') != '' else None
+                except ValueError:
+                    date = None
+                description = event_data.get('description', '')
+                event_type = event_data.get('type', '')
+                refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
+                donator_id = event_data.get('donator_id', None)  # Adjust based on your data
+                cursor.execute(insert_query, (
+                    date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
+                ))
+        elif isinstance(events_data, list):
+            for event_data in events_data:
+                try:
+                    date = event_data.get('date', None) if event_data.get('date') != '' else None
+                except ValueError:
+                    date = None
+                description = event_data.get('description', '')
+                event_type = event_data.get('type', '')
+                refugee_id = event_data.get('refugee_id', None)  # Adjust based on your data
+                donator_id = event_data.get('donator_id', None)  # Adjust based on your data
+                cursor.execute(insert_query, (
+                    date, old_id, description, event_type, refugee_id, donator_id, family_id, 1  # Assuming user_id is 1
+                ))
 
 
 def insert_refugee(cursor, family_id, member_data):
@@ -166,6 +186,8 @@ try:
     # Establish a connection to the database
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
+    insert_count = 0
+
 
     # Read data from the JSON file
     with open('oasisfamilies.json') as f:
@@ -180,12 +202,21 @@ try:
             # Insert members into refugees table
             if 'members' in family_data:
                 insert_refugee(cursor, inserted_family_id, family_data['members'])
+            else:
+                print("No members data found for family_id:", family_id)
 
             if 'events' in family_data:
                 insert_events(cursor, inserted_family_id, family_data['events'], family_id)
+            else:
+                print("No events data found for family_id:", family_id)
 
             if 'requests' in family_data:
                 insert_requests(cursor, inserted_family_id, family_data['requests'], family_id)
+            else:
+                print("No requests data found for family_id:", family_id)
+
+            insert_count += 1
+            print("Total entries inserted:", insert_count)
         # Commit changes and close the cursor and connection
         cnx.commit()
         cursor.close()

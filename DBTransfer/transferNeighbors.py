@@ -137,6 +137,7 @@ try:
     # Establish a connection to the database
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
+    insert_count = 0
 
     # Read data from the JSON file
     with open('oasisneighbors.json') as f:
@@ -155,6 +156,8 @@ try:
             if 'events' in family_data:
                 insert_events(cursor, inserted_family_id, family_data['events'], family_id)
         # Commit changes and close the cursor and connection
+            insert_count += 1
+            print("Total entries inserted:", insert_count)
         cnx.commit()
         cursor.close()
         cnx.close()
