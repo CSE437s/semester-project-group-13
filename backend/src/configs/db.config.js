@@ -1,9 +1,9 @@
 
 const db = {
-    host: "oasispractice-chrisspam1126-ece5.a.aivencloud.com",
-    port: "16031",
+    host: "oasisdb-oasisdb.a.aivencloud.com",
+    port: "13780",
     user: "avnadmin",
-    password: "AVNS_wABtR6d4vmnUszOm4hC",
+    password: "AVNS_UugTJpwoWZiGpP6VjcA",
     database: "oasis",
 };
 
