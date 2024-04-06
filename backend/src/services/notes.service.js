@@ -25,19 +25,22 @@ async function getOne(note_id) {
   }
 }
 
-async function create({ refugee_id, user_id, date, text, type }) {
+async function create({ description, user_id, date, refugee_id, donator_id, family_id, is_deleted, type }) {
   try {
     const query = `
-      INSERT INTO notes (refugee_id, user_id, date, text, type)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO notes (description, user_id, date, refugee_id, donator_id, family_id, is_deleted, type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const results = await db.query(query, [
-      refugee_id,
+      description,
       user_id,
       date,
-      text,
-      type
+      refugee_id,
+      donator_id,
+      family_id,
+      is_deleted,
+      type,
     ]);
 
     const note_id = results.insertId;
@@ -49,19 +52,22 @@ async function create({ refugee_id, user_id, date, text, type }) {
   }
 }
 
-async function update({ note_id, refugee_id, user_id, date, text, type }) {
+async function update({ note_id, description, user_id, date, refugee_id, donator_id, family_id, is_deleted, type }) {
   try {
     const query = `
       UPDATE notes 
-      SET refugee_id = ?, user_id = ?, date = ?, text = ?, type = ?
+      SET description = ?, user_id = ?, date = ?, refugee_id = ?, donator_id = ?, family_id = ?, is_deleted = ?, type = ?
       WHERE note_id = ?
     `;
 
     const results = await db.query(query, [
-      refugee_id,
+      description,
       user_id,
       date,
-      text,
+      refugee_id,
+      donator_id,
+      family_id,
+      is_deleted,
       type,
       note_id
     ]);
@@ -74,41 +80,28 @@ async function update({ note_id, refugee_id, user_id, date, text, type }) {
   }
 }
 
-async function deleteOne(note_id) {
+
+
+async function deleteOne(note_id, is_deleted) {
   try {
-    const query = 'DELETE FROM notes WHERE note_id = ?';
-    const result = await db.query(query, [note_id]);
-    console.log('Note deleted with ID:', note_id);
-    return { success: true };
+    const query = `
+      UPDATE notes 
+      SET is_deleted = ?
+      WHERE note_id = ?
+    `;
+
+    const results = await db.query(query, [
+      is_deleted,
+      note_id
+    ]);
+
+    console.log('note deleted with ID:', note_id);
+    return { success: true, note_id };
   } catch (error) {
-    console.error('Error deleting Note', error);
+    console.error('Error deleting note', note_id);
     throw error;
   }
 }
-
-
-async function updateUserId(user_idToChange, note_id) {
-    try {
-      const query = 'UPDATE notes SET user_id = ? WHERE user_id = ?';
-      await db.query(query, [note_id, user_idToChange]);
-      console.log('User ID updated in notes');
-    } catch (error) {
-      console.error('Error updating user ID in notes', error);
-      throw error;
-    }
-  }
-  
-
-  async function updateRefugeeId(refugeeIdToChange, newRefugeeId) {
-    try {
-      const query = 'UPDATE notes SET refugee_id = ? WHERE refugee_id = ?';
-      await db.query(query, [newRefugeeId, refugeeIdToChange]);
-      console.log('Refugee ID updated in notes');
-    } catch (error) {
-      console.error('Error updating refugee ID in notes', error);
-      throw error;
-    }
-  }
 
 module.exports = {
   getAll,
@@ -116,6 +109,4 @@ module.exports = {
   create,
   update,
   deleteOne,
-  updateUserId,
-  updateRefugeeId,
 };

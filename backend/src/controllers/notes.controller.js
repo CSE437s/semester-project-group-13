@@ -19,37 +19,58 @@ async function getOne(req, res, next) {
   }
 }
 
-async function create(req, res) {
+async function create({
+  description,
+  user_id,
+  date,
+  refugee_id,
+  donator_id,
+  family_id,
+  is_deleted,
+  type,
+}) {
   try {
-    const { refugee_id, user_id, date, text, type } = req.body;
+    const query = `
+      INSERT INTO notes (description, user_id, date, refugee_id, donator_id, family_id, is_deleted, type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    const result = await noteService.create({
-      refugee_id,
+    const results = await db.query(query, [
+      description,
       user_id,
       date,
-      text,
-      type
-    });
+      refugee_id,
+      donator_id,
+      family_id,
+      is_deleted,
+      type,
+    ]);
 
-    res.status(200).json(result);
+    const note_id = results.insertId;
+    console.log('Note created with ID:', note_id);
+    return { success: true, note_id };
   } catch (error) {
-    console.error('Error creating note', error.message);
-    res.status(500).json({ error: 'Error creating note' });
+    console.error('Error creating note', error);
+    throw error;
   }
 }
+
 
 async function update(req, res) {
   try {
     const { note_id } = req.params;
-    const { refugee_id, user_id, date, text, type } = req.body;
+    const { description, user_id, date, refugee_id, donator_id, family_id, is_deleted, type } = req.body;
 
     const result = await noteService.update({
       note_id,
-      refugee_id,
+      description,
       user_id,
       date,
-      text,
-      type
+      refugee_id,
+      donator_id,
+      family_id,
+      is_deleted,
+      type,
     });
 
     res.status(200).json(result);
@@ -61,14 +82,23 @@ async function update(req, res) {
 
 async function deleteOne(req, res) {
   try {
-    const { note_id } = req.params;
-    await noteService.deleteOne(note_id);
-    res.status(200).json({ success: true });
+    const { note_id } = req.params; 
+    const { is_deleted } = req.body;
+
+    const result = await noteService.deleteOne(note_id, is_deleted);
+
+    res.status(200).json(result);
   } catch (error) {
-    console.error('Error deleting note', error.message);
-    res.status(500).json({ error: 'Error deleting note' });
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      console.error('Error Deleting Note: This note is referenced by other records.');
+      return res.status(400).json({ error: 'This note is referenced by other records and cannot be deleted.' });
+    }
+
+    console.error('Error Deleting Note', error);
+    res.status(500).json({ error: 'Error Deleting Note' });
   }
 }
+
 
 module.exports = {
   getAll,
