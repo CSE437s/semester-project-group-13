@@ -7,7 +7,6 @@ router.get('/:refugee_id', refugeeController.getOne);
 router.post('/create', refugeeController.create);
 router.put('/:refugee_id/update', refugeeController.update); 
 router.delete('/:refugee_id/deleteOne', refugeeController.deleteOne);
-router.get('/family/:family_id', refugeeController.getAllInFamily);
 
 
 
