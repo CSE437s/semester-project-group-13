@@ -121,17 +121,6 @@ async function getOne(refugee_id) {
   }
   
 
-async function deleteOne(refugee_id) {
-  try {
-    const query = 'DELETE FROM refugees WHERE refugee_id = ?';
-    await db.query(query, [refugee_id]);
-    console.log(`Refugee with ID ${refugee_id} deleted successfully`);
-    return { success: true };
-  } catch (error) {
-    console.error('Error deleting refugee', error);
-    throw error;
-  }
-}
 async function deleteOne(refugee_id, {
   is_deleted
 }) {

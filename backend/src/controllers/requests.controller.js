@@ -1,3 +1,4 @@
+const { request } = require('express');
 const requestService = require('../services/requests.service');
 
 async function getAll(req, res, next) {
@@ -22,22 +23,22 @@ async function getOne(req, res, next) {
 async function create(req, res) {
   try {
     const {
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
     } = req.body;
 
     const result = await requestService.create({
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
     });
 
@@ -52,23 +53,23 @@ async function update(req, res) {
   try {
     const { request_id } = req.params; 
     const {
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
     } = req.body;
 
     const result = await requestService.update({
       request_id,
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
     });
 
@@ -90,6 +91,25 @@ async function deleteOne(req, res) {
   }
 }
 
+
+async function deleteOne(req, res) {
+  try {
+    const { request_id } = req.params; 
+    const { is_deleted } = req.body;
+
+    const result = await requestService.deleteOne(request_id, is_deleted);
+
+    res.status(200).json(result);
+  } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      console.error('Error Deleting Request: This request is referenced by other records.');
+      return res.status(400).json({ error: 'This request is referenced by other records and cannot be deleted.' });
+    }
+
+    console.error('Error Deleting Request', error);
+    res.status(500).json({ error: 'Error Deleting Request' });
+  }
+}
 module.exports = {
   getAll,
   getOne,

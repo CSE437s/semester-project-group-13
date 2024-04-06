@@ -24,29 +24,28 @@ async function getOne(request_id) {
     throw error;
   }
 }
-
 async function create({
-  refugee_id,
   family_id,
   date,
   item,
-  quantity,
-  fulfilled,
+  amount,
+  completed,
+  is_deleted,
   user_id,
 }) {
   try {
     const query = `
-      INSERT INTO requests (refugee_id, family_id, date, item, quantity, fulfilled, user_id)
+      INSERT INTO requests (family_id, date, item, amount, completed, is_deleted, user_id)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     const results = await db.query(query, [
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
     ]);
 
@@ -59,23 +58,33 @@ async function create({
   }
 }
 
-async function update({ request_id, refugee_id, family_id, date, item, quantity, fulfilled, user_id }) {
+
+async function update({
+  request_id,
+  family_id,
+  date,
+  item,
+  amount,
+  completed,
+  is_deleted,
+  user_id,
+}) {
   try {
     const query = `
       UPDATE requests 
-      SET refugee_id = ?, family_id = ?, date = ?, item = ?, quantity = ?, fulfilled = ?, user_id = ?
+      SET family_id = ?, date = ?, item = ?, amount = ?, completed = ?, is_deleted = ?, user_id = ?
       WHERE request_id = ?
     `;
 
     const results = await db.query(query, [
-      refugee_id,
       family_id,
       date,
       item,
-      quantity,
-      fulfilled,
+      amount,
+      completed,
+      is_deleted,
       user_id,
-      request_id
+      request_id,
     ]);
 
     console.log('Request updated with ID:', request_id);
@@ -85,6 +94,7 @@ async function update({ request_id, refugee_id, family_id, date, item, quantity,
     throw error;
   }
 }
+
 
 async function deleteOne(request_id) {
   try {
@@ -98,41 +108,28 @@ async function deleteOne(request_id) {
   }
 }
 
+async function deleteOne(request_id, is_deleted) {
+  try {
+    const query = `
+      UPDATE requests 
+      SET is_deleted = ?
+      WHERE request_id = ?
+    `;
 
-async function updateUserId(user_idToChange, request_id) {
-    try {
-      const query = 'UPDATE requests SET user_id = ? WHERE user_id = ?';
-      await db.query(query, [request_id, user_idToChange]);
-      console.log('User ID updated in notes');
-    } catch (error) {
-      console.error('Error updating user ID in notes', error);
-      throw error;
-    }
-  }
-  
-  async function updateRefugeeId(refugeeIdToChange, new_value) {
-    try {
-      const query = 'UPDATE requests SET refugee_id = ? WHERE refugee_id = ?';
-      await db.query(query, [new_value, refugeeIdToChange]);
-      console.log('Refugee ID updated in requests');
-    } catch (error) {
-      console.error('Error updating refugee ID in requests', error);
-      throw error;
-    }
-  }
+    const results = await db.query(query, [
+      is_deleted,
+      request_id
+    ]);
 
-  
-async function updateFamilyId(familyIdToChange, new_value) {
-    try {
-      const query = 'UPDATE requests SET family_id = ? WHERE family_id = ?';
-      await db.query(query, [new_value, familyIdToChange]);
-      console.log('Family ID updated in requests');
-    } catch (error) {
-      console.error('Error updating Family ID in requests', error);
-      throw error;
-    }
+    console.log('Request deleted with ID:', request_id);
+    return { success: true, request_id };
+  } catch (error) {
+    console.error('Error deleting Request', error);
+    throw error;
   }
-  
+}
+
+
 
 module.exports = {
   getAll,
@@ -140,7 +137,4 @@ module.exports = {
   create,
   update,
   deleteOne,
-  updateUserId,
-  updateRefugeeId,
-  updateFamilyId,
 };
