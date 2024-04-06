@@ -3,12 +3,13 @@ import mysql.connector
 # Define your database connection parameters
 config = {
     'user': 'avnadmin',
-    'port': 13780,
-    'password': 'AVNS_UugTJpwoWZiGpP6VjcA',
-    'host': 'oasisdb-oasisdb.a.aivencloud.com',
+    'port': 16031,
+    'password': 'AVNS_wABtR6d4vmnUszOm4hC',
+    'host': 'oasispractice-chrisspam1126-ece5.a.aivencloud.com',
     'database': 'oasis',
     'raise_on_warnings': True
 }
+
 
 try:
     # Establish a connection to the database
@@ -26,6 +27,7 @@ try:
         IsGoodNeighbor TINYINT(1),
         DesiresToBeGoodNeighbor TINYINT(1),
         Languages VARCHAR(255),
+        is_deleted BOOLEAN DEFAULT FALSE,
         FamilyName VARCHAR(255),
         LatestDateAtOasis DATE,
         DateCreated DATE,

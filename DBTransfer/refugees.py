@@ -4,12 +4,13 @@ import json
 # Define your database connection parameters
 config = {
     'user': 'avnadmin',
-    'port': 13780,
-    'password': 'AVNS_UugTJpwoWZiGpP6VjcA',
-    'host': 'oasisdb-oasisdb.a.aivencloud.com',
+    'port': 16031,
+    'password': 'AVNS_wABtR6d4vmnUszOm4hC',
+    'host': 'oasispractice-chrisspam1126-ece5.a.aivencloud.com',
     'database': 'oasis',
     'raise_on_warnings': True
 }
+
 
 try:
     # Establish a connection to the database
@@ -28,6 +29,7 @@ try:
         gender VARCHAR(255),
         relation_to_head VARCHAR(255),
         phone VARCHAR(20),
+        is_deleted BOOLEAN DEFAULT FALSE,
         FOREIGN KEY (family_id) REFERENCES families(family_id)
     )
     """

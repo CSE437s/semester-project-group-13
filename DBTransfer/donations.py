@@ -4,9 +4,9 @@ import json
 # Define your database connection parameters
 config = {
     'user': 'avnadmin',
-    'port': 13780,
-    'password': 'AVNS_UugTJpwoWZiGpP6VjcA',
-    'host': 'oasisdb-oasisdb.a.aivencloud.com',
+    'port': 16031,
+    'password': 'AVNS_wABtR6d4vmnUszOm4hC',
+    'host': 'oasispractice-chrisspam1126-ece5.a.aivencloud.com',
     'database': 'oasis',
     'raise_on_warnings': True
 }
@@ -25,6 +25,7 @@ try:
         item VARCHAR(255),
         amount INT,
         completed BOOLEAN,
+        is_deleted BOOLEAN DEFAULT FALSE,
         date DATE,
         user_id INT,
         FOREIGN KEY (family_id) REFERENCES families(family_id),

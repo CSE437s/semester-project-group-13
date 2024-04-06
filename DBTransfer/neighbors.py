@@ -3,12 +3,13 @@ import mysql.connector
 # Define your database connection parameters
 config = {
     'user': 'avnadmin',
-    'port': 13780,
-    'password': 'AVNS_UugTJpwoWZiGpP6VjcA',
-    'host': 'oasisdb-oasisdb.a.aivencloud.com',
+    'port': 16031,
+    'password': 'AVNS_wABtR6d4vmnUszOm4hC',
+    'host': 'oasispractice-chrisspam1126-ece5.a.aivencloud.com',
     'database': 'oasis',
     'raise_on_warnings': True
 }
+
 
 try:
     # Establish a connection to the database
@@ -31,6 +32,7 @@ try:
         PhoneNumber VARCHAR(20),
         Relation VARCHAR(255),
         is_head_of_house TINYINT(1),
+        is_deleted BOOLEAN DEFAULT FALSE,
         FOREIGN KEY (RefugeeFamilyID) REFERENCES families(family_id),
         FOREIGN KEY (FamilyID) REFERENCES families(family_id)
     )
