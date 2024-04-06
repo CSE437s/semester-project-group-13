@@ -19,37 +19,23 @@ async function getOne(req, res, next) {
   }
 }
 
-async function getAllIncomplete(req, res) {
-  try {
-    const incompleteDonations = await donationService.getAllIncomplete();
-    res.status(200).json({ incompleteDonations });
-  } catch (error) {
-    console.error('Error retrieving incomplete donations', error);
-    res.status(500).json({ error: 'Error retrieving incomplete donations' });
-  }
-}
-
 async function create(req, res) {
   try {
     const {
       item,
-      quantity,
+      amount,
       completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      receiving_refugee,
+      date,
+      family_id,
       user_id,
     } = req.body;
 
     const result = await donationService.create({
       item,
-      quantity,
+      amount,
       completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      receiving_refugee,
+      date,
+      family_id,
       user_id,
     });
 
@@ -65,14 +51,14 @@ async function update(req, res) {
     const { donation_id } = req.params; 
     const {
       item,
-      quantity,
+      amount,
       completed,
     } = req.body;
 
     const result = await donationService.update({
       donation_id,
       item,
-      quantity,
+      amount,
       completed
     });
 
@@ -85,12 +71,20 @@ async function update(req, res) {
 
 async function deleteOne(req, res) {
   try {
-    const { donation_id } = req.params;
-    await donationService.deleteOne(donation_id);
-    res.status(200).json({ success: true });
+    const { donation_id } = req.params; 
+    const {
+      is_deleted,
+    } = req.body;
+
+    const result = await donationService.deleteOne({
+      donation_id,
+      is_deleted
+    });
+
+    res.status(200).json(result);
   } catch (error) {
-    console.error('Error deleting donation', error.message);
-    res.status(500).json({ error: 'Error deleting donation' });
+    console.error('Error Deleting Donation', error.message);
+    res.status(500).json({ error: 'Error Deleting donation' });
   }
 }
 
@@ -98,7 +92,6 @@ module.exports = {
   getAll,
   getOne,
   create,
-  getAllIncomplete,
   update,
   deleteOne,
 };

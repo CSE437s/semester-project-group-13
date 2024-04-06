@@ -27,28 +27,24 @@ async function getOne(donation_id) {
 
 async function create({
   item,
-  quantity,
+  amount,
   completed,
-  giving_family,
-  giving_volunteer,
-  receiving_family,
-  receiving_refugee,
+  date,
+  family_id,
   user_id,
 }) {
   try {
     const query = `
-      INSERT INTO donations (item, quantity, completed, giving_family, giving_volunteer, receiving_family, receiving_refugee, user_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO donations (item, amount, completed, date, family_id, user_id)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     const results = await db.query(query, [
       item,
-      quantity,
+      amount,
       completed,
-      giving_family,
-      giving_volunteer,
-      receiving_family,
-      receiving_refugee,
+      date,
+      family_id,
       user_id,
     ]);
 
@@ -61,17 +57,17 @@ async function create({
   }
 }
 
-async function update({ donation_id, item, quantity, completed}) {
+async function update({ donation_id, item, amount, completed}) {
   try {
     const query = `
       UPDATE donations 
-      SET item = ?, quantity = ?, completed = ?
+      SET item = ?, amount = ?, completed = ?
       WHERE donation_id = ?
     `;
 
     const results = await db.query(query, [
       item,
-      quantity,
+      amount,
       completed,
       donation_id
     ]);
@@ -86,8 +82,8 @@ async function update({ donation_id, item, quantity, completed}) {
 
 async function deleteOne(donation_id) {
   try {
-    const query = 'DELETE FROM donations WHERE donation_id = ?';
-    const result = await db.query(query, [donation_id]);
+    const query = 'UPDATE donations SET is_deleted WHERE donation_id = ?';
+    const result = await db.query(query, [is_deleted ,donation_id]);
     console.log('Donation deleted with ID:', donation_id);
     return { success: true };
   } catch (error) {
@@ -96,71 +92,10 @@ async function deleteOne(donation_id) {
   }
 }
 
-async function updateGivingVolunteer(volunteer_id, new_value) {
-  try {
-    const query = 'UPDATE donations SET giving_volunteer = ? WHERE giving_volunteer = ?';
-    await db.query(query, [new_value, volunteer_id]);
-    console.log('Giving volunteer updated in donations');
-  } catch (error) {
-    console.error('Error updating giving volunteer in donations', error);
-    throw error;
-  }
-}
-
-async function updateUserId(user_idToChange, new_value) {
-  try {
-    const query = 'UPDATE donations SET giving_family = ? WHERE giving_family = ?';
-    await db.query(query, [new_value, user_idToChange]);
-    console.log('User ID updated in donations');
-  } catch (error) {
-    console.error('Error updating user ID in donations', error);
-    throw error;
-  }
-}
-
-async function updateRefugeeId(refugeeIdToChange, new_value) {
-  try {
-    const query = 'UPDATE donations SET receiving_refugee = ? WHERE receiving_refugee = ?';
-    await db.query(query, [new_value, refugeeIdToChange]);
-    console.log('Refugee ID updated in donations');
-  } catch (error) {
-    console.error('Error updating Refugee ID in donations', error);
-    throw error;
-  }
-}
-
-async function updateGivingFamilyId(familyIdToChange, new_value) {
-  try {
-    const query = 'UPDATE donations SET giving_family = ? WHERE giving_family = ?';
-    await db.query(query, [new_value, familyIdToChange]);
-    console.log('Family ID updated in donations');
-  } catch (error) {
-    console.error('Error updating Family ID in donations', error);
-    throw error;
-  }
-}
-
-async function updateRecievingFamilyId(familyIdToChange, new_value) {
-  try {
-    const query = 'UPDATE donations SET receiving_family = ? WHERE receiving_family = ?';
-    await db.query(query, [new_value, familyIdToChange]);
-    console.log('Family ID updated in donations');
-  } catch (error) {
-    console.error('Error updating Family ID in donations', error);
-    throw error;
-  }
-}
-
-
 module.exports = {
   getAll,
   getOne,
   create,
   update,
   deleteOne,
-  updateGivingVolunteer,
-  updateUserId,
-  updateRefugeeId,
-  updateGivingFamilyId,
-  updateRecievingFamilyId,
 };
