@@ -19,75 +19,116 @@ async function getOne(req, res, next) {
   }
 }
 
-async function create(req, res) {
+async function create({
+  Refugee_Family_ID,
+  FamilyID,
+  Birthday,
+  Email,
+  FirstName,
+  LastName,
+  Gender,
+  PhoneNumber,
+  Relation,
+  is_head_of_house,
+  is_deleted,
+}) {
   try {
-    const {
-      refugee_family_id,
-      host_family_id,
-      match_date,
-      neighbor_id
-    } = req.body;
+    const query = `
+      INSERT INTO neighbors (Refugee_Family_ID, FamilyID, Birthday, Email, FirstName, LastName, Gender, PhoneNumber, Relation, is_head_of_house, is_deleted)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    if (!refugee_family_id || !host_family_id || !match_date || !neighbor_id) {
-      throw new Error('Incomplete neighbor data. Please provide all required fields.');
-  }
+    const results = await db.query(query, [
+      Refugee_Family_ID,
+      FamilyID,
+      Birthday,
+      Email,
+      FirstName,
+      LastName,
+      Gender,
+      PhoneNumber,
+      Relation,
+      is_head_of_house,
+      is_deleted,
+    ]);
 
-    const result = await neighborService.create({
-      refugee_family_id,
-      host_family_id,
-      match_date,
-      neighbor_id
-    });
-
-    res.status(200).json(result);
+    const neighbor_id = results.insertId;
+    console.log('Neighbor created with ID:', neighbor_id);
+    return { success: true, neighbor_id };
   } catch (error) {
-    console.error('Error Creating Neighbor', error.message);
-    res.status(500).json({ error: 'Error creating neighbor' });
+    console.error('Error Creating Neighbor', error);
+    throw error;
   }
 }
 
-async function update(req, res) {
+
+async function update({
+  neighbor_id,
+  Refugee_Family_ID,
+  FamilyID,
+  Birthday,
+  Email,
+  FirstName,
+  LastName,
+  Gender,
+  PhoneNumber,
+  Relation,
+  is_head_of_house,
+  is_deleted,
+}) {
   try {
-    const { neighbor_id } = req.params;
-    const {
-      refugee_family_id,
-      host_family_id,
-      match_date,
-    } = req.body;
+    const query = `
+      UPDATE neighbors 
+      SET Refugee_Family_ID = ?, FamilyID = ?, Birthday = ?, Email = ?, FirstName = ?, LastName = ?, Gender = ?, PhoneNumber = ?, Relation = ?, is_head_of_house = ?, is_deleted = ?
+      WHERE neighbor_id = ?
+    `;
 
-    if (!refugee_family_id && !host_family_id && !match_date) {
-      throw new Error('No data provided for update. Please provide at least one field to update.');
-  }
+    const results = await db.query(query, [
+      Refugee_Family_ID,
+      FamilyID,
+      Birthday,
+      Email,
+      FirstName,
+      LastName,
+      Gender,
+      PhoneNumber,
+      Relation,
+      is_head_of_house,
+      is_deleted,
+      neighbor_id
+    ]);
 
-    const result = await neighborService.update({
-      neighbor_id,
-      refugee_family_id,
-      host_family_id,
-      match_date,
-    });
-
-    res.status(200).json(result);
+    console.log('Neighbor updated with ID:', neighbor_id);
+    return { success: true, neighbor_id };
   } catch (error) {
-    console.error('Error updating Neighbor', error.message);
-    res.status(500).json({ error: 'Error updating neighbor' });
+    console.error('Error updating Neighbor', error);
+    throw error;
   }
 }
 
 async function deleteOne(req, res) {
   try {
-    const { neighbor_id } = req.params;
-    await neighborService.deleteOne(neighbor_id);
-    res.status(200).json({ success: true });
+    const { neighbor_id } = req.params; 
+    const {
+      is_deleted
+    } = req.body;
+
+    const result = await neighborService.deleteOne({
+      is_deleted,
+    });
+
+    res.status(200).json(result);
   } catch (error) {
     if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-      console.error('Error deleting neighbor: This neighbor is referenced by other records.');
-      return res.status(400).json({ error: 'This neighbor is referenced by other records and cannot be deleted.' });
+        console.error('Error Deleting Neighbor: This Neighbor is referenced by other records.');
+        return res.status(400).json({ error: 'This Neighbor is referenced by other records and cannot be Deleted.' });
     }
 
-    console.error('Error deleting neighbor', error.message);
-    res.status(500).json({ error: 'Error deleting neighbor' });
-  }
+    console.error('Error Deleting Neighbor', error);
+    res.status(500).json({ error: 'Error Deleting Neighbor' });
 }
+}
+
 
 module.exports = {
   getAll,
