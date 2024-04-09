@@ -1,25 +1,25 @@
-const donationService = require('../services/donation.service');
+const donationService = require('../services/donation.service')
 
-async function getAll(req, res, next) {
+async function getAll (req, res, next) {
   try {
-    res.json(await donationService.getAll());
+    res.json(await donationService.getAll())
   } catch (err) {
-    console.error('Error while getting all donations', err.message);
-    next(err);
+    console.error('Error while getting all donations', err.message)
+    next(err)
   }
 }
 
-async function getOne(req, res, next) {
+async function getOne (req, res, next) {
   try {
-    const { donation_id } = req.params;
-    res.json(await donationService.getOne(donation_id));
+    const { donation_id } = req.params
+    res.json(await donationService.getOne(donation_id))
   } catch (err) {
-    console.error('Error while getting one donation', err.message);
-    next(err);
+    console.error('Error while getting one donation', err.message)
+    next(err)
   }
 }
 
-async function create(req, res) {
+async function create (req, res) {
   try {
     const {
       item,
@@ -27,8 +27,8 @@ async function create(req, res) {
       completed,
       date,
       family_id,
-      user_id,
-    } = req.body;
+      user_id
+    } = req.body
 
     const result = await donationService.create({
       item,
@@ -36,55 +36,55 @@ async function create(req, res) {
       completed,
       date,
       family_id,
-      user_id,
-    });
+      user_id
+    })
 
-    res.status(200).json(result);
+    res.status(200).json(result)
   } catch (error) {
-    console.error('Error Creating Donation', error.message);
-    res.status(500).json({ error: 'Error creating donation' });
+    console.error('Error Creating Donation', error.message)
+    res.status(500).json({ error: 'Error creating donation' })
   }
 }
 
-async function update(req, res) {
+async function update (req, res) {
   try {
-    const { donation_id } = req.params; 
+    const { donation_id } = req.params
     const {
       item,
       amount,
-      completed,
-    } = req.body;
+      completed
+    } = req.body
 
     const result = await donationService.update({
       donation_id,
       item,
       amount,
       completed
-    });
+    })
 
-    res.status(200).json(result);
+    res.status(200).json(result)
   } catch (error) {
-    console.error('Error Updating Donation', error.message);
-    res.status(500).json({ error: 'Error updating donation' });
+    console.error('Error Updating Donation', error.message)
+    res.status(500).json({ error: 'Error updating donation' })
   }
 }
 
-async function deleteOne(req, res) {
+async function deleteOne (req, res) {
   try {
-    const { donation_id } = req.params; 
+    const { donation_id } = req.params
     const {
-      is_deleted,
-    } = req.body;
+      is_deleted
+    } = req.body
 
     const result = await donationService.deleteOne({
       donation_id,
       is_deleted
-    });
+    })
 
-    res.status(200).json(result);
+    res.status(200).json(result)
   } catch (error) {
-    console.error('Error Deleting Donation', error.message);
-    res.status(500).json({ error: 'Error Deleting donation' });
+    console.error('Error Deleting Donation', error.message)
+    res.status(500).json({ error: 'Error Deleting donation' })
   }
 }
 
@@ -93,5 +93,5 @@ module.exports = {
   getOne,
   create,
   update,
-  deleteOne,
-};
+  deleteOne
+}

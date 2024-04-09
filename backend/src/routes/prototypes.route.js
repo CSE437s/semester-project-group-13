@@ -1,11 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const prototypesController = require('../controllers/prototypes.controller');
+const express = require('express')
+const router = express.Router()
+const prototypesController = require('../controllers/prototypes.controller')
 
-router.get('/', prototypesController.getAll);
-router.get('/:id', prototypesController.getOne);
-router.post('/create', prototypesController.create); 
-router.put('/:id/update', prototypesController.update); 
-router.delete('/:id/deleteOne', prototypesController.deleteOne);
+router.get('/', prototypesController.getAll)
+router.get('/:id', prototypesController.getOne)
+router.post('/create', prototypesController.create)
+router.put('/:id/update', prototypesController.update)
+router.delete('/:id/deleteOne', prototypesController.deleteOne)
 
-module.exports = router;
+module.exports = router

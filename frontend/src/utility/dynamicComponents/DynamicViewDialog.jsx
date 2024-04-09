@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -12,55 +12,55 @@ import {
   useTheme,
   propNames,
   Spacer
-} from "@chakra-ui/react";
-import theme from "../../style/theme";
-import DynamicFormDialog from "./DynamicFormDialog";
-import { getDisplayString } from "../contexts/ContextProvider";
+} from '@chakra-ui/react'
+import theme from '../../style/theme'
+import DynamicFormDialog from './DynamicFormDialog'
+import { getDisplayString } from '../contexts/ContextProvider'
 
 const DynamicViewDialog = (props) => {
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const theme = useTheme();
+  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const theme = useTheme()
 
   if (!props.data) {
-    return <p>No Data Found</p>;
+    return <p>No Data Found</p>
   }
 
   const handleEditClick = () => {
-    setOpenEditDialog(true);
-  };
+    setOpenEditDialog(true)
+  }
 
   const handleCloseEditDialog = () => {
-    setOpenEditDialog(false);
-  };
+    setOpenEditDialog(false)
+  }
 
   const handleDeleteClick = () => {
-    props.context.delete(props.data);
-    props.onSubmit();
-    props.onClose();
-  };
+    props.context.delete(props.data)
+    props.onSubmit()
+    props.onClose()
+  }
 
   const handleInfoContext = (field) => {
-    let value = "";
+    let value = ''
 
     switch (field.type) {
       default:
-        value = field.label + ": " + props.data[field.name];
-        break;
-      case "bool":
-        value = field.label + ": " + (props.data[field.name] == 0 ? "No" : "Yes");
-        break;
-      case "date":
-        const formattedDate = new Date(props.data[field.name]);
-        value = field.label + ": " + formattedDate.toDateString();
-        break;
-      case "id":
-        console.log("viewData", props.viewData)
-        value = field.label + ": " + props.viewData[field.name]
-        break;
+        value = field.label + ': ' + props.data[field.name]
+        break
+      case 'bool':
+        value = field.label + ': ' + (props.data[field.name] == 0 ? 'No' : 'Yes')
+        break
+      case 'date':
+        const formattedDate = new Date(props.data[field.name])
+        value = field.label + ': ' + formattedDate.toDateString()
+        break
+      case 'id':
+        console.log('viewData', props.viewData)
+        value = field.label + ': ' + props.viewData[field.name]
+        break
     }
 
-    return <Text key={field.name}>{value}</Text>;
-  };
+    return <Text key={field.name}>{value}</Text>
+  }
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
@@ -77,36 +77,36 @@ const DynamicViewDialog = (props) => {
             onClose={handleCloseEditDialog}
             context={props.context}
             onSubmit={(formData) => {
-              props.onSubmit();
+              props.onSubmit()
               props.context.edit(formData)
             }}
             formFields={props.context.editFields}
             title={props.context.editTitle}
             existData={props.data}
-          ></DynamicFormDialog>
+          />
         </ModalBody>
         <ModalFooter>
-        <Spacer/>         
-        <Spacer/>
-        <Spacer/>
-        <Spacer/>
-        <Spacer/>
+          <Spacer />
+          <Spacer />
+          <Spacer />
+          <Spacer />
+          <Spacer />
           <Button
-            variant={'dark'}
+            variant='dark'
             onClick={handleDeleteClick}
           >
             Delete
           </Button>
-          <Spacer/>
+          <Spacer />
           <Button
-            variant={'solid'}
+            variant='solid'
             onClick={handleEditClick}
           >
             Edit
           </Button>
-          <Spacer/>
+          <Spacer />
           <Button
-            variant={'outline'}
+            variant='outline'
             onClick={props.onClose}
           >
             Cancel
@@ -114,7 +114,7 @@ const DynamicViewDialog = (props) => {
         </ModalFooter>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}
 
-export default DynamicViewDialog;
+export default DynamicViewDialog

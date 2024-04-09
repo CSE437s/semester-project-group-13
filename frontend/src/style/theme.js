@@ -1,8 +1,8 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react'
 
 const theme = extendTheme({
   config: {
-    initialColorMode: 'light',
+    initialColorMode: 'light'
   },
   colors: {
     primary: {
@@ -15,19 +15,19 @@ const theme = extendTheme({
       600: '#5c26a8',
       700: '#471d86',
       800: '#311563',
-      900: '#1c0b41',
-    },
+      900: '#1c0b41'
+    }
   },
   fonts: {
     body: 'system-ui, sans-serif',
     heading: 'Georgia, serif',
-    mono: 'Menlo, monospace',
+    mono: 'Menlo, monospace'
   },
   components: {
-    Flex : {
+    Flex: {
       variants: {
-        mainDisplay : {
-          id: "mainDisplay",
+        mainDisplay: {
+          id: 'mainDisplay',
           maxWidth: '85vw',
           width: '85vw',
           flexDir: 'column',
@@ -52,21 +52,21 @@ const theme = extendTheme({
           },
           td: {
             padding: '8px',
-            borderBottom: '1px solid #ddd',
+            borderBottom: '1px solid #ddd'
           },
           table: {
-            borderRadius: 'md', // Rounded edges
+            borderRadius: 'md' // Rounded edges
           },
           tbody: {
             tr: {
               _hover: {
                 bg: 'primary.50', // Background color on hover
                 color: 'gray'
-              },
-            },
-          },
-        },
-      },
+              }
+            }
+          }
+        }
+      }
     },
     Button: {
       variants: {
@@ -74,27 +74,27 @@ const theme = extendTheme({
           bg: 'primary.800',
           color: 'white',
           _hover: {
-            bg: 'primary.600',
-          },
+            bg: 'primary.600'
+          }
         },
         solid: {
           bg: 'primary.600',
           color: 'white',
           _hover: {
-            bg: 'primary.400',
-          },
+            bg: 'primary.400'
+          }
         },
         outline: {
           border: 'solid primary.800 2px',
           bg: 'primary.300',
           color: 'white',
           _hover: {
-            bg: 'primary.200',
-          },
-        },
-      },
-    },
-  },
-});
+            bg: 'primary.200'
+          }
+        }
+      }
+    }
+  }
+})
 
-export default theme;
+export default theme
