@@ -2,7 +2,7 @@ const userService = require('../services/user.service');
 const donationService = require('../services/donation.service');
 const familyService = require('../services/family.service');
 const refugeeService = require('../services/refugee.service');
-const volunteerService = require('../services/volunteer.service');
+const donatorService = require('../services/donator.service');
 const noteService = require('../services/notes.service');
 const requestService = require('../services/requests.service');
 
@@ -81,7 +81,7 @@ async function deleteOne(req, res) {
       donationService.updateUserId(user_id, 1),
       familyService.updateUserId(user_id, 1),
       refugeeService.updateUserId(user_id, 1),
-      volunteerService.updateUserId(user_id, 1),
+      donatorService.updateUserId(user_id, 1),
       requestService.updateUserId(user_id, 1),
       noteService.updateUserId(user_id, 1)
 

@@ -7,7 +7,7 @@ const authRouter = require('./src/routes/auth.route');
 const neighborRouter = require('./src/routes/goodNeighbor.route')
 const donationRouter = require('./src/routes/donation.route')
 const userRouter = require('./src/routes/user.route')
-const volunteerRouter = require('./src/routes/volunteer.route')
+const donatorRouter = require('./src/routes/donator.route')
 const requestRouter = require('./src/routes/requests.route')
 const notesRouter = require('./src/routes/notes.route')
 
@@ -41,7 +41,7 @@ app.use('/family', familyRouter);
 app.use('/neighbor', neighborRouter);
 app.use('/donation', donationRouter);
 app.use('/user', userRouter);
-app.use('/volunteer', volunteerRouter);
+app.use('/donator', donatorRouter);
 app.use('/notes', notesRouter);
 
 

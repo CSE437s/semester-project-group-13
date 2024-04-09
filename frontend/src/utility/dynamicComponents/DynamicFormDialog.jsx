@@ -179,19 +179,19 @@ const DynamicFormDialog = ({
         <ModalCloseButton />
         <ModalBody>
           {formFields.map((field) => (handleInputContext(field)))}
-          {formAlert && (
+          {formAlert ? (
             <Alert status="warning" bg={theme.colors.primary[700]} color={'white'} mt={4} borderRadius={'md'}>
               <AlertTitle mr={2}>Form Submission Failed!</AlertTitle>
               <CloseButton onClick={() => setFormAlert(false)} position="absolute" right="2px" top="2px" scale={.1} />
             </Alert>
-          )}
-          {formErrors.length > 0 && (
+          ) : null}
+          {formErrors.length > 0 ? (
             <ul>
               {formErrors.map((error, index) => (
                 <li key={index}>{error}</li>
               ))}
             </ul>
-          )}
+          ) : null}
         </ModalBody>
         <ModalFooter>
             <Spacer/>         
