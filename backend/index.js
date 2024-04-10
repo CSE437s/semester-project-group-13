@@ -50,6 +50,10 @@ app.listen(8080, () => {
   console.log('server listening on port 8080')
 })
 
+app.get('/tests/authRoutesTest.js', function(req, res) {
+  res.render('userreport', { title: 'Users Report' });
+});
+
 /* Add this later to make sure we are safe.
 const requireAuth = (req, res, next) => {
   if (!req.session.user) {
