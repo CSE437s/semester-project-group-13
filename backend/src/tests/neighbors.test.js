@@ -1,4 +1,4 @@
-const neighborController = require('../controllers/neighbor.controller');
+const neighborController = require('../controllers/goodNeighbor.controller');
 const neighborService = require('../services/goodNeighbor.service');
 
 jest.mock('../services/goodNeighbor.service'); // Mocking the service module

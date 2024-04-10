@@ -1,8 +1,8 @@
 const { Router } = require('express'); // Change 'request' to 'Router' or any other valid variable name
-const requestController = require('../controllers/request.controller');
-const requestService = require('../services/request.service');
+const requestController = require('../controllers/requests.controller');
+const requestService = require('../services/requests.service');
 
-jest.mock('../services/request.service');
+jest.mock('../services/requests.service');
 
 describe('Request Controller', () => {
   describe('getAll', () => {
