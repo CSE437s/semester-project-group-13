@@ -1,4 +1,3 @@
-const { Router } = require('express'); // Change 'request' to 'Router' or any other valid variable name
 const requestController = require('../controllers/requests.controller');
 const requestService = require('../services/requests.service');
 
