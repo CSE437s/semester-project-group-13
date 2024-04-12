@@ -29,23 +29,19 @@ export function getDisplayString(context, data) {
   let displayString = "";
   switch(context.type){
     case 'refugee':
-      displayString = `${data.first_name} ${data.last_name}`
-      break;
     case 'donator':
+    case 'user':
+    case 'admin':
       displayString = `${data.first_name} ${data.last_name}`
       break;
     case 'family':
       displayString = `${data.FamilyName}`
       break;
     case 'donation':
-      displayString = `${data.item} ${data.amount}`
+      displayString = `${data.item} (${data.amount})`
       break;
     case 'neighbor':
       displayString = `${data.FirstName} ${data.LastName}`
-      break;
-    case 'user':
-    case 'admin':
-      displayString = `${data.first_name} ${data.last_name}`
       break;
     default:
       console.log("Invalid Display String :", data);

@@ -58,13 +58,13 @@ const DynamicTable = (props) => {
 
   if (!props.data || !props.data.length) {
     console.log("props", props.data, props.context);
-    return <LoadingPage></LoadingPage>;
+    return "No Data Available";
   }
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
     props.onClick(index);
-    setOpenViewDialog(true);
+    //setOpenViewDialog(true);
   };
 
   const handleCloseViewDialog = () => {
@@ -141,7 +141,7 @@ const DynamicTable = (props) => {
         </Tbody>
       </Table>
 
-      {selectedRow !== -1 && (
+      {/* {selectedRow !== -1 && (
         <DynamicViewDialog
           isOpen={openViewDialog}
           onClose={handleCloseViewDialog}
@@ -152,7 +152,7 @@ const DynamicTable = (props) => {
           contextLadenFieldNames={contextLadenFieldNames}
           fieldContexts={fieldContexts}
         ></DynamicViewDialog>
-      )}
+      )} */}
     </Box>
   );
 };

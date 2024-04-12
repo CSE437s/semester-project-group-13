@@ -110,7 +110,7 @@ const DynamicFormDialog = ({
         return (
           <FormControl key={field.name} mb={4}>
             <FormLabel>{field.label}</FormLabel>
-            <RadioGroup onChange={(e) => handleFieldChange(field, e)} defaultValue={value}>
+            <RadioGroup onChange={(e) => handleFieldChange(field, e)} value={value}>
               <Stack direction="row">
                 <Radio value="1">Yes</Radio>
                 <Radio value="0">No</Radio>

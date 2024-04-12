@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  CloseButton,
   Button,
   Text,
   useTheme,
@@ -16,14 +10,14 @@ import {
 } from "@chakra-ui/react";
 import theme from "../../style/theme";
 import DynamicFormDialog from "./DynamicFormDialog";
-import { getDisplayString } from "../contexts/ContextProvider";
+import { getDisplayString, ContextProvider} from "../contexts/ContextProvider";
 
-const DynamicViewDialog = (props) => {
+const PanelViewDialog = (props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const theme = useTheme();
 
   if (!props.data || props.data.length === 0) {
-    return <p>No Data Found</p>;
+    return <p>No Row Selected</p>;
   }
 
   const handleEditClick = () => {
@@ -56,52 +50,57 @@ const DynamicViewDialog = (props) => {
         break;
       case "id":
         console.log("viewData", props.viewData)
-        value = field.label + ": " + props.viewData[field.name]
+        value = field.label + ": " + getDisplayString(ContextProvider('donator'), props.viewData)
         break;
     }
-
-    return <Text key={field.name}>{value}</Text>;
+    if(props.data[field.name] == undefined && field.type != 'id'){
+      value = "N/A"
+    }
+    return <Text fontSize={'3vh'} key={field.name}>{value}</Text>;
   };
 
   return (
 
-      <Flex>
-        <h1>{getDisplayString(props.context, props.data) || props.context.viewTitle}</h1>
-        {/* <ModalCloseButton /> */}
-        {/* close button? */}
-        <Flex>
+      <Flex width={'inherit'} height={'inherit'} flexDir={'column'} justifyContent={'space-evenly'}>
+        <Flex flexDir='row' justifyContent={'space-evenly'}>
+          <h1>{getDisplayString(props.context, props.data) || props.context.viewTitle}</h1>
+          <CloseButton size="md" onClick={props.onClose()} />
+        </Flex>
+        <Flex flexDir={'column'} id='panel-body' maxHeight={'60vh'} overflowY={'auto'}>
           {props.context.viewFields.map((field) =>
             handleInfoContext(field)
           )}
           {(() => {
+            //implement context sensitivity
             switch (props.context.type) {
-              // case "refugee":
-              //   return (
-              
-              //   );
               default:
-                return null; // Render nothing by default or handle other cases
+                return (
+                  <DynamicFormDialog
+                  isOpen={openEditDialog}
+                  onClose={handleCloseEditDialog}
+                  context={props.context}
+                  onSubmit={(formData) => {
+                    props.onSubmit();
+                    props.context.edit(formData)
+                  }}
+                  formFields={props.context.editFields}
+                  title={props.context.editTitle}
+                  existData={props.data}
+                ></DynamicFormDialog>
+                )
             }
           })()}
-          <DynamicFormDialog
-            isOpen={openEditDialog}
-            onClose={handleCloseEditDialog}
-            context={props.context}
-            onSubmit={(formData) => {
-              props.onSubmit();
-              props.context.edit(formData)
-            }}
-            formFields={props.context.editFields}
-            title={props.context.editTitle}
-            existData={props.data}
-          ></DynamicFormDialog>
         </Flex>
-        <Flex>
-        <Spacer/>         
-        <Spacer/>
-        <Spacer/>
-        <Spacer/>
-        <Spacer/>
+        <Flex id='panel-footer' flexDir={'row'} justifyContent={'space-evenly'}>
+        {(() => {
+            //implement context sensitivity
+            switch (props.context.type) {
+
+              default:
+                return null
+            }
+          })()}
+
           <Button
             variant={'dark'}
             onClick={handleDeleteClick}
@@ -122,9 +121,11 @@ const DynamicViewDialog = (props) => {
           >
             Cancel
           </Button>
+          <Spacer/>
+
           </Flex>
           </Flex>
   );
 };
 
-export default DynamicViewDialog;
+export default PanelViewDialog;
