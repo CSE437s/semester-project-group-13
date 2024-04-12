@@ -3,9 +3,9 @@ import DynamicTable from "./utility/DynamicTable";
 import axios from "axios";
 import BasicPage from "./utility/BasicPage";
 import DynamicFormDialog from "./utility/DynamicFormDialog";
-import theme from "./style/theme";
+import theme from "../style/theme";
 import { Button, useTheme, Spacer } from "@chakra-ui/react";
-import {ContextProvider} from "./utility/contexts/ContextProvider";
+import {ContextProvider} from "../utility/contexts/ContextProvider";
 
 const Refugees = (props) => {
   console.log("Refugee Page clicked");

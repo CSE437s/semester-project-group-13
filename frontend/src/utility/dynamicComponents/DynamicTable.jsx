@@ -11,23 +11,25 @@ const DynamicTable = (props) => {
   const [selectedRow, setSelectedRow] = useState(-1);
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const [columnData, setColumnData] = useState({});
-  const viewFieldNames = props.context.viewFields.map(field => field.name);
-  const contextLadenFields = props.context.viewFields.filter(field => field.hasOwnProperty('contextType'));
-  const contextLadenFieldNames = contextLadenFields.map(field => field.name);
+  const displayFieldNames = props.context.displayFields.map((field) => field.name);
+  const contextLadenFields = props.context.displayFields.filter((field) =>
+    field.hasOwnProperty("contextType")
+  );
+  const contextLadenFieldNames = contextLadenFields.map((field) => field.name);
   const fieldContexts = contextLadenFields.reduce((acc, field) => {
     acc[field.name] = field.contextType;
     return acc;
   }, {});
-  console.log(contextLadenFields)
-  
+  console.log(contextLadenFields);
+
   useEffect(() => {
-    if(props.data && props.data.length){
+    if (props.data && props.data.length) {
       contextLadenFields.forEach((entry) => {
         const fieldContext = ContextProvider(entry.contextType);
         axios
           .get(fieldContext.getAllEndpoint)
           .then((response) => {
-            console.log("succesful api")
+            console.log("succesful api");
             const dataFromApi = response.data.data;
             if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
               console.error("dataFromApi is not a non-empty array");
@@ -37,7 +39,10 @@ const DynamicTable = (props) => {
             setColumnData((prevData) => ({
               ...prevData,
               [fieldContext.type]: dataFromApi.reduce((acc, entry) => {
-                acc[entry[fieldContext.id]] = getDisplayString(fieldContext, entry);
+                acc[entry[fieldContext.id]] = getDisplayString(
+                  fieldContext,
+                  entry
+                );
                 return acc;
               }, {}),
             }));
@@ -45,17 +50,20 @@ const DynamicTable = (props) => {
           .catch((error) => {
             console.error("Error making API call:", error);
           });
-        });
+      });
+    } else {
+      console.log('no data given')
     }
   }, [props.data]);
 
   if (!props.data || !props.data.length) {
-    console.log("props", props.data, props.context)
+    console.log("props", props.data, props.context);
     return <LoadingPage></LoadingPage>;
   }
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
+    props.onClick(index);
     setOpenViewDialog(true);
   };
 
@@ -70,28 +78,32 @@ const DynamicTable = (props) => {
   );
 
   const handleColumnContext = (column) => {
-    if(viewFieldNames.includes(column)){
+    if (displayFieldNames.includes(column)) {
       return <Th key={column}>{translateBE(column)}</Th>;
     }
   };
 
   const handleRowContext = (row, rowIndex, column) => {
-
-    if(viewFieldNames.includes(column)){
-      if(contextLadenFieldNames.includes(column) && columnData.hasOwnProperty(fieldContexts[column])){
-        let displayString = columnData[fieldContexts[column]][row[column]]
+    if (displayFieldNames.includes(column)) {
+      if (
+        contextLadenFieldNames.includes(column) &&
+        columnData.hasOwnProperty(fieldContexts[column])
+      ) {
+        let displayString = columnData[fieldContexts[column]][row[column]];
         return <Td key={column}>{displayString}</Td>;
       }
       return <Td key={column}>{translateBE(row[column])}</Td>;
     }
   };
 
-
   const prepareViewData = (data) => {
     const viewDataDict = {};
     Object.keys(data).forEach((key) => {
-      if (viewFieldNames.includes(key)) {
-        if (contextLadenFieldNames.includes(key) && columnData.hasOwnProperty(fieldContexts[key])) {
+      if (displayFieldNames.includes(key)) {
+        if (
+          contextLadenFieldNames.includes(key) &&
+          columnData.hasOwnProperty(fieldContexts[key])
+        ) {
           viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
         } else {
           viewDataDict[key] = data[key];
@@ -100,7 +112,6 @@ const DynamicTable = (props) => {
     });
     return viewDataDict;
   };
-  
 
   return (
     <Box>
@@ -111,11 +122,19 @@ const DynamicTable = (props) => {
           </Tr>
         </Thead>
         <Tbody>
-          {props.data.map((row, rowIndex) => (
-            <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
-              {filteredColumns.map((column) => handleRowContext(row, rowIndex, column))}
-            </Tr>
-          ))}
+          {props.data.map((row, rowIndex) =>
+            Object.values(row).some((item) =>
+              typeof item === "string"
+                ? item.includes(props.searchValue)
+                : false
+            ) ? (
+              <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
+                {filteredColumns.map((column) =>
+                  handleRowContext(row, rowIndex, column)
+                )}
+              </Tr>
+            ) : null
+          )}
         </Tbody>
       </Table>
 

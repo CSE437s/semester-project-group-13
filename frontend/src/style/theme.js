@@ -78,6 +78,13 @@ const theme = extendTheme({
             bg: 'primary.600',
           },
         },
+        lessDark: {
+          bg: 'primary.700',
+          color: 'white',
+          _hover: {
+            bg: 'primary.500',
+          },
+        },
         solid: {
           bg: 'primary.600',
           color: 'white',

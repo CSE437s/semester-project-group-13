@@ -4,8 +4,8 @@ import axios from 'axios';
 import DynamicFormDialog from './utility/DynamicFormDialog';
 import { Button, useTheme, Spacer} from '@chakra-ui/react';
 import BasicPage from './utility/BasicPage';
-import theme from './style/theme';
-import { ContextProvider } from './utility/contexts/ContextProvider';
+import theme from '../style/theme';
+import { ContextProvider } from '../utility/contexts/ContextProvider';
 
 
 const Volunteers = (props) => {

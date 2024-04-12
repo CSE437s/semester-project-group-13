@@ -2,7 +2,8 @@ import DonationContext from "./Donations";
 import FamilyContext from "./Families";
 import GoodNeighborContext from "./GoodNeighbors";
 import RefugeeContext from "./Refugees";
-import VolunteerContext from "./Volunteers";
+import DonatorContext from "./Donators";
+import UserContext from "./Users";
 
 export const ContextProvider = (type) => {
   switch (type) {
@@ -12,10 +13,13 @@ export const ContextProvider = (type) => {
       return FamilyContext;
     case "donation":
       return DonationContext;
-    case "goodNeighbor":
+    case "neighbor":
       return GoodNeighborContext;
-    case "volunteer":
-      return VolunteerContext;
+    case "donator":
+      return DonatorContext;
+    case "user":
+    case "admin":
+      return UserContext;
     default:
       throw new Error(`Unsupported context type: ${type}`);
   }
@@ -27,19 +31,21 @@ export function getDisplayString(context, data) {
     case 'refugee':
       displayString = `${data.first_name} ${data.last_name}`
       break;
-    case 'volunteer':
+    case 'donator':
       displayString = `${data.first_name} ${data.last_name}`
       break;
     case 'family':
-      if(data.head_of_household){
-        displayString = `${data.head_of_household} ${data.last_name}`
-      }
+      displayString = `${data.FamilyName}`
       break;
     case 'donation':
-      displayString = `${data.item} ${data.quantity}`
+      displayString = `${data.item} ${data.amount}`
       break;
-    case 'goodNeighbor':
-      //displayString = `${entry.first_name} ${entry.last_name}`
+    case 'neighbor':
+      displayString = `${data.FirstName} ${data.LastName}`
+      break;
+    case 'user':
+    case 'admin':
+      displayString = `${data.first_name} ${data.last_name}`
       break;
     default:
       console.log("Invalid Display String :", data);
@@ -50,10 +56,12 @@ export function getDisplayString(context, data) {
 export function getAllContexts(){
   return {
     refugee: RefugeeContext,
-    volunteer: VolunteerContext,
+    donator: DonatorContext,
     family: FamilyContext,
     donation: DonationContext,
-    goodNeighbor: GoodNeighborContext
+    neighbor: GoodNeighborContext,
+    user: UserContext,
+    admin: UserContext,
   }
 }
 

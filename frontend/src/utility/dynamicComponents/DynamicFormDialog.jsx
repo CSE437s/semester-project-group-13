@@ -46,7 +46,6 @@ const DynamicFormDialog = ({
     console.log("field", field.name, "value", value)
     if(field.type == "date"){
       value = value.toISOString().split('T')[0]
-      console.log('date', value)
     }
     setFormData((prevData) => ({ ...prevData, [field.name]: value }));
 
@@ -137,7 +136,7 @@ const DynamicFormDialog = ({
           if (localStorage.getItem("loginData")) {
             formData[field.name] = JSON.parse(localStorage.getItem("loginData")).user_id;
           }
-          break;
+          return null;
         }
         const fieldContext = ContextProvider(field.contextType);
         if (formData && formData[fieldContext.id]) {
@@ -145,7 +144,6 @@ const DynamicFormDialog = ({
         } else {
           value = {};
         }
-        console.log(formData);
         return (
           <SearchableDropdown
             contextType={field.contextType}

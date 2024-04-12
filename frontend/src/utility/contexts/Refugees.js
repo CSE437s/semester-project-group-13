@@ -44,52 +44,39 @@ const handleDeleteRefugee = (formData) => {
 const refugeeCreateFields = [
   { name: "first_name", label: "First Name", type: "text" },
   { name: "last_name", label: "Last Name", type: "text" },
-  { name: "country_of_origin", label: "Country of Origin", type: "text" },
-  { name: "gender", label: "Gender", type: "text" },
-  { name: "email", label: "Email", type: "email" },
-  { name: "phone_number", label: "Phone Number", type: "tel" },
-  { name: "date_of_birth", label: "Date of Birth", type: "date" },
-  {
-    name: "date_of_arrival_to_us",
-    label: "Date of Arrival [to US]",
-    type: "date",
-  },
-  {
-    name: "date_of_joining_oasis",
-    label: "Date of Arrival [to Oasis]",
-    type: "date",
-  },
   { name: "family_id", label: "Family", type: "id", contextType: "family" },
+  { name: "gender", label: "Gender", type: "text" },
+  { name: "birthday", label: "Date of Birth", type: "date" },
+  { name: 'phone', label: 'Phone Number', type: 'tel' },
+  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+  { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
 ];
 
 const refugeeEditFields = [
   { name: "first_name", label: "First Name", type: "text" },
   { name: "last_name", label: "Last Name", type: "text" },
-  { name: "gender", label: "Gender", type: "text" },
-  { name: "email", label: "Email", type: "email" },
-  { name: "phone_number", label: "Phone Number", type: "tel" },
+  { name: 'phone', label: 'Phone Number', type: 'tel' },
   { name: "family_id", label: "Family", type: "id", contextType: "family" },
+  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+  { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
 ];
 
 const refugeeViewFields = [
   { name: "first_name", label: "First Name", type: "text" },
   { name: "last_name", label: "Last Name", type: "text" },
-  { name: "country_of_origin", label: "Country of Origin", type: "text" },
+  { name: "family_id", label: "Family", type: "id", contextType: "family" },
   { name: "gender", label: "Gender", type: "text" },
-  { name: "email", label: "Email", type: "email" },
-  { name: "phone_number", label: "Phone Number", type: "tel" },
-  { name: "date_of_birth", label: "Date of Birth", type: "date" },
-  {
-    name: "date_of_arrival_to_us",
-    label: "Date of Arrival [to US]",
-    type: "date",
-  },
-  {
-    name: "date_of_joining_oasis",
-    label: "Date of Arrival [to Oasis]",
-    type: "date",
-  },
-  { name: "family_id", label: "Family", type: "id", contextType: "family"},
+  { name: "birthday", label: "Date of Birth", type: "date" },
+  { name: 'phone', label: 'Phone Number', type: 'tel' },
+  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+  { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
+];
+
+const refugeeDisplayFields = [
+  { name: "first_name", label: "First Name", type: "text" },
+  { name: "last_name", label: "Last Name", type: "text" },
+  { name: 'phone', label: 'Phone Number', type: 'tel' },
+  { name: "family_id", label: "Family", type: "id", contextType: "family" },
 ];
 
 const RefugeeContext = {
@@ -103,6 +90,7 @@ const RefugeeContext = {
   createFields: refugeeCreateFields,
   editFields: refugeeEditFields,
   viewFields: refugeeViewFields,
+  displayFields: refugeeDisplayFields,
   createTitle: "Add Refugee",
   editTitle: "Edit Refugee",
   viewTitle: "View Refugee", //TO-DO: viewDialog should provide its own title, so we can provide the first and last refugee name

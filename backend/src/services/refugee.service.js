@@ -8,7 +8,7 @@ async function getAll() {
 }
 
 
-
+//this should be getting from the refugee/god neighbor/donator tables
 async function getAllInFamily(family_id) {
   try {
     const sql = 'SELECT * FROM families WHERE family_id = ?';

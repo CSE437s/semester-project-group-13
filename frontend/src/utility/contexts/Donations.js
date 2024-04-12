@@ -37,28 +37,32 @@ const handleDeleteDonation = (formData) => {
 
 const donationCreateFields = [
 { name: 'item', label: 'Item', type: 'text' },
-{ name: 'quantity', label: 'Quantity', type: 'number' },
-{ name: 'completed', label: 'Completed?', type: 'bool'}, //needs unique typing
-{ name: 'giving_family', label: 'Given By (Family)', type: 'id', contextType: "family"},
-{ name: 'giving_volunteer', label: 'Given By (Member)', type: 'id', contextType: "volunteer"},
-{ name: 'recieving_family', label: 'Recieved By (Family)', type: 'id', contextType: "family"},
-{ name: 'recieving_refugee', label: 'Recieved By (Member)', type: 'id', contextType: "refugee"}, 
-{ name: 'user_id', label: 'User', type: 'id' },
+{ name: 'amount', label: 'Amount', type: 'number' },
+{ name: 'completed', label: 'Completed?', type: 'bool'},
+{ name: 'date', label: 'Date of Donation', type: 'date' },
+{ name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
+{ name: 'user_id', label: 'User', type: 'id', contextType: 'user'},
 ];
 
 const donationEditFields = [
 { name: 'item', label: 'Item', type: 'text' },
-{ name: 'quantity', label: 'Quantity', type: 'number' },
+{ name: 'amount', label: 'Amount', type: 'number' },
 { name: 'completed', label: 'Completed?', type: 'bool'},
 ];
 
 const donationViewFields = [
 { name: 'item', label: 'Item', type: 'text' },
-{ name: 'quantity', label: 'Quantity', type: 'number' },
+{ name: 'amount', label: 'Amount', type: 'number' },
 { name: 'completed', label: 'Completed?', type: 'bool'},
-{ name: 'giving_family', label: 'Given By (Family)', type: 'id', contextType: "family"},
-{ name: 'recieving_family', label: 'Recieved By (Family)', type: 'id', contextType: "family"},
+{ name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
+{ name: 'user_id', label: 'Entered By', type: 'id', contextType: 'user'},
 ];
+
+const donationDisplayFields = [
+    { name: 'item', label: 'Item', type: 'text' },
+    { name: 'amount', label: 'Amount', type: 'number' },
+    { name: 'completed', label: 'Completed?', type: 'bool'},
+]
 
 const DonationContext = {
     type: "donation",
@@ -71,6 +75,7 @@ const DonationContext = {
     createFields: donationCreateFields,
     editFields: donationEditFields,
     viewFields: donationViewFields,
+    displayFields: donationDisplayFields,
     createTitle: "Add Donation",
     editTitle: "Edit Donation",
     viewTitle: "View Donation", //TO-DO: viewDialog should provide its own title, so we can provide the first and last family name

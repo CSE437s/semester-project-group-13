@@ -36,33 +36,87 @@ const handleDeleteFamily = (formData) => {
 }
 
 const familyCreateFields = [
-    { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'FamilyName', label: 'Family Name', type: 'text' },
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
-    { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
+    { name: 'zip_code', label: 'Zip Code', type: 'number' },
+    { name: "CountryOfOrigin", label: "Country of Origin", type: "text" },
+    {
+        name: "ArrivalDate",
+        label: "Date of Arrival [to US]",
+        type: "date",
+      },
+      {
+        name: "DateCreated",
+        label: "Date of Arrival [to Oasis]",
+        type: "date",
+      },
+      {
+        name: "LatestDateAtOasis",
+        label: "Most Recent Visit",
+        type: "date",
+      },
+    { name: "Languages", label: "Language(s)", type: "text" },
+    { name: 'IsRefugeeFamily', label: 'Refugee Family?', type: 'bool' },
+    { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
+    { name: 'IsOpenToHaveGoodNeighbor', label: 'Open to Have Good Neighbor', type: 'bool' },
+    { name: 'DesiresToBeGoodNeighbor', label: 'Desires to be Good Neighbor', type: 'bool' },
+    { name: 'user_id', label: 'User', type: 'id', contextType: 'user'},
   ];
 
   const familyEditFields = [
-    { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'FamilyName', label: 'Family Name', type: 'text' },
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
-    { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
+    { name: 'zip_code', label: 'Zip Code', type: 'number' },
+    { name: "Languages", label: "Language(s)", type: "text" },
+    { name: 'IsRefugeeFamily', label: 'Refugee Family?', type: 'bool' },
+    { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
+    { name: 'IsOpenToHaveGoodNeighbor', label: 'Open to Have Good Neighbor', type: 'bool' },
+    { name: 'DesiresToBeGoodNeighbor', label: 'Desires to be Good Neighbor', type: 'bool' },
   ];
 
   const familyViewFields = [
-    { name: 'head_of_household', label: 'Head of Household', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'FamilyName', label: 'Family Name', type: 'text' },
     { name: 'address', label: 'Street Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
-    { name: 'zip', label: 'Zip Code', type: 'number' },
-    { name: 'is_refugee', label: 'Is Refugee?', type: 'bool' },
-    { name: 'is_good_neighbor', label: 'Is Good Neighbor?', type: 'bool' }
+    { name: 'zip_code', label: 'Zip Code', type: 'number' },
+    { name: "CountryOfOrigin", label: "Country of Origin", type: "text" },
+    {
+        name: "ArrivalDate",
+        label: "Date of Arrival [to US]",
+        type: "date",
+      },
+      {
+        name: "DateCreated",
+        label: "Date of Arrival [to Oasis]",
+        type: "date",
+      },
+      {
+        name: "LatestDateAtOasis",
+        label: "Most Recent Visit",
+        type: "date",
+      },
+    { name: "Languages", label: "Language(s)", type: "text" },
+    { name: 'IsRefugeeFamily', label: 'Refugee Family?', type: 'bool' },
+    { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
+    { name: 'IsOpenToHaveGoodNeighbor', label: 'Open to Have Good Neighbor', type: 'bool' },
+    { name: 'DesiresToBeGoodNeighbor', label: 'Desires to be Good Neighbor', type: 'bool' },
+    { name: 'user_id', label: 'Entered By', type: 'id', contextType: 'user'},
+  ]
+
+  const familyDisplayFields = [
+    { name: 'FamilyName', label: 'Family Name', type: 'text' },
+    { name: 'address', label: 'Street Address', type: 'text' },
+    { name: 'city', label: 'City', type: 'text' },
+    {
+        name: "LatestDateAtOasis",
+        label: "Most Recent Visit",
+        type: "date",
+      },
+    { name: "CountryOfOrigin", label: "Country of Origin", type: "text" },
+    { name: 'IsRefugeeFamily', label: 'Refugee Family?', type: 'bool' },
+    { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
   ];
 
   const FamilyContext = {

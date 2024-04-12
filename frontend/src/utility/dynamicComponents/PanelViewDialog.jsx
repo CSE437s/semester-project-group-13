@@ -11,7 +11,8 @@ import {
   Text,
   useTheme,
   propNames,
-  Spacer
+  Spacer,
+  Flex
 } from "@chakra-ui/react";
 import theme from "../../style/theme";
 import DynamicFormDialog from "./DynamicFormDialog";
@@ -21,7 +22,7 @@ const DynamicViewDialog = (props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const theme = useTheme();
 
-  if (!props.data) {
+  if (!props.data || props.data.length === 0) {
     return <p>No Data Found</p>;
   }
 
@@ -63,12 +64,12 @@ const DynamicViewDialog = (props) => {
   };
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{getDisplayString(props.context, props.data) || props.context.viewTitle}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
+
+      <Flex>
+        <h1>{getDisplayString(props.context, props.data) || props.context.viewTitle}</h1>
+        {/* <ModalCloseButton /> */}
+        {/* close button? */}
+        <Flex>
           {props.context.viewFields.map((field) =>
             handleInfoContext(field)
           )}
@@ -94,8 +95,8 @@ const DynamicViewDialog = (props) => {
             title={props.context.editTitle}
             existData={props.data}
           ></DynamicFormDialog>
-        </ModalBody>
-        <ModalFooter>
+        </Flex>
+        <Flex>
         <Spacer/>         
         <Spacer/>
         <Spacer/>
@@ -121,9 +122,8 @@ const DynamicViewDialog = (props) => {
           >
             Cancel
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          </Flex>
+          </Flex>
   );
 };
 

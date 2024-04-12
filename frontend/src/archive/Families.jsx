@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import DynamicTable from './utility/DynamicTable';
 import axios from 'axios';
 import BasicPage from './utility/BasicPage';
-import theme from './style/theme';
+import theme from '../style/theme';
 import { useTheme, Button, Spacer } from '@chakra-ui/react';
 import DynamicFormDialog from './utility/DynamicFormDialog';
-import {ContextProvider} from './utility/contexts/ContextProvider';
+import {ContextProvider} from '../utility/contexts/ContextProvider';
 
-const GoodNeighbors = (props) => {
-    console.log('Good Neighbors Page clicked');
+const Families = (props) => {
+    console.log('Families Page clicked');
 
     const [data, setData] = useState([]);
     const [openCreateDialog, setOpenCreateDialog] = useState(false);
     const theme = useTheme();
-    const context = ContextProvider("goodNeighbor")
+    const context = ContextProvider("family");
 
     useEffect(() => {
-        axios.get('http://localhost:8080/neighbor')
+        axios.get(context.getAllEndpoint)
             .then((response) => {
                 const dataFromApi = response.data.data;
                 console.log(dataFromApi);
@@ -38,10 +38,10 @@ const GoodNeighbors = (props) => {
     return (
         <div>
             <BasicPage
-                title="Good Neighbors"
-            >
-                <Button variant={"solid"} onClick={handleOpenCreateDialog}>
-                    Add Good Neighbor
+                title="Families"
+            >            
+                <Button variant={'solid'} onClick={handleOpenCreateDialog}>
+                    Add Family
                 </Button>
                 <Spacer height={'5vh'}/>
                 <DynamicTable 
@@ -60,4 +60,4 @@ const GoodNeighbors = (props) => {
     );
 };
 
-export default GoodNeighbors;
+export default Families;
