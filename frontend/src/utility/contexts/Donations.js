@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const handleCreateDonation = (formData) => {
+    formData['is_deleted'] = 0;
     axios.post('http://localhost:8080/donation/create', formData)
     .then((response) => {
         const data = response.data;

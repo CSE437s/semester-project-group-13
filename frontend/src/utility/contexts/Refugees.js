@@ -2,6 +2,7 @@ import axios from "axios";
 
 //this logic should be handled by the family page in the future
 const handleCreateRefugee = (formData) => {
+  formData['is_deleted'] = 0;
   axios
     .post("http://localhost:8080/refugee/create", formData)
     .then((response) => {

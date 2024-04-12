@@ -1,6 +1,10 @@
 import axios from "axios";
 
 const handleCreateFamily = (formData) => {
+  formData['EnteredBy'] = "";
+  formData['Scheduled'] = "";
+  formData['is_deleted'] = 0;
+
     axios.post('http://localhost:8080/family/create', formData)
     .then((response) => {
         const data = response.data;

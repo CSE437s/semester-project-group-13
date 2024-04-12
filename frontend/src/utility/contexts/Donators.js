@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const handleCreateDonator = (formData) => {
+    formData['is_deleted'] = 0;
     axios.post('http://localhost:8080/donator/create', formData)
     .then((response) => {
         const data = response.data;
@@ -60,7 +61,6 @@ const donatorEditFields = [
     { name: 'address', label: 'Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
     { name: 'zip_code', label: 'Zip Code', type: 'number' },
-    {name: 'gender', label: 'Gender', type: 'text'}, //radio?
     { name: 'family_id', label: 'Family', type: 'id', contextType: 'family'},
 ];
 

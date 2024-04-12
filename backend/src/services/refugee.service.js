@@ -78,11 +78,8 @@ async function getOne(refugee_id) {
     last_name,
     family_id,
     is_head_of_house,
-    birthday,
-    gender,
     relation_to_head,
     phone,
-    is_deleted
   }) {
     try {
       const query =
@@ -92,11 +89,8 @@ async function getOne(refugee_id) {
            last_name = ?, 
            family_id = ?, 
            is_head_of_house = ?, 
-           birthday = ?, 
-           gender = ?, 
            relation_to_head = ?, 
            phone = ?, 
-           is_deleted = ? 
          WHERE refugee_id = ?`;
   
       const results = await db.query(query, [
@@ -104,11 +98,8 @@ async function getOne(refugee_id) {
         last_name,
         family_id,
         is_head_of_house,
-        birthday,
-        gender,
         relation_to_head,
         phone,
-        is_deleted,
         refugee_id
       ]);
   
@@ -121,9 +112,8 @@ async function getOne(refugee_id) {
   }
   
 
-async function deleteOne(refugee_id, {
-  is_deleted
-}) {
+async function deleteOne(refugee_id) {
+  let is_deleted = 1;
   try {
     const query =
       `UPDATE refugees 

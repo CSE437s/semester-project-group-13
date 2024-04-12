@@ -30,6 +30,7 @@ async function getOne(donator_id) {
     phone_number,
     user_id,
     city,
+    gender,
     is_deleted,
     relation_to_head,
     address,
@@ -38,8 +39,8 @@ async function getOne(donator_id) {
   }) {
     try {
       const query = `
-        INSERT INTO donators (first_name, last_name, is_head_of_house, family_id, date_of_birth, phone_number, user_id, city, is_deleted, relation_to_head, address, email, zip_code)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO donators (first_name, last_name, is_head_of_house, family_id, birthday, phone_number, user_id, city, gender, is_deleted, relation_to_head, address, email, zip_code)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
   
       const results = await db.query(query, [
@@ -51,6 +52,7 @@ async function getOne(donator_id) {
         phone_number,
         user_id,
         city,
+        gender,
         is_deleted,
         relation_to_head,
         address,
@@ -72,11 +74,8 @@ async function getOne(donator_id) {
     last_name,
     is_head_of_house,
     family_id,
-    birthday,
     phone_number,
-    user_id,
     city,
-    is_deleted,
     relation_to_head,
     address,
     email,
@@ -85,7 +84,7 @@ async function getOne(donator_id) {
     try {
       const query = `
         UPDATE donators 
-        SET first_name = ?, last_name = ?, is_head_of_house = ?, family_id = ?, date_of_birth = ?, phone_number = ?, user_id = ?, city = ?, is_deleted = ?, relation_to_head = ?, address = ?, email = ?, zip_code = ?
+        SET first_name = ?, last_name = ?, is_head_of_house = ?, family_id = ?, phone_number = ?, city = ?, relation_to_head = ?, address = ?, email = ?, zip_code = ?
         WHERE donator_id = ?
       `;
   
@@ -94,11 +93,8 @@ async function getOne(donator_id) {
         last_name,
         is_head_of_house,
         family_id,
-        birthday,
         phone_number,
-        user_id,
         city,
-        is_deleted,
         relation_to_head,
         address,
         email,
@@ -115,7 +111,8 @@ async function getOne(donator_id) {
   }
   
 
-  async function deleteOne(donator_id, is_deleted) {
+  async function deleteOne(donator_id) {
+    let is_deleted = 1;
     try {
       const query = `
         UPDATE donators 

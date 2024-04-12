@@ -73,20 +73,12 @@ async function getOne(family_id) {
   }
   
 async function update({
-  user_id,
   IsRefugeeFamily,
   IsOpenToHaveGoodNeighbor,
   IsGoodNeighbor,
   DesiresToBeGoodNeighbor,
   Languages,
-  is_deleted,
   FamilyName,
-  LatestDateAtOasis,
-  DateCreated,
-  ArrivalDate,
-  CountryOfOrigin,
-  EnteredBy,
-  Scheduled,
   address,
   zip_code,
   city,
@@ -95,25 +87,17 @@ async function update({
   try {
     const query = `
       UPDATE families 
-      SET user_id = ?, IsRefugeeFamily = ?, IsOpenToHaveGoodNeighbor = ?, IsGoodNeighbor = ?, DesiresToBeGoodNeighbor = ?, Languages = ?, is_deleted = ?, FamilyName = ?, LatestDateAtOasis = ?, DateCreated = ?, ArrivalDate = ?, CountryOfOrigin = ?, EnteredBy = ?, Scheduled = ?, address = ?, zip_code = ?, city = ?
+      SET IsRefugeeFamily = ?, IsOpenToHaveGoodNeighbor = ?, IsGoodNeighbor = ?, DesiresToBeGoodNeighbor = ?, Languages = ?, FamilyName = ?, address = ?, zip_code = ?, city = ?
       WHERE family_id = ?
     `;
 
     const results = await db.query(query, [
-      user_id,
       IsRefugeeFamily,
       IsOpenToHaveGoodNeighbor,
       IsGoodNeighbor,
       DesiresToBeGoodNeighbor,
       Languages,
-      is_deleted,
       FamilyName,
-      LatestDateAtOasis,
-      DateCreated,
-      ArrivalDate,
-      CountryOfOrigin,
-      EnteredBy,
-      Scheduled,
       address,
       zip_code,
       city,
@@ -128,7 +112,8 @@ async function update({
   }
 }
 
-async function deleteOne(family_id, is_deleted) {
+async function deleteOne(family_id) {
+  let is_deleted = 1;
   try {
     const query = `
       UPDATE families 

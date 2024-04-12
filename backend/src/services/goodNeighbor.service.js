@@ -64,35 +64,29 @@ async function getOne(neighbor_id) {
     neighbor_id,
     Refugee_Family_ID,
     FamilyID,
-    Birthday,
     Email,
     FirstName,
     LastName,
-    Gender,
     PhoneNumber,
     Relation,
     is_head_of_house,
-    is_deleted,
   }) {
     try {
       const query = `
         UPDATE good_neighbors 
-        SET Refugee_Family_ID = ?, FamilyID = ?, Birthday = ?, Email = ?, FirstName = ?, LastName = ?, Gender = ?, PhoneNumber = ?, Relation = ?, is_head_of_house = ?, is_deleted = ?
+        SET Refugee_Family_ID = ?, FamilyID = ?, Email = ?, FirstName = ?, LastName = ?, PhoneNumber = ?, Relation = ?, is_head_of_house = ?
         WHERE neighbor_id = ?
       `;
   
       const results = await db.query(query, [
         Refugee_Family_ID,
         FamilyID,
-        Birthday,
         Email,
         FirstName,
         LastName,
-        Gender,
         PhoneNumber,
         Relation,
         is_head_of_house,
-        is_deleted,
         neighbor_id,
       ]);
   
@@ -105,7 +99,8 @@ async function getOne(neighbor_id) {
   }
   
 
-async function deleteOne(neighbor_id, is_deleted) {
+async function deleteOne(neighbor_id) {
+  let is_deleted = 1;
   try {
     const query = `
       UPDATE good_neighbors 

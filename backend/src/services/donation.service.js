@@ -81,6 +81,7 @@ async function update({ donation_id, item, amount, completed}) {
 }
 
 async function deleteOne(donation_id) {
+  let is_deleted = 1;
   try {
     const query = 'UPDATE donations SET is_deleted WHERE donation_id = ?';
     const result = await db.query(query, [is_deleted ,donation_id]);

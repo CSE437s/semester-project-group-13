@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const handleCreateGoodNeighbor = (formData) => {
+    formData['is_deleted'] = 0;
     axios.post('http://localhost:8080/neighbor/create', formData)
     .then((response) => {
         const data = response.data;

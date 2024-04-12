@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const handleCreateUser = (formData) => {
+    
     axios.post('http://localhost:8080/user/create', formData)
     .then((response) => {
         const data = response.data;
@@ -47,6 +48,8 @@ const userEditFields = [
     { name: 'username', label: 'Username', type: 'text' },
     { name: 'password', label: 'Password', type: 'text' },
     { name: 'email', label: 'Email Address', type: 'email'},
+    { name: 'first_name', label: 'First Name', type: 'text'},
+{ name: 'last_name', label: 'Last Name', type: 'text'}
 ];
 
 const userViewFields = [
