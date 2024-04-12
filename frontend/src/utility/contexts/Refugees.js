@@ -73,10 +73,10 @@ const refugeeViewFields = [
 ];
 
 const refugeeDisplayFields = [
-  { name: "first_name", label: "First Name", type: "text" },
-  { name: "last_name", label: "Last Name", type: "text" },
-  { name: 'phone', label: 'Phone Number', type: 'tel' },
   { name: "family_id", label: "Family", type: "id", contextType: "family" },
+  { name: "first_name", label: "First Name", type: "text" },
+  { name: 'phone', label: 'Phone Number', type: 'tel' },
+  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
 ];
 
 const RefugeeContext = {

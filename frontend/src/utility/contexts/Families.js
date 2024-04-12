@@ -114,9 +114,6 @@ const familyCreateFields = [
         label: "Most Recent Visit",
         type: "date",
       },
-    { name: "CountryOfOrigin", label: "Country of Origin", type: "text" },
-    { name: 'IsRefugeeFamily', label: 'Refugee Family?', type: 'bool' },
-    { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
   ];
 
   const FamilyContext = {
@@ -130,6 +127,7 @@ const familyCreateFields = [
     createFields: familyCreateFields,
     editFields: familyEditFields,
     viewFields: familyViewFields,
+    displayFields: familyDisplayFields,
     createTitle: "Add Family",
     editTitle: "Edit Family",
     viewTitle: "View Family", //TO-DO: viewDialog should provide its own title, so we can provide the first and last family name

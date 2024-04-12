@@ -80,12 +80,10 @@ const donatorViewFields = [
 ];
 
 const donatorDisplayFields = [
-    { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
-    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
-    { name: 'email', label: 'Email Address', type: 'email' },
-    // { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
     { name: 'family_id', label: 'Family', type: 'id', contextType: 'family'},
+    { name: 'first_name', label: 'First Name', type: 'text' },
+    { name: 'phone_number', label: 'Phone Number', type: 'tel' },
+    { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
 ];
 
 const DonatorContext = {

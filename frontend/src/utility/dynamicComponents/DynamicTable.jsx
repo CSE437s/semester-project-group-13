@@ -91,6 +91,9 @@ const DynamicTable = (props) => {
       ) {
         let displayString = columnData[fieldContexts[column]][row[column]];
         return <Td key={column}>{displayString}</Td>;
+      } else if(contextLadenFieldNames.includes(column)){
+        return <Td key={column}>{(row[column])}</Td>;
+
       }
       return <Td key={column}>{translateBE(row[column])}</Td>;
     }

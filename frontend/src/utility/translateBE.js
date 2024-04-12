@@ -1,9 +1,14 @@
 let be_to_fe_dict = {
   head_of_household: "Head Of Household",
+  is_head_of_house: "Head of House?",
   first_name: "First Name",
+  FirstName: "First Name",
   last_name: "Last Name",
+  LastName: "Last Name",
+  FamilyName: "Family Name",
   address: "Address",
   phone_number: "Phone Number",
+  PhoneNumber: "Phone Number",
   city: "City",
   zip: "Zip",
   family_members: "Family Members",
@@ -11,11 +16,21 @@ let be_to_fe_dict = {
   item: "Item",
   quantity: "Quantity",
   country_of_origin: "Country of Origin",
+  CountryOfOrigin: "Country of Origin",
   gender: "Gender",
   age: "Age",
   date_of_birth: "Date of Birth",
   date_of_arrival_to_us: "Date of Arrival",
   date_of_joining_oasis: "Date Joined",
+  Birthday: "Date of Birth",
+  birthday: "Date of Birth",
+  ArrivalDate: "Date of Arrival",
+  DateCreated: "Date Joined",
+  LatestDateAtOasis: "Last Seen",
+  IsRefugeeFamily: "Refugee Family?",
+  IsGoodNeighbor: "Matched?",
+  IsOpenToHaveGoodNeighbor: "Open to Good Neighbor Pairing?",
+  DesiresToBeGoodNeighbor: "Eligible Good Neighbor?",
   church_they_attend: "Church Home",
   donations_history: "Past Donations",
   fulfilled: "Fulfilled?",
@@ -31,7 +46,10 @@ let be_to_fe_dict = {
   match_date: "Match Date",
   host_family_id: "Host Family",
   refugee_family_id: "Refugee Family",
-  family_id: "Family"
+  RefugeeFamilyID: "Refugee Family",
+  family_id: "Family",
+  FamilyID: "Family"
+
 };
 
 function isValidDateFormat(dateString) {
