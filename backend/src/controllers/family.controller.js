@@ -42,28 +42,32 @@ async function getFamiliesPerCountry(req, res, next) {
 
 
 async function create(req, res) {
-    try {
-      const {
-        user_id,
-        IsRefugeeFamily,
-        IsOpenToHaveGoodNeighbor,
-        IsGoodNeighbor,
-        DesiresToBeGoodNeighbor,
-        Languages,
-        is_deleted,
-        FamilyName,
-        LatestDateAtOasis,
-        DateCreated,
-        ArrivalDate,
-        CountryOfOrigin,
-        EnteredBy,
-        Scheduled,
-        address,
-        zip_code,
-        city
-      } = req.body;
-  
-      const result = await familyService.create({
+  try {
+    const {
+      user_id,
+      IsRefugeeFamily,
+      IsOpenToHaveGoodNeighbor,
+      IsGoodNeighbor,
+      DesiresToBeGoodNeighbor,
+      Languages,
+      is_deleted,
+      FamilyName,
+      LatestDateAtOasis,
+      DateCreated,
+      ArrivalDate,
+      CountryOfOrigin,
+      EnteredBy,
+      Scheduled,
+      address,
+      zip_code,
+      city,
+      overrideDuplicateCheck
+    } = req.body;
+
+    let result;
+
+    if (overrideDuplicateCheck) {
+      result = await familyService.create({
         user_id,
         IsRefugeeFamily,
         IsOpenToHaveGoodNeighbor,
@@ -82,13 +86,42 @@ async function create(req, res) {
         zip_code,
         city
       });
-  
-      res.status(200).json(result);
-    } catch (error) {
-      console.error('Error Creating Family', error);
-      res.status(500).json({ error: 'Error creating family' });
+    } else {
+      const duplicateCheckResult = await familyService.checkForDuplicates({ address });
+      if (duplicateCheckResult.hasDuplicates) {
+        return res.status(400).json({
+          message: 'Duplicate address found',
+          duplicates: duplicateCheckResult.duplicates
+        });
+      } else {
+        result = await familyService.create({
+          user_id,
+          IsRefugeeFamily,
+          IsOpenToHaveGoodNeighbor,
+          IsGoodNeighbor,
+          DesiresToBeGoodNeighbor,
+          Languages,
+          is_deleted,
+          FamilyName,
+          LatestDateAtOasis,
+          DateCreated,
+          ArrivalDate,
+          CountryOfOrigin,
+          EnteredBy,
+          Scheduled,
+          address,
+          zip_code,
+          city
+        });
+      }
     }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error Creating Family', error);
+    res.status(500).json({ error: 'Error creating family' });
   }
+}
 
   async function update(req, res) {
     try {

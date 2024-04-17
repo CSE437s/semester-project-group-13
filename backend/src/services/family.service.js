@@ -68,6 +68,16 @@ async function getOne(family_id) {
     city
   }) {
     try {
+      const duplicateEntries = await checkForDuplicates(address);
+  
+      if (duplicateEntries.length > 0) {
+        return {
+          success: false,
+          message: 'Warning: There are duplicate entries with the same address.',
+          duplicates: duplicateEntries
+        };
+      }
+  
       const query =
         'INSERT INTO families (head_of_household, last_name, address, city, zip, is_refugee, is_good_neighbor, user_id, is_deleted, family_name, latest_date_at_oasis, date_created, arrival_date, country_of_origin, entered_by, scheduled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   
@@ -99,6 +109,19 @@ async function getOne(family_id) {
       throw error;
     }
   }
+  
+  async function checkForDuplicates(address) {
+    try {
+      // Query to check for duplicates based on address
+      const query = 'SELECT * FROM families WHERE address = ?';
+      const rows = await db.query(query, [address]);
+      return rows;
+    } catch (error) {
+      console.error('Error checking for duplicates', error);
+      throw error;
+    }
+  }
+  
   
 async function update({
   IsRefugeeFamily,
