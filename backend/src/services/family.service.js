@@ -22,6 +22,19 @@ async function getSome(startIndex, limit) {
   }
 }
 
+async function getFamiliesPerCountry() {
+  try {
+      const query = 'SELECT CountryOfOrigin, COUNT(*) AS NumberOfFamilies FROM families GROUP BY CountryOfOrigin';
+      const rows = await db.query(query);
+      return {
+          data: rows,
+      };
+  } catch (error) {
+      console.error('Error while getting families per country', error);
+      throw error;
+  }
+}
+
 async function getOne(family_id) {
     try {
       const sql = 'SELECT * FROM families WHERE family_id = ?';
@@ -156,4 +169,5 @@ module.exports = {
     update,
     deleteOne,
     getSome,
+    getFamiliesPerCountry,
 };

@@ -30,6 +30,17 @@ async function getOne(req, res, next) {
     }
 }
 
+async function getFamiliesPerCountry(req, res, next) {
+  try {
+      const result = await familyService.getFamiliesPerCountry();
+      res.status(200).json(result);
+  } catch (error) {
+      console.error('Error getting families per country', error);
+      next(error);
+  }
+}
+
+
 async function create(req, res) {
     try {
       const {
@@ -165,4 +176,5 @@ module.exports = {
     update,
     deleteOne,
     getSome,
+    getFamiliesPerCountry,
 };
