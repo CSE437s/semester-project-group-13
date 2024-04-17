@@ -3,7 +3,8 @@ const router = express.Router();
 const statisticsController = require('../controllers/statistics.controller');
 
 router.get('/category', statisticsController.getAll);
-
+router.get('/somecategory', statisticsController.getSomeCategory);
+router.get('/somedate', familyController.getSomeDate);
 router.get('/date', statisticsController.getAllFromDate);
 
 module.exports = router;

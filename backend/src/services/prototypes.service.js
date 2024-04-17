@@ -12,6 +12,21 @@ async function getAll() {
   }
 }
 
+
+async function getSome(startIndex, limit) {
+  try {
+    const query = 'SELECT * FROM prototypes LIMIT ?, ?';
+    const rows = await db.query(query, [startIndex, limit]);
+    
+    return {
+      data: rows,
+    };
+  } catch (error) {
+    console.error('Error while getting some prototypes', error.message);
+    throw error;
+  }
+}
+
 async function getOne(id) {
   try {
     const sql = 'SELECT * FROM prototypes WHERE id = ?';
@@ -109,4 +124,5 @@ module.exports = {
   create,
   update,
   deleteOne,
+  getSome,
 };

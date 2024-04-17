@@ -9,6 +9,17 @@ async function getAll(req, res, next) {
   }
 }
 
+
+async function getSome(req, res, next) {
+  try {
+      const { startIndex, limit } = req.query;
+      res.json(await prototypeservice.getSome(startIndex, limit));
+  } catch (err) {
+      console.error('Error while getting some prototypes', err.message);
+      next(err);
+  }
+}
+
 async function getOne(req, res, next) {
   try {
     const { id } = req.params;
@@ -106,4 +117,5 @@ module.exports = {
   create,
   update,
   deleteOne,
+  getSome,
 };

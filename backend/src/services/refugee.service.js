@@ -23,6 +23,21 @@ async function getAllInFamily(family_id) {
 }
 
 
+async function getSome(startIndex, limit) {
+  try {
+    const query = 'SELECT * FROM refugees LIMIT ?, ?';
+    const rows = await db.query(query, [startIndex, limit]);
+    
+    return {
+      data: rows,
+    };
+  } catch (error) {
+    console.error('Error while getting some refugees', error.message);
+    throw error;
+  }
+}
+
+
 async function getOne(refugee_id) {
     try {
       const sql = 'SELECT * FROM refugees WHERE refugee_id = ?';
@@ -142,4 +157,5 @@ module.exports = {
     update,
     deleteOne,
     getAllInFamily,
+    getSome,
 };
