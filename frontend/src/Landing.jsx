@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import image from "./images/OasisLogo.png"
 import axios from "axios";
 import { useTheme, Flex, Button, Spacer } from "@chakra-ui/react";
 import theme from "./style/theme";
@@ -156,7 +157,10 @@ const Landing = (props) => {
         width="100%"
         zIndex="999"
       >
+<img src={image} alt="Oasis Logo" style={{ width: "200px", height: "auto", marginRight: "auto" }} />
+
         <Spacer flex={20} />
+
         <Button
           variant="lessDark"
           onClick={() => handleTabChange("admin")}
