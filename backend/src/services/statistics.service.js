@@ -28,6 +28,41 @@ async function getAll(table, column, value) {
     }
 }
 
+
+async function getSomeCategory(table, column, value, startIndex, limit) {
+    try {
+      const tableExists = await checkTableExists(table);
+      if (!tableExists) {
+        throw new Error(`Table '${table}' does not exist`);
+      }
+  
+  
+      let sql = `SELECT * FROM ${table}`;
+      const params = [];
+  
+      if (column && value) {
+        sql += ` WHERE ${column} = ?`;
+        params.push(value);
+      }
+  
+      if (startIndex !== undefined && limit !== undefined) {
+        sql += ` LIMIT ?, ?`;
+        params.push(startIndex, limit);
+      }
+  
+      const rows = await db.query(sql, params);
+      return {
+        data: rows,
+        metadata: {
+          rowCount: rows.length,
+        },
+      };
+    } catch (error) {
+      console.error('Error while getting requests', error);
+      throw error;
+    }
+  }
+
 async function getAllFromDate(table, column, value, startDate, endDate, dateColumn) {
     try {
         const tableExists = await checkTableExists(table);
@@ -71,6 +106,55 @@ async function getAllFromDate(table, column, value, startDate, endDate, dateColu
     }
 }
 
+
+async function getSomeFromDate(table, column, value, startDate, endDate, dateColumn, startIndex, limit) {
+    try {
+      const tableExists = await checkTableExists(table);
+      if (!tableExists) {
+        throw new Error(`Table '${table}' does not exist`);
+      }
+  
+      const dateColumnIsDate = await checkColumnIsDate(table, dateColumn);
+      if (dateColumn && !dateColumnIsDate) {
+        throw new Error(`Column '${dateColumn}' in table '${table}' is not a date column`);
+      }
+  
+      let sql = `SELECT * FROM ${table}`;
+      const params = [];
+  
+      if (column && value) {
+        sql += ` WHERE ${column} = ?`;
+        params.push(value);
+      }
+  
+      if (startDate && endDate) {
+        if (params.length > 0) {
+          sql += ' AND';
+        } else {
+          sql += ' WHERE';
+        }
+        sql += ` ${dateColumn} BETWEEN ? AND ?`;
+        params.push(startDate, endDate);
+      }
+  
+      if (startIndex !== undefined && limit !== undefined) {
+        sql += ` LIMIT ?, ?`;
+        params.push(startIndex, limit); 
+      }
+  
+      const rows = await db.query(sql, params);
+      return {
+        data: rows,
+        metadata: {
+          rowCount: rows.length 
+        }
+      };
+    } catch (error) {
+      console.error('Error while getting requests', error);
+      throw error;
+    }
+}
+
 async function checkTableExists(table) {
     try {
         // Query to check if the table exists in the database schema
@@ -98,4 +182,6 @@ async function checkColumnIsDate(table, column) {
 module.exports = {
     getAll,
     getAllFromDate,
+    getSomeCategory,
+    getSomeFromDate,
 };
