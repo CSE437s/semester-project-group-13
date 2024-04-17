@@ -20,6 +20,21 @@ async function getOne(donator_id) {
     }
   }
 
+
+async function getSome(startIndex, limit) {
+  try {
+    const query = 'SELECT * FROM donators LIMIT ?, ?';
+    const rows = await db.query(query, [startIndex, limit]);
+    
+    return {
+      data: rows,
+    };
+  } catch (error) {
+    console.error('Error while getting some donators', error.message);
+    throw error;
+  }
+}
+
   
   async function create({
     first_name,
@@ -139,4 +154,5 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getSome,
 };

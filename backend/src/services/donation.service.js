@@ -12,6 +12,23 @@ async function getAll() {
   }
 }
 
+async function getSome(startIndex, limit) {
+  try {
+    console.log('Start Index:', startIndex);
+    console.log('Limit:', limit);
+    
+    const query = 'SELECT * FROM donations LIMIT ?, ?';
+    const rows = await db.query(query, [startIndex, limit]);
+    
+    return {
+      data: rows,
+    };
+  } catch (error) {
+    console.error('Error while getting some donations', error.message);
+    throw error;
+  }
+}
+
 async function getOne(donation_id) {
   try {
     const sql = 'SELECT * FROM donations WHERE donation_id = ?';
@@ -99,4 +116,5 @@ module.exports = {
   create,
   update,
   deleteOne,
+  getSome,
 };
