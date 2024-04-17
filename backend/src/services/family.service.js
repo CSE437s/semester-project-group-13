@@ -7,6 +7,21 @@ async function getAll() {
     };
 }
 
+async function getSome(startIndex, limit) {
+  console.log('Start Index:', startIndex);
+  console.log('Limit:', limit);
+  try {
+      const query = 'SELECT * FROM families LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      return {
+          data: rows,
+      };
+  } catch (err) {
+      console.error('Error while getting some families', err.message);
+      throw err;
+  }
+}
+
 async function getOne(family_id) {
     try {
       const sql = 'SELECT * FROM families WHERE family_id = ?';
@@ -140,4 +155,5 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getSome,
 };
