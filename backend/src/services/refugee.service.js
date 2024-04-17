@@ -23,17 +23,17 @@ async function getAllInFamily(family_id) {
 }
 
 
-async function getSome(startIndex, limit) {
+async function getSome({ startIndex, limit }) { // Accept an object
   try {
-    const query = 'SELECT * FROM refugees LIMIT ?, ?';
-    const rows = await db.query(query, [startIndex, limit]);
-    
-    return {
-      data: rows,
-    };
+      const query = 'SELECT * FROM refugees LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      
+      return {
+          data: rows,
+      };
   } catch (error) {
-    console.error('Error while getting some refugees', error.message);
-    throw error;
+      console.error('Error while getting some refugees', error.message);
+      throw error;
   }
 }
 

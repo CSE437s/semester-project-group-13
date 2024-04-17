@@ -21,17 +21,17 @@ async function getOne(user_id) {
   }
 
 
-  async function getSome(startIndex, limit) {
+  async function getSome({ startIndex, limit }) { 
     try {
-      const query = 'SELECT * FROM users LIMIT ?, ?';
-      const rows = await db.query(query, [startIndex, limit]);
-      
-      return {
-        data: rows,
-      };
+        const query = 'SELECT * FROM users LIMIT ?, ?';
+        const rows = await db.query(query, [startIndex, limit]);
+        
+        return {
+            data: rows,
+        };
     } catch (error) {
-      console.error('Error while getting some users', error.message);
-      throw error;
+        console.error('Error while getting some user', error.message);
+        throw error;
     }
   }
 

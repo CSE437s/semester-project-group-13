@@ -13,17 +13,17 @@ async function getAll() {
 }
 
 
-async function getSome(startIndex, limit) {
+async function getSome({ startIndex, limit }) { 
   try {
-    const query = 'SELECT * FROM notes LIMIT ?, ?';
-    const rows = await db.query(query, [startIndex, limit]);
-    
-    return {
-      data: rows,
-    };
+      const query = 'SELECT * FROM notes LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      
+      return {
+          data: rows,
+      };
   } catch (error) {
-    console.error('Error while getting some notes', error.message);
-    throw error;
+      console.error('Error while getting some notes', error.message);
+      throw error;
   }
 }
 
