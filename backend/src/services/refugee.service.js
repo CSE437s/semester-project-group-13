@@ -105,7 +105,7 @@ async function getOne(refugee_id) {
            family_id = ?, 
            is_head_of_house = ?, 
            relation_to_head = ?, 
-           phone = ?, 
+           phone = ? 
          WHERE refugee_id = ?`;
   
       const results = await db.query(query, [

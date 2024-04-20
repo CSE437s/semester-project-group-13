@@ -69,6 +69,7 @@ const UserContext = {
     type: "user",
     id: "user_id",
     getAllEndpoint: "http://localhost:8080/user",
+    getSomeEndpoint: "http://localhost:8080/user/some",
     getOneEndpoint: (id) => `http://localhost:8080/user/${id}`,
     create: handleCreateUser,
     edit: handleEditUser,

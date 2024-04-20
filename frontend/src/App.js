@@ -80,11 +80,6 @@ function App() {
         {loggedIn ? (
           <Landing onLogout={handleSuccessfulLogout}></Landing>
         ) : (
-          // <button onClick={apiCallTest}>Make API Call</button>
-          // <button onClick={apiCallDataBase}>Get Database</button>
-          // <button onClick={showCurrentUserNameAndPassword}>
-          //   Show Current User and Password
-          // </button>
           <Login onLogin={handleSuccessfulLogin} />
         )}
       </header>
