@@ -99,22 +99,22 @@ const DynamicTable = (props) => {
     }
   };
 
-  const prepareViewData = (data) => {
-    const viewDataDict = {};
-    Object.keys(data).forEach((key) => {
-      if (displayFieldNames.includes(key)) {
-        if (
-          contextLadenFieldNames.includes(key) &&
-          columnData.hasOwnProperty(fieldContexts[key])
-        ) {
-          viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
-        } else {
-          viewDataDict[key] = data[key];
-        }
-      }
-    });
-    return viewDataDict;
-  };
+  // const prepareViewData = (data) => {
+  //   const viewDataDict = {};
+  //   Object.keys(data).forEach((key) => {
+  //     if (displayFieldNames.includes(key)) {
+  //       if (
+  //         contextLadenFieldNames.includes(key) &&
+  //         columnData.hasOwnProperty(fieldContexts[key])
+  //       ) {
+  //         viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
+  //       } else {
+  //         viewDataDict[key] = data[key];
+  //       }
+  //     }
+  //   });
+  //   return viewDataDict;
+  // };
 
   return (
     <Box>
@@ -130,7 +130,7 @@ const DynamicTable = (props) => {
               typeof item === "string"
                 ? item.includes(props.searchValue)
                 : false
-            ) ? (
+            ) && !row["is_deleted"] ? (
               <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
                 {filteredColumns.map((column) =>
                   handleRowContext(row, rowIndex, column)

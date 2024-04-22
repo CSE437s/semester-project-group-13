@@ -19,6 +19,17 @@ async function getOne(req, res, next) {
   }
 }
 
+async function getSome(req, res, next) {
+  try {
+      const { startIndex, limit } = req.query;
+      res.json(await neighborService.getSome(startIndex, limit));
+  } catch (err) {
+      console.error('Error while getting some neighbors', err.message);
+      next(err);
+  }
+}
+
+
 async function create({
   Refugee_Family_ID,
   FamilyID,
@@ -136,4 +147,5 @@ module.exports = {
   create,
   update,
   deleteOne,
+  getSome,
 };

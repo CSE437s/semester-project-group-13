@@ -84,6 +84,7 @@ const RefugeeContext = {
   type: "refugee",
   id: "refugee_id",
   getAllEndpoint: "http://localhost:8080/refugee",
+  getSomeEndpoint: "http://localhost:8080/refugee/some",
   getOneEndpoint: (id) => `http://localhost:8080/refugee/${id}`,
   create: handleCreateRefugee,
   edit: handleEditRefugee,

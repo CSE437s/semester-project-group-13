@@ -20,6 +20,21 @@ async function getOne(neighbor_id) {
     }
   }
 
+  async function getSome(startIndex, limit) {
+    try {
+      const query = 'SELECT * FROM good_neighbors LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      
+      return {
+        data: rows,
+      };
+    } catch (error) {
+      console.error('Error while getting some neighbors', error.message);
+      throw error;
+    }
+  }
+
+  
   async function create({
     Refugee_Family_ID,
     FamilyID,
@@ -128,5 +143,6 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getSome,
 
 };

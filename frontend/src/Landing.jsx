@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import image from "./images/OasisLogo.png"
 import axios from "axios";
 import { useTheme, Flex, Button, Spacer } from "@chakra-ui/react";
 import theme from "./style/theme";
@@ -26,18 +27,28 @@ const Landing = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedRow, setSelectedRow] = useState(-1);
 
-    const viewFieldNames = activeTab != 'mapComponent' ? contexts[activeTab].viewFields.map(
-      (field) => field.name
-    ) : null;
-    const contextLadenFields = activeTab != 'mapComponent' ? contexts[activeTab].viewFields.filter((field) =>
-      field.hasOwnProperty("contextType")
-    ): null;
-    const contextLadenFieldNames = contextLadenFields ? contextLadenFields.map((field) => field.name) : null;
-    const fieldContexts = contextLadenFields ? contextLadenFields.reduce((acc, field) => {
-      acc[field.name] = field.contextType;
-      return acc;
-    }, {}) : null;
+  let startIndex = 0;
+  let limit = 100;
 
+  const viewFieldNames =
+    activeTab != "mapComponent"
+      ? contexts[activeTab].viewFields.map((field) => field.name)
+      : null;
+  const contextLadenFields =
+    activeTab != "mapComponent"
+      ? contexts[activeTab].viewFields.filter((field) =>
+          field.hasOwnProperty("contextType")
+        )
+      : null;
+  const contextLadenFieldNames = contextLadenFields
+    ? contextLadenFields.map((field) => field.name)
+    : null;
+  const fieldContexts = contextLadenFields
+    ? contextLadenFields.reduce((acc, field) => {
+        acc[field.name] = field.contextType;
+        return acc;
+      }, {})
+    : null;
 
   const handleTabChange = (tab) => {
     setActiveTab((prevTab) => {
@@ -83,39 +94,73 @@ const Landing = (props) => {
     setSelectedRow(index);
   };
 
-  // const handleSearch = () => {
-  //   // Implement your search logic here
-  //   console.log("Search:", searchValue);
-  // };
+  const handleViewMore = () => {
+    startIndex = limit;
+    limit += limit;
+  }
+
+  // useEffect(() => {
+  //   let newData = {};
+  //   setFormSubmit(false);
+  //   Object.entries(contexts).forEach((entry) => {
+  //     axios
+  //       .get(entry[1].getSomeEndpoint, {
+  //         params: {
+  //           startIndex: startIndex,
+  //           limit: limit
+  //         }
+  //       })
+  //       .then((response) => {
+  //         console.log("succesful api");
+  //         const dataFromApi = response.data.data;
+  //         if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+  //           console.error("dataFromApi is not a non-empty array");
+  //           return;
+  //         }
+  //         if(data){
+  //           newData[entry[0]] = [...data[entry[0]], dataFromApi];
+  //         } else {
+  //           newData[entry[0]] = dataFromApi;
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error making API call:", error);
+  //       });
+  //   });
+  //   setData(newData);
+  // }, [formSubmit]);
 
   useEffect(() => {
-    let newData = {};
     setFormSubmit(false);
-    Object.entries(contexts).forEach((entry) => {
-      axios
-        .get(entry[1].getAllEndpoint)
-        .then((response) => {
-          console.log("succesful api");
-          const dataFromApi = response.data.data;
-          if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-            console.error("dataFromApi is not a non-empty array");
-            return;
-          }
-          newData[entry[0]] = dataFromApi;
-        })
-        .catch((error) => {
-          console.error("Error making API call:", error);
-        });
+    Promise.all(Object.entries(contexts).map(([key, value]) =>
+      axios.get(value.getSomeEndpoint, {
+        params: {
+          startIndex: startIndex,
+          limit: limit
+        }
+      })
+      .then((response) => {
+        console.log("Successful API call for", key);
+        const dataFromApi = response.data.data;
+        if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+          console.error("dataFromApi is not a non-empty array");
+          return [];
+        }
+        return { [key]: dataFromApi };
+      })
+      .catch((error) => {
+        console.error("Error making API call:", error);
+        return {};
+      })
+    ))
+    .then((results) => {
+      const newData = results.reduce((acc, result) => ({ ...acc, ...result }), {});
+      setData(newData);
+    })
+    .catch((error) => {
+      console.error("Error processing API responses:", error);
     });
-    setData(newData);
   }, [formSubmit]);
-
-  
-  if(!data){
-    if(activeTab !== 'mapComponent' && !data[activeTab]){
-      return <LoadingPage></LoadingPage>
-    }
-  }
 
   const prepareViewData = (selectedData) => {
     const viewDataDict = {};
@@ -139,6 +184,7 @@ const Landing = (props) => {
   };
 
   return (
+  //data && (data[activeTab] || activeTab == "mapComponent") ? (
     <Flex
       flexDirection="column"
       width="100vw"
@@ -156,7 +202,12 @@ const Landing = (props) => {
         width="100%"
         zIndex="999"
       >
+<img src={image} alt="Oasis Logo" style={{ width: "200px", height: "auto", marginRight: "auto" }} />
+
+        handle
+
         <Spacer flex={20} />
+
         <Button
           variant="lessDark"
           onClick={() => handleTabChange("admin")}
@@ -174,7 +225,7 @@ const Landing = (props) => {
         id="body"
         flexDirection="row"
         flex={8}
-        width={'100%'}
+        width={"100%"}
         height={"90vh"}
         marginTop="10vh"
       >
@@ -250,6 +301,7 @@ const Landing = (props) => {
             <DynamicTable
               context={contexts[activeTab]}
               data={data[activeTab]}
+              //columnData={data}
               onSubmit={handleFormSubmit}
               onClick={handleViewDialog}
               searchValue={searchValue}
@@ -298,7 +350,10 @@ const Landing = (props) => {
         ) : null}
       </Flex>
     </Flex>
-  );
+  )
+  //  : (
+  //   <LoadingPage></LoadingPage>
+  // );
 };
 
 export default Landing;

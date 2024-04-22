@@ -7,6 +7,34 @@ async function getAll() {
     };
 }
 
+async function getSome(startIndex, limit) {
+  console.log('Start Index:', startIndex);
+  console.log('Limit:', limit);
+  try {
+      const query = 'SELECT * FROM families LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      return {
+          data: rows,
+      };
+  } catch (err) {
+      console.error('Error while getting some families', err.message);
+      throw err;
+  }
+}
+
+async function getFamiliesPerCountry() {
+  try {
+      const query = 'SELECT CountryOfOrigin, COUNT(*) AS NumberOfFamilies FROM families GROUP BY CountryOfOrigin';
+      const rows = await db.query(query);
+      return {
+          data: rows,
+      };
+  } catch (error) {
+      console.error('Error while getting families per country', error);
+      throw error;
+  }
+}
+
 async function getOne(family_id) {
     try {
       const sql = 'SELECT * FROM families WHERE family_id = ?';
@@ -40,6 +68,16 @@ async function getOne(family_id) {
     city
   }) {
     try {
+      const duplicateEntries = await checkForDuplicates(address);
+  
+      if (duplicateEntries.length > 0) {
+        return {
+          success: false,
+          message: 'Warning: There are duplicate entries with the same address.',
+          duplicates: duplicateEntries
+        };
+      }
+  
       const query =
         'INSERT INTO families (head_of_household, last_name, address, city, zip, is_refugee, is_good_neighbor, user_id, is_deleted, family_name, latest_date_at_oasis, date_created, arrival_date, country_of_origin, entered_by, scheduled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   
@@ -71,6 +109,19 @@ async function getOne(family_id) {
       throw error;
     }
   }
+  
+  async function checkForDuplicates(address) {
+    try {
+      // Query to check for duplicates based on address
+      const query = 'SELECT * FROM families WHERE address = ?';
+      const rows = await db.query(query, [address]);
+      return rows;
+    } catch (error) {
+      console.error('Error checking for duplicates', error);
+      throw error;
+    }
+  }
+  
   
 async function update({
   IsRefugeeFamily,
@@ -140,4 +191,6 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getSome,
+    getFamiliesPerCountry,
 };

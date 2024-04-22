@@ -124,6 +124,7 @@ const familyCreateFields = [
     type: "family",
     id: "family_id",
     getAllEndpoint: "http://localhost:8080/family",
+    getSomeEndpoint: "http://localhost:8080/family/some",
     getOneEndpoint: (id) => `http://localhost:8080/family/${id}`,
     create: handleCreateFamily,
     edit: handleEditFamily,

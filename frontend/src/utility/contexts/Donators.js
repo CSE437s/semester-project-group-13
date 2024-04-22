@@ -90,6 +90,7 @@ const DonatorContext = {
     type: "donator",
     id: "donator_id",
     getAllEndpoint: "http://localhost:8080/donator",
+    getSomeEndpoint: "http://localhost:8080/donator/some",
     getOneEndpoint: (id) => `http://localhost:8080/donator/${id}`,
     create: handleCreateDonator,
     edit: handleEditDonator,

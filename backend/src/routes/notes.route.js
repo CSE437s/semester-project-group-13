@@ -3,6 +3,7 @@ const router = express.Router();
 const notesController = require('../controllers/notes.controller');
 
 router.get('/', notesController.getAll);
+router.get('/some', notesController.getSome);
 router.get('/:note_id', notesController.getOne);
 router.post('/create', notesController.create); 
 router.put('/:note_id/update', notesController.update); 

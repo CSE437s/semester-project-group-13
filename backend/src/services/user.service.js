@@ -20,6 +20,21 @@ async function getOne(user_id) {
     }
   }
 
+
+  async function getSome({ startIndex, limit }) { 
+    try {
+        const query = 'SELECT * FROM users LIMIT ?, ?';
+        const rows = await db.query(query, [startIndex, limit]);
+        
+        return {
+            data: rows,
+        };
+    } catch (error) {
+        console.error('Error while getting some user', error.message);
+        throw error;
+    }
+  }
+
   async function create({
     username,
     password,
@@ -84,4 +99,5 @@ module.exports = {
     create,
     update,
     deleteOne,
+    getSome,
 };

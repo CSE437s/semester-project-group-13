@@ -12,6 +12,21 @@ async function getAll() {
   }
 }
 
+
+async function getSome({ startIndex, limit }) { 
+  try {
+      const query = 'SELECT * FROM notes LIMIT ?, ?';
+      const rows = await db.query(query, [startIndex, limit]);
+      
+      return {
+          data: rows,
+      };
+  } catch (error) {
+      console.error('Error while getting some notes', error.message);
+      throw error;
+  }
+}
+
 async function getOne(note_id) {
   try {
     const sql = 'SELECT * FROM notes WHERE note_id = ?';
@@ -109,4 +124,5 @@ module.exports = {
   create,
   update,
   deleteOne,
+  getSome,
 };

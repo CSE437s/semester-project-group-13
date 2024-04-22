@@ -21,6 +21,52 @@ async function getAll(req, res, next) {
     }
   }
 
+
+  async function getSomeFromDate(req, res, next) {
+    try {
+      const { table, column, value, startDate, endDate, dateColumn, startIndex, limit } = req.query;
+  
+      const result = await statisticService.getSomeFromDate(
+        table,
+        column,
+        value,
+        startDate,
+        endDate,
+        dateColumn,
+        startIndex,
+        limit
+      );
+  
+      res.json(result);
+    } catch (error) {
+      console.error('Error while getting statistics', error);
+      next(error);
+    }
+  }
+
+  async function getSomeCategory(req, res, next) {
+    try {
+      const { table, column, value, startIndex, limit } = req.query;
+  
+      const result = await statisticService.getSomeCategory(
+        table,
+        column,
+        value,
+        startIndex,
+        limit,
+      );
+  
+      res.json(result);
+    } catch (error) {
+      console.error('Error while getting requests', error);
+      next(error);
+    }
+  }
+  
+
+
+  
+
   async function getAllFromDate(req, res, next) {
     try {
         const { column, category, value, startDate, endDate, dateColumn } = req.query;
@@ -43,4 +89,6 @@ async function getAll(req, res, next) {
 module.exports = {
   getAll,
   getAllFromDate,
+  getSomeCategory,
+  getSomeFromDate,
 };

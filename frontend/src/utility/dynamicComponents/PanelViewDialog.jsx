@@ -17,7 +17,8 @@ const PanelViewDialog = (props) => {
   const theme = useTheme();
 
   if (!props.data || props.data.length === 0) {
-    return <p>No Row Selected</p>;
+    let contextType = props.context.type;
+    return <p>Select a {contextType.charAt(0).toUpperCase() + contextType.slice(1)}</p>;
   }
 
   const handleEditClick = () => {
