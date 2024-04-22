@@ -4,6 +4,7 @@ const app = express();
 const refugeeRouter = require('./src/routes/refugee.route');
 const familyRouter = require('./src/routes/family.route');
 const authRouter = require('./src/routes/auth.route');
+const geocodeRouter = require('./src/routes/geocode.route');
 const neighborRouter = require('./src/routes/goodNeighbor.route')
 const donationRouter = require('./src/routes/donation.route')
 const userRouter = require('./src/routes/user.route')
@@ -12,7 +13,7 @@ const requestRouter = require('./src/routes/requests.route')
 const notesRouter = require('./src/routes/notes.route')
 const statisticsRouter = require('./src/routes/statistics.route')
 const prototypeRouter = require('./src/routes/prototypes.route')
-const geocodeRouter = require('./src/routes/geocode.route')
+
 
 
 const session = require("express-session");
@@ -38,6 +39,7 @@ app.use(session({
 
 app.use("/auth", authRouter);
 app.use("/requests", requestRouter);
+app.use('/geocode', geocodeRouter);
 app.use('/refugee', refugeeRouter);
 app.use('/family', familyRouter);
 app.use('/neighbor', neighborRouter);

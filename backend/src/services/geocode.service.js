@@ -1,5 +1,4 @@
 const db = require('./db.service');
-//const axios = require('axios');
 
 async function getAll() {
   try {
@@ -33,6 +32,17 @@ async function create({
   is_deleted,
 }) {
   try {
+    // Check if a geocode already exists for this family_id
+    const existingGeocode = await db.query(
+      'SELECT * FROM geocodes WHERE family_id = ? AND is_deleted = 0',
+      [family_id]
+    );
+
+    if (existingGeocode.length > 0) {
+      // If there's already a geocode, skip insertion and return the existing one
+      return { success: false, message: 'Geocode already exists for this family_id' };
+    }
+
     const query =
       'INSERT INTO geocodes (family_id, latitude, longitude, is_deleted) VALUES (?, ?, ?, ?)';
 
@@ -48,7 +58,7 @@ async function create({
     return { success: true, geocode_ID };
   } catch (error) {
     console.error('Error Creating Geocode', error);
-    throw error;
+    throw new Error('Failed to create geocode.');
   }
 }
 
@@ -104,35 +114,81 @@ async function deleteOne(geocode_id) {
   }
 }
 
-// async function geocode(address, family_id) {
-//   try {
-//     // Make a request to the geocoding service (e.g., Nominatim) to obtain coordinates for the address
-//     const response = await axios.get('https://nominatim.openstreetmap.org/search', {
-//       params: {
-//         q: address,
-//         format: 'json',
-//         limit: 1
-//       }
-//     });
+async function geocode(address, zip_code, family_id) {
+  try {
+    // Make a request to the geocoding service (e.g., Nominatim) to obtain coordinates for the address
+    const fullAddress = `${address}, ${zip_code}`;
+    const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+      params: {
+        q: fullAddress,
+        format: 'json',
+        limit: 1
+      }
+    });
 
-//     // Extract latitude and longitude from the response
-//     const { lat, lon } = response.data[0];
+    // Extract latitude and longitude from the response
+    if (response.data.length === 0) {
+      throw new Error(`No geocode found for address: ${fullAddress}`);
+    }
 
-//     // Save the geocoded data into the database (geocodes table)
-//     await geocodes.create({
-//       family_id,
-//       latitude: lat,
-//       longitude: lon,
-//       is_deleted,
-//     });
+    const { lat, lon } = response.data[0];
 
-//     // Return the geocoded coordinates
-//     return { latitude: lat, longitude: lon };
-//   } catch (error) {
-//     // Handle errors, such as network issues or invalid addresses
-//     throw new Error(`Geocoding error: ${error.message}`);
-//   }
-// }
+    // Save the geocoded data into the database (geocodes table)
+    await geocodes.create({
+      family_id,
+      latitude: lat,
+      longitude: lon,
+      is_deleted: 0,
+    });
+
+    if (!geocodeResult.success) {
+      console.error('Geocode already exists for family_id:', family_id);
+    }
+
+    // Return the geocoded coordinates
+    return { latitude: lat, longitude: lon };
+  } catch (error) {
+    // Handle errors, such as network issues or invalid addresses
+    console.error('Geocoding error:', error);
+    throw new Error(`Geocoding error: ${error.message}`);
+  }
+}
+
+async function getGeocodeFamilies() {
+  try {
+    const query = `
+      SELECT family_id, address, zip_code 
+      FROM families 
+      WHERE address IS NOT NULL 
+        AND family_id NOT IN (SELECT family_id FROM geocodes WHERE is_deleted = 0)
+    `;
+    const results = await db.query(query);
+    return results; // Returns list of families needing geocoding
+  } catch (error) {
+    console.error('Error fetching families needing geocoding:', error);
+    throw error;
+  }
+}
+
+async function geocodeFamilies() {
+  try {
+    const families = await getGeocodeFamilies(); // Uses the service function
+    for (const family of families) {
+      const { family_id, address, zip_code } = family;
+
+      const { latitude, longitude } = await geocodeService.geocode(address, zip_code, family_id);
+
+      if (!coordinates) {
+        console.error('No coordinates found for family:', family_id);
+      }
+    }
+
+    console.log('Successfully geocoded families');
+  } catch (error) {
+    console.error('Error during geocoding families:', error);
+    throw error;
+  }
+}
   
   module.exports = {
     getAll,
@@ -140,6 +196,8 @@ async function deleteOne(geocode_id) {
     create,
     update,
     deleteOne,
-    //geocode,
+    geocode,
+    getGeocodeFamilies,
+    geocodeFamilies,
   };
   

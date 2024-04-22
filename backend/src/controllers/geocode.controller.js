@@ -100,16 +100,37 @@ async function getAll(req, res, next) {
   }
 
   
-// async function geocode(req, res, next) {
-//   try {
-//     const { address } = req.body; // Assuming address is sent in the request body
-//     await geocodeService.geocode(address);
-//     res.status(200).json({ success: true, message: 'Geocoding successful' });
-//   } catch (error) {
-//     console.error('Error geocoding address:', error);
-//     res.status(500).json({ error: 'Error geocoding address' });
-//   }
-// }
+async function geocode(req, res, next) {
+  try {
+    const { address } = req.body; // Assuming address is sent in the request body
+    await geocodeService.geocode(address);
+    res.status(200).json({ success: true, message: 'Geocoding successful' });
+  } catch (error) {
+    console.error('Error geocoding address:', error);
+    res.status(500).json({ error: 'Error geocoding address' });
+  }
+}
+
+async function getGeocodeFamilies() {
+    try {
+      res.json(await geocodeService.getGeocodeFamilies());
+    } catch (err) {
+      console.error('Error while getting geocodes for the families', err.message);
+      next(err);
+    }
+}
+
+async function geocodeFamilies(req, res, next) {
+  try {
+    await geocodeService.geocodeFamilies(); // Calls the service function to geocode families
+    res.status(200).json({ success: true, message: 'Successfully geocoded families' });
+  } catch (error) {
+    console.error('Error geocoding families:', error);
+    res.status(500).json({ error: 'Error during geocoding families' });
+    next(error);
+  }
+}
+
 
 module.exports = {
     getAll,
@@ -117,5 +138,7 @@ module.exports = {
     create,
     update,
     deleteOne,
-    //geocode,
+    geocode,
+    getGeocodeFamilies,
+    geocodeFamilies,
   };

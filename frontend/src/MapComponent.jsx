@@ -64,6 +64,19 @@ const MapComponent = (props) => {
     setMap(mapInstance);
   };
 
+  const handleGeocode = async () => {
+    try {
+
+      const response = await axios.post('http://localhost:8080/geocode-families');
+
+      console.log('Geocoding response:', response.data);
+    } catch (error) {
+      console.error('Error during geocoding:', error);
+    }
+  };
+
+
+
   // Creates Markers for each family address
   useEffect(() => {
     if (!map || !coords.length) return;
@@ -87,6 +100,13 @@ const MapComponent = (props) => {
         >
           Open Map
         </Button>
+        <Button
+          mt={4}
+          colorScheme="purple"
+          onClick={handleGeocode}
+        >
+          Geocode Addresses
+        </Button>
       </Flex>
     ) : (
       <Flex flexDirection="column" alignItems="center">
@@ -97,6 +117,13 @@ const MapComponent = (props) => {
           onClick={initializeMap}
         >
           Open Map
+        </Button>
+        <Button
+          mt={4}
+          colorScheme="purple"
+          onClick={handleGeocode}
+        >
+          Geocode Address
         </Button>
       </Flex>
     )
