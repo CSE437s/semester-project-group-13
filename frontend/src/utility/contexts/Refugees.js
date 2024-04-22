@@ -64,13 +64,14 @@ const refugeeEditFields = [
 
 const refugeeViewFields = [
   { name: "first_name", label: "First Name", type: "text" },
-  { name: "last_name", label: "Last Name", type: "text" },
+  //{ name: "last_name", label: "Last Name", type: "text" },
   { name: "family_id", label: "Family", type: "id", contextType: "family" },
+  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+  { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
   { name: "gender", label: "Gender", type: "text" },
   { name: "birthday", label: "Date of Birth", type: "date" },
   { name: 'phone', label: 'Phone Number', type: 'tel' },
-  { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
-  { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
+
 ];
 
 const refugeeDisplayFields = [

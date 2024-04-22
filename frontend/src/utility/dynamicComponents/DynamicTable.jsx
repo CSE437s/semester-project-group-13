@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, theme, useTheme } from "@chakra-ui/react";
 import translateBE from "../translateBE";
 import DynamicFormDialog from "./DynamicFormDialog";
 import DynamicViewDialog from "./DynamicViewDialog";
@@ -8,10 +8,15 @@ import axios from "axios";
 import LoadingPage from "../LoadingPage";
 
 const DynamicTable = (props) => {
-  const [selectedRow, setSelectedRow] = useState(-1);
-  const [openViewDialog, setOpenViewDialog] = useState(false);
+  //const [selectedRow, setSelectedRow] = useState(-1);
+  //const [openViewDialog, setOpenViewDialog] = useState(false);
   const [columnData, setColumnData] = useState({});
-  const displayFieldNames = props.context.displayFields.map((field) => field.name);
+
+  const theme = useTheme();
+
+  const displayFieldNames = props.context.displayFields.map(
+    (field) => field.name
+  );
   const contextLadenFields = props.context.displayFields.filter((field) =>
     field.hasOwnProperty("contextType")
   );
@@ -35,7 +40,6 @@ const DynamicTable = (props) => {
               console.error("dataFromApi is not a non-empty array");
               return;
             }
-
             setColumnData((prevData) => ({
               ...prevData,
               [fieldContext.type]: dataFromApi.reduce((acc, entry) => {
@@ -52,25 +56,26 @@ const DynamicTable = (props) => {
           });
       });
     } else {
-      console.log('no data given')
+      console.log("no data given");
     }
   }, [props.data]);
 
   if (!props.data || !props.data.length) {
     console.log("props", props.data, props.context);
-    return "No Data Available";
+    //return "No Data Available";
+    return <LoadingPage></LoadingPage>
   }
 
   const handleRowClick = (index) => {
-    setSelectedRow(index);
+    // setSelectedRow(index);
     props.onClick(index);
     //setOpenViewDialog(true);
   };
 
-  const handleCloseViewDialog = () => {
-    setOpenViewDialog(false);
-    setSelectedRow(-1);
-  };
+  // const handleCloseViewDialog = () => {
+  //   setOpenViewDialog(false);
+  //   setSelectedRow(-1);
+  // };
 
   const columns = Object.keys(props.data[0]);
   const filteredColumns = columns.filter(
@@ -84,37 +89,62 @@ const DynamicTable = (props) => {
   };
 
   const handleRowContext = (row, rowIndex, column) => {
+    let displayString = translateBE(row[column]);
     if (displayFieldNames.includes(column)) {
       if (
         contextLadenFieldNames.includes(column) &&
         columnData.hasOwnProperty(fieldContexts[column])
       ) {
-        let displayString = columnData[fieldContexts[column]][row[column]];
-        return <Td key={column}>{displayString}</Td>;
-      } else if(contextLadenFieldNames.includes(column)){
-        return <Td key={column}>{(row[column])}</Td>;
-
-      }
-      return <Td key={column}>{translateBE(row[column])}</Td>;
+        displayString = columnData[fieldContexts[column]][row[column]];
+      } else if (contextLadenFieldNames.includes(column) || column == 'amount') {
+        displayString = row[column];
+      } 
+      return rowIndex == props.selectedRow ? (
+        <Td key={column} bg={theme.colors.primary[300]}>{displayString}</Td>
+      ) : (
+        <Td key={column}>{displayString}</Td>
+      );
     }
   };
 
-  // const prepareViewData = (data) => {
-  //   const viewDataDict = {};
-  //   Object.keys(data).forEach((key) => {
-  //     if (displayFieldNames.includes(key)) {
-  //       if (
-  //         contextLadenFieldNames.includes(key) &&
-  //         columnData.hasOwnProperty(fieldContexts[key])
-  //       ) {
-  //         viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
-  //       } else {
-  //         viewDataDict[key] = data[key];
-  //       }
-  //     }
-  //   });
-  //   return viewDataDict;
-  // };
+  const prepareViewData = (data) => {
+    const viewDataDict = {};
+    Object.keys(data).forEach((key) => {
+      if (displayFieldNames.includes(key)) {
+        if (
+          contextLadenFieldNames.includes(key) &&
+          columnData.hasOwnProperty(fieldContexts[key])
+        ) {
+          viewDataDict[key] = columnData[fieldContexts[key]][data[key]];
+        } else {
+          viewDataDict[key] = data[key];
+        }
+      }
+    });
+    return viewDataDict;
+  };
+
+  const isRowVisible = (row, rowIndex) => {
+    if (row["is_deleted"] || row["is_deleted"] == undefined) {
+      return false;
+    }
+
+    if (!props.searchValue){
+      return true;
+    }
+
+    const viewData = prepareViewData(row);
+  
+    return Object.values(viewData).some((item) => {
+      switch (typeof item) {
+        case "string":
+          return item.toLowerCase().includes(props.searchValue);
+        default:
+          return false;
+      }
+    });
+  };
+  
 
   return (
     <Box>
@@ -126,11 +156,7 @@ const DynamicTable = (props) => {
         </Thead>
         <Tbody>
           {props.data.map((row, rowIndex) =>
-            Object.values(row).some((item) =>
-              typeof item === "string"
-                ? item.includes(props.searchValue)
-                : false
-            ) && !row["is_deleted"] ? (
+            isRowVisible(row, rowIndex) ? (
               <Tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
                 {filteredColumns.map((column) =>
                   handleRowContext(row, rowIndex, column)

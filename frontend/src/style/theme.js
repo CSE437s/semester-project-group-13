@@ -95,20 +95,31 @@ const theme = extendTheme({
         },
       },
     },
+    Input: {
+      variants: {
+        filled: {
+          bg: 'primary.900', // Updated to primary.500 (shades of blue)
+          color: 'white',
+          _hover: {
+            bg: 'primary.400'
+          }
+        }
+      }
+    },
     Button: {
       variants: {
         dark: {
-          bg: 'primary.500', // Updated to primary.500 (shades of blue)
+          bg: 'primary.700', // Updated to primary.500 (shades of blue)
           color: 'white',
           _hover: {
-            bg: 'primary.600',
+            bg: 'primary.500',
           },
         },
         lessDark: {
           bg: 'primary.400', // Updated to primary.400 (shades of blue)
           color: 'white',
           _hover: {
-            bg: 'primary.300',
+            bg: 'primary.200',
           },
         },
         solid: {
@@ -120,17 +131,17 @@ const theme = extendTheme({
         },
         outline: {
           border: 'solid primary.500 2px', // Updated to primary.500 (shades of blue)
-          bg: 'customGray.300',
+          bg: 'customGray.600',
           color: '#FAFAFA', // Updated to #FAFAFA (lighter text)
           _hover: {
-            bg: 'customGray.200',
+            bg: 'customGray.400',
           },
         },
         danger: {
           bg: 'customRed.600',
           color: 'white',
           _hover: {
-            bg: 'customRed.500',
+            bg: 'customRed.400',
           },
         },
       },

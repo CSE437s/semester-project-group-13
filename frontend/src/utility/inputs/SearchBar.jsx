@@ -12,7 +12,7 @@ const SearchBar = ({ value, onChange, onClear, onSearch }) => {
         variant="filled"
         borderRadius="full"
         size="md"
-        bg="gray.100"
+        bg="primary.400"
       />
       <InputRightElement>
         {value && (
@@ -20,7 +20,7 @@ const SearchBar = ({ value, onChange, onClear, onSearch }) => {
             aria-label="Clear search"
             icon={<CloseIcon />}
             onClick={onClear}
-            size="sm"
+            size="xs"
             variant="ghost"
           />
         )}

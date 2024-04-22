@@ -66,17 +66,18 @@ const donatorEditFields = [
 
 const donatorViewFields = [
     { name: 'first_name', label: 'First Name', type: 'text' },
-    { name: 'last_name', label: 'Last Name', type: 'text' },
+    { name: 'family_id', label: 'Family', type: 'id', contextType: 'family'},
+   // { name: 'last_name', label: 'Last Name', type: 'text' },
+   { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+   { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
     { name: 'birthday', label: 'Date of Birth', type: 'date' },
-    { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
-    { name: 'relation_to_head', label: 'Relation to Head of Household', type: 'text' },
+
     { name: 'phone_number', label: 'Phone Number', type: 'tel' },
     { name: 'email', label: 'Email Address', type: 'email' },
     { name: 'address', label: 'Address', type: 'text' },
     { name: 'city', label: 'City', type: 'text' },
     { name: 'zip_code', label: 'Zip Code', type: 'number' },
     {name: 'gender', label: 'Gender', type: 'text'}, //radio?
-    { name: 'family_id', label: 'Family', type: 'id', contextType: 'family'},
 ];
 
 const donatorDisplayFields = [
