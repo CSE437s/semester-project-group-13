@@ -67,7 +67,7 @@ const MapComponent = (props) => {
   const handleGeocode = async () => {
     try {
 
-      const response = await axios.post('http://localhost:8080/geocode-families');
+      const response = await axios.post('http://localhost:8080/geocode/geocode-families');
 
       console.log('Geocoding response:', response.data);
     } catch (error) {

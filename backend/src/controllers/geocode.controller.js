@@ -1,4 +1,5 @@
 const geocodeService = require('../services/geocode.service');
+const axios = require('axios');
 
 async function getAll(req, res, next) {
     try {
@@ -111,7 +112,7 @@ async function geocode(req, res, next) {
   }
 }
 
-async function getGeocodeFamilies() {
+async function getGeocodeFamilies(req, res, next) {
     try {
       res.json(await geocodeService.getGeocodeFamilies());
     } catch (err) {
