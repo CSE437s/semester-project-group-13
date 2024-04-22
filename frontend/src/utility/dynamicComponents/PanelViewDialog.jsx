@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   CloseButton,
   Button,
@@ -14,12 +15,60 @@ import { getDisplayString, ContextProvider} from "../contexts/ContextProvider";
 
 const PanelViewDialog = (props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [referenceData, setReferenceData] = useState({})
   const theme = useTheme();
+
+  const viewFieldNames = props.context.viewFields.map((field) => field.name);
+  const contextLadenFields = props.context.viewFields.filter((field) => field.hasOwnProperty("contextType"));
+  const contextLadenFieldNames = contextLadenFields
+    ? contextLadenFields.map((field) => field.name)
+    : null;
+  const fieldContexts = contextLadenFields
+    ? contextLadenFields.reduce((acc, field) => {
+        acc[field.name] = field.contextType;
+        return acc;
+      }, {})
+    : null;
+
+    useEffect(() => {
+      if (props.data) {
+        contextLadenFields.forEach((entry) => {
+          const fieldContext = ContextProvider(entry.contextType);
+          axios
+            .get(fieldContext.getAllEndpoint)
+            .then((response) => {
+              console.log("succesful api");
+              const dataFromApi = response.data.data;
+              if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+                console.error("dataFromApi is not a non-empty array");
+                return;
+              }
+              setReferenceData((prevData) => ({
+                ...prevData,
+                [fieldContext.type]: dataFromApi.reduce((acc, entry) => {
+                  acc[entry[fieldContext.id]] = getDisplayString(
+                    fieldContext,
+                    entry
+                  );
+                  return acc;
+                }, {}),
+              }));
+            })
+            .catch((error) => {
+              console.error("Error making API call:", error);
+            });
+        });
+      } else {
+        console.log("no data given");
+      }
+    }, [props.data]);
 
   if (!props.data || props.data.length === 0) {
     let contextType = props.context.type;
     return <p>Select a {contextType.charAt(0).toUpperCase() + contextType.slice(1)}</p>;
   }
+
+
 
   const handleEditClick = () => {
     setOpenEditDialog(true);
@@ -50,8 +99,11 @@ const PanelViewDialog = (props) => {
         value = field.label + ": " + formattedDate.toDateString();
         break;
       case "id":
-        console.log("viewData", props.viewData)
-        value = field.label + ": " + getDisplayString(ContextProvider('donator'), props.viewData)
+        if(referenceData[field.contextType][props.data[field.name]]){
+          value = field.label + ": " + referenceData[field.contextType][props.data[field.name]]
+        } else {
+          value = field.label + ": " + props.data[field.name]
+        }
         break;
     }
     if(props.data[field.name] == undefined && field.type != 'id'){
@@ -59,6 +111,32 @@ const PanelViewDialog = (props) => {
     }
     return <Text fontSize={'3vh'} key={field.name}>{value}</Text>;
   };
+
+  // const prepareViewData = (selectedData) => {
+  //   const viewDataDict = {};
+  //   Object.keys(selectedData).forEach((key) => {
+  //     if (viewFieldNames.includes(key)) {
+  //       if (
+  //         contextLadenFieldNames.includes(key) &&
+  //         referenceData.hasOwnProperty(fieldContexts[key])
+  //       ) {
+  //         const fieldContext = ContextProvider(fieldContexts[key]);
+  //         const referenceRow = referenceData[fieldContexts[key]][0]
+  //         //.find((entry) => 
+  //         //entry[fieldContext.id] === selectedData[key])
+  //         console.log(referenceData[fieldContexts[key]])
+  //         viewDataDict[key] = referenceRow
+  //           ? getDisplayString(fieldContext, referenceRow)
+  //           : selectedData[key];
+  //       } else {
+  //         viewDataDict[key] = selectedData[key];
+  //       }
+  //     }
+  //   });
+  //   return viewDataDict;
+  // };
+
+  // const viewData = prepareViewData(props.data)
 
   return (
 
@@ -102,7 +180,10 @@ const PanelViewDialog = (props) => {
             }
           })()}
 
+          {/* handle context buttons */}
+          <Spacer/>
           <Button
+          flex={2}
             variant={'dark'}
             onClick={handleDeleteClick}
           >
@@ -110,19 +191,19 @@ const PanelViewDialog = (props) => {
           </Button>
           <Spacer/>
           <Button
+          flex={2}
             variant={'solid'}
             onClick={handleEditClick}
           >
             Edit
           </Button>
           <Spacer/>
-          <Button
+          {/* <Button
             variant={'outline'}
             onClick={props.onClose}
           >
             Cancel
-          </Button>
-          <Spacer/>
+          </Button> */}
 
           </Flex>
           </Flex>

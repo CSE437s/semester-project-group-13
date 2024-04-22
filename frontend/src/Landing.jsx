@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import image from "./images/OasisLogo.png"
+import image from "./images/OasisLogo.png";
 import axios from "axios";
 import { useTheme, Flex, Button, Spacer } from "@chakra-ui/react";
 import theme from "./style/theme";
@@ -8,6 +8,7 @@ import TabButton from "./utility/TabButton"; // Assuming you have a custom TabBu
 import {
   ContextProvider,
   getAllContexts,
+  getDisplayString,
 } from "./utility/contexts/ContextProvider";
 import MapComponent from "./MapComponent";
 import DynamicFormDialog from "./utility/dynamicComponents/DynamicFormDialog";
@@ -27,8 +28,8 @@ const Landing = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedRow, setSelectedRow] = useState(-1);
 
-  let startIndex = 0;
-  let limit = 100;
+  //const [startIndex, setStartIndex] = useState(0);
+  const [limit, setLimit] = useState(100);
 
   const viewFieldNames =
     activeTab != "mapComponent"
@@ -83,7 +84,7 @@ const Landing = (props) => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchValue(e.target.value);
+    setSearchValue(e.target.value.toLowerCase().trim());
   };
 
   const handleClearSearch = () => {
@@ -95,96 +96,56 @@ const Landing = (props) => {
   };
 
   const handleViewMore = () => {
-    startIndex = limit;
-    limit += limit;
-  }
-
-  // useEffect(() => {
-  //   let newData = {};
-  //   setFormSubmit(false);
-  //   Object.entries(contexts).forEach((entry) => {
-  //     axios
-  //       .get(entry[1].getSomeEndpoint, {
-  //         params: {
-  //           startIndex: startIndex,
-  //           limit: limit
-  //         }
-  //       })
-  //       .then((response) => {
-  //         console.log("succesful api");
-  //         const dataFromApi = response.data.data;
-  //         if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-  //           console.error("dataFromApi is not a non-empty array");
-  //           return;
-  //         }
-  //         if(data){
-  //           newData[entry[0]] = [...data[entry[0]], dataFromApi];
-  //         } else {
-  //           newData[entry[0]] = dataFromApi;
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error making API call:", error);
-  //       });
-  //   });
-  //   setData(newData);
-  // }, [formSubmit]);
+    //setStartIndex(prevStartIndex => prevStartIndex + limit);
+    setLimit((prevLimit) => prevLimit + limit);
+  };
 
   useEffect(() => {
     setFormSubmit(false);
-    Promise.all(Object.entries(contexts).map(([key, value]) =>
-      axios.get(value.getSomeEndpoint, {
-        params: {
-          startIndex: startIndex,
-          limit: limit
-        }
-      })
-      .then((response) => {
-        console.log("Successful API call for", key);
-        const dataFromApi = response.data.data;
-        if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-          console.error("dataFromApi is not a non-empty array");
-          return [];
-        }
-        return { [key]: dataFromApi };
+    Promise.all(
+      Object.entries(contexts).map(([key, value]) =>
+        axios
+          .get(value.getSomeEndpoint, {
+            params: {
+              startIndex: 0,
+              limit: limit,
+            },
+          })
+          .then((response) => {
+            console.log("Successful API call for", key);
+            const dataFromApi = response.data.data;
+            if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+              console.error("dataFromApi is not a non-empty array");
+              return [];
+            }
+            return { [key]: dataFromApi };
+          })
+          .catch((error) => {
+            console.error("Error making API call:", error);
+            return {};
+          })
+      )
+    )
+      .then((results) => {
+        const newData = results.reduce(
+          (acc, result) => ({ ...acc, ...result }),
+          {}
+        );
+        setData((prevData) => ({ ...prevData, ...newData }));
       })
       .catch((error) => {
-        console.error("Error making API call:", error);
-        return {};
-      })
-    ))
-    .then((results) => {
-      const newData = results.reduce((acc, result) => ({ ...acc, ...result }), {});
-      setData(newData);
-    })
-    .catch((error) => {
-      console.error("Error processing API responses:", error);
-    });
-  }, [formSubmit]);
+        console.error("Error processing API responses:", error);
+      });
+  }, [formSubmit, limit]);
 
-  const prepareViewData = (selectedData) => {
-    const viewDataDict = {};
-    Object.keys(selectedData).forEach((key) => {
-      if (viewFieldNames.includes(key)) {
-        if (
-          contextLadenFieldNames.includes(key) &&
-          data.hasOwnProperty(fieldContexts[key])
-        ) {
-          viewDataDict[key] = data[fieldContexts[key]][selectedData[key]];
-        } else {
-          viewDataDict[key] = selectedData[key];
-        }
-      }
-    });
-    return viewDataDict;
-  };
+
 
   const handlePanelClose = () => {
     setSelectedRow(-1);
   };
 
   return (
-  //data && (data[activeTab] || activeTab == "mapComponent") ? (
+    //data && (data[activeTab] || activeTab == "mapComponent") ? (
     <Flex
       flexDirection="column"
       width="100vw"
@@ -202,9 +163,13 @@ const Landing = (props) => {
         width="100%"
         zIndex="999"
       >
-<img src={image} alt="Oasis Logo" style={{ width: "200px", height: "auto", marginRight: "auto" }} />
+        <img
+          src={image}
+          alt="Oasis Logo"
+          style={{ width: "200px", height: "auto", marginRight: "auto" }}
+        />
 
-        handle
+        {/* handle header buttons based on context */}
 
         <Spacer flex={20} />
 
@@ -301,18 +266,27 @@ const Landing = (props) => {
             <DynamicTable
               context={contexts[activeTab]}
               data={data[activeTab]}
-              //columnData={data}
+              selectedRow={selectedRow}
               onSubmit={handleFormSubmit}
               onClick={handleViewDialog}
               searchValue={searchValue}
             ></DynamicTable>
-            <Button
+            {/* <Button
               width={"20%"}
               my={2}
               variant={"solid"}
               onClick={handleOpenCreateDialog}
             >
               {contexts[activeTab].createTitle}
+            </Button> */}
+
+            <Button
+              width={"20%"}
+              my={2}
+              variant={"solid"}
+              onClick={handleViewMore}
+            >
+              {"View More"}
             </Button>
           </Flex>
         ) : (
@@ -338,11 +312,6 @@ const Landing = (props) => {
                   : []
               }
               onSubmit={handleFormSubmit}
-              viewData={
-                selectedRow !== -1 && data[activeTab]
-                  ? prepareViewData(data[activeTab][selectedRow])
-                  : []
-              }
               contextLadenFieldNames={contextLadenFieldNames}
               fieldContexts={fieldContexts}
             ></PanelViewDialog>
@@ -350,7 +319,7 @@ const Landing = (props) => {
         ) : null}
       </Flex>
     </Flex>
-  )
+  );
   //  : (
   //   <LoadingPage></LoadingPage>
   // );

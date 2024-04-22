@@ -61,16 +61,17 @@ const goodNeighborCreateFields = [
   ];
 
   const goodNeighborViewFields = [
-    { name: 'RefugeeFamilyID', label: 'Refugee Family', type: 'id', contextType: 'family' },
-    { name: 'FamilyID', label: 'Host Family', type: 'id', contextType: 'family' }, 
     { name: 'FirstName', label: 'First Name', type: 'text' },
-    { name: 'LastName', label: 'Last Name', type: 'text' },
+    { name: 'FamilyID', label: 'Host Family', type: 'id', contextType: 'family' }, 
+    { name: 'RefugeeFamilyID', label: 'Refugee Family', type: 'id', contextType: 'family' },
+    // { name: 'LastName', label: 'Last Name', type: 'text' },
+    { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
+    { name: 'Relation', label: 'Relation to Head of Household', type: 'text' },
     { name: 'Gender', label: 'Gender', type: 'text' },
     { name: 'Birthday', label: 'Date of Birth', type: 'date' },
     { name: 'Email', label: 'Email Address', type: 'email' },
     { name: 'PhoneNumber', label: 'Phone Number', type: 'tel' },
-    { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
-    { name: 'Relation', label: 'Relation to Head of Household', type: 'text' },
+
   ];
 
   const goodNeighborDisplayFields = [
