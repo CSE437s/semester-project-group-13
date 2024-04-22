@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, theme, useTheme } from "@chakra-ui/react";
 import translateBE from "../translateBE";
-import DynamicFormDialog from "./DynamicFormDialog";
-import DynamicViewDialog from "./DynamicViewDialog";
 import { ContextProvider, getDisplayString } from "../contexts/ContextProvider";
 import axios from "axios";
 import LoadingPage from "../LoadingPage";
@@ -67,15 +65,8 @@ const DynamicTable = (props) => {
   }
 
   const handleRowClick = (index) => {
-    // setSelectedRow(index);
     props.onClick(index);
-    //setOpenViewDialog(true);
   };
-
-  // const handleCloseViewDialog = () => {
-  //   setOpenViewDialog(false);
-  //   setSelectedRow(-1);
-  // };
 
   const columns = Object.keys(props.data[0]);
   const filteredColumns = columns.filter(
@@ -133,6 +124,10 @@ const DynamicTable = (props) => {
       return true;
     }
 
+    if (props.context.type == "donation" || props.context.type == "request"){
+      if(row['completed'] == 1) return false;
+    }
+
     const viewData = prepareViewData(row);
   
     return Object.values(viewData).some((item) => {
@@ -167,18 +162,14 @@ const DynamicTable = (props) => {
         </Tbody>
       </Table>
 
-      {/* {selectedRow !== -1 && (
-        <DynamicViewDialog
-          isOpen={openViewDialog}
-          onClose={handleCloseViewDialog}
-          context={props.context}
-          data={props.data[selectedRow]}
-          onSubmit={props.onSubmit}
-          viewData={prepareViewData(props.data[selectedRow])}
-          contextLadenFieldNames={contextLadenFieldNames}
-          fieldContexts={fieldContexts}
-        ></DynamicViewDialog>
-      )} */}
+      <Button
+        width={"20%"}
+        my={2}
+        variant={"solid"}
+        onClick={props.onViewMore}
+      >
+        {"View More"}
+      </Button>
     </Box>
   );
 };

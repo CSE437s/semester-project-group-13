@@ -7,11 +7,6 @@ async function getAll(table, column, value) {
             throw new Error(`Table '${table}' does not exist`);
         }
 
-        const columnIsDate = await checkColumnIsDate(table, column);
-        if (column && !columnIsDate) {
-            throw new Error(`Column '${column}' in table '${table}' is not a date column`);
-        }
-
         let sql = `SELECT * FROM ${table} WHERE ${column} = ?`;
         const params = [value];
 

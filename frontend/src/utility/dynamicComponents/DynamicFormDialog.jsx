@@ -18,7 +18,8 @@ import {
   CloseButton,
   RadioGroup,
   Stack,
-  Radio
+  Radio,
+  Select
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import theme from "../../style/theme";
@@ -64,6 +65,8 @@ const DynamicFormDialog = ({
       case "phone":
         const phonePattern = /^\d{10}$/;
         return phonePattern.test(value);
+      case "radio":
+        return !(!value)
       case "id":
       case "number":
         return !isNaN(value);
@@ -110,7 +113,7 @@ const DynamicFormDialog = ({
         return (
           <FormControl key={field.name} mb={4}>
             <FormLabel>{field.label}</FormLabel>
-            <RadioGroup onChange={(e) => handleFieldChange(field, e)} value={value}>
+            <RadioGroup onChange={(e) => handleFieldChange(field, e)}>
               <Stack direction="row">
                 <Radio value="1">Yes</Radio>
                 <Radio value="0">No</Radio>
@@ -142,7 +145,7 @@ const DynamicFormDialog = ({
         if (formData && formData[fieldContext.id]) {
           value = { value: formData[fieldContext.id], label: getDisplayString(fieldContext, formData) };
         } else {
-          value = {};
+          value = { value: existData[fieldContext.id], label: getDisplayString(fieldContext, existData) };
         }
         return (
           <SearchableDropdown
@@ -153,6 +156,31 @@ const DynamicFormDialog = ({
             key={field.name}
           />
         );
+      case 'radio':
+        return (
+          <FormControl key={field.name} mb={4}>
+          <FormLabel>{field.label}</FormLabel>
+          <RadioGroup onChange={(e) => handleFieldChange(field, e)}>
+            <Stack direction="row">
+            {field.options.map((entry) => ( // Changed forEach to map
+              <Radio key={entry.value} value={entry.value}>{entry.label}</Radio>
+            ))}
+            </Stack>
+          </RadioGroup>
+        </FormControl>
+        )
+      case 'dropdown':
+        return (
+          <FormControl key={field.name} mb={4}>
+          <FormLabel>{field.label}</FormLabel>
+          <Select onChange={(e) => handleFieldChange(field, e.target.value)}>
+            <option value="">Select...</option>
+            {field.options.map((entry) => (
+              <option key={entry.value} value={entry.value}>{entry.label}</option>
+            ))}
+          </Select>
+        </FormControl>
+        )
       default:
         value = formData[field.name] || "";
         return (
