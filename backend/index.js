@@ -11,8 +11,7 @@ const donatorRouter = require('./src/routes/donator.route')
 const requestRouter = require('./src/routes/requests.route')
 const notesRouter = require('./src/routes/notes.route')
 const statisticsRouter = require('./src/routes/statistics.route')
-
-
+const geocodeRouter = require('./src/routes/geocode.route')
 
 
 const session = require("express-session");
@@ -46,6 +45,7 @@ app.use('/user', userRouter);
 app.use('/donator', donatorRouter);
 app.use('/notes', notesRouter);
 app.use('/statistics', statisticsRouter);
+app.use('/geocode', geocodeRouter);
 
 
 

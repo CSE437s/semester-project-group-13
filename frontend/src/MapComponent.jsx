@@ -6,50 +6,52 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
-  const [addresses, setAddresses] = useState([]);
   const [coords, setCoordinates] = useState([]);
   const theme = useTheme();
 
-  // Fetch addresses from db
+  // Fetch Lat, Lon from db
   useEffect(() => {
-    axios.get('http://localhost:8080/family')
+    axios.get('http://localhost:8080/geocode')
         .then((response) => {
-          const addressesFromApi = response.data.data.map((family) => family.address);
-          setAddresses(addressesFromApi);
-          console.log(addressesFromApi);
+          const coordsFromApi = response.data.data.map((geocode) => ({
+            latitude: geocode.latitude,
+            longitude: geocode.longitude
+          }));
+          setCoordinates(coordsFromApi);
+          console.log(coordsFromApi);
         })
         .catch((error) => {
-          console.error('Error fetching addresses from backend:', error);
+          console.error('Error fetching coordinates from backend:', error);
         });
   }, []);
 
-  // Obtain Long/Lat Coords thru Nominatim from addresses
-  useEffect(() => {
-    const fetchCoordinates = async () => {
-        try {
-            const promises = addresses.map(async (address) => {
-                const response = await axios.get('https://nominatim.openstreetmap.org/search', {
-                    params: {
-                        q: address,
-                        format: 'json',
-                        limit: 1
-                    }
-                });
-                const { lat, lon } = response.data[0];
-                return { lat, lon };
-            });
-            const coordinates = await Promise.all(promises);
-            setCoordinates(coordinates);
-            console.log('Coordinates:', coordinates);
-        } catch (error) {
-            console.error('Error fetching coordinates from Nominatim:', error);
-        }
-    };
+  // // Obtain Long/Lat Coords thru Nominatim from addresses
+  // useEffect(() => {
+  //   const fetchCoordinates = async () => {
+  //       try {
+  //           const promises = addresses.map(async (address) => {
+  //               const response = await axios.get('https://nominatim.openstreetmap.org/search', {
+  //                   params: {
+  //                       q: address,
+  //                       format: 'json',
+  //                       limit: 1
+  //                   }
+  //               });
+  //               const { lat, lon } = response.data[0];
+  //               return { lat, lon };
+  //           });
+  //           const coordinates = await Promise.all(promises);
+  //           setCoordinates(coordinates);
+  //           console.log('Coordinates:', coordinates);
+  //       } catch (error) {
+  //           console.error('Error fetching coordinates from Nominatim:', error);
+  //       }
+  //   };
 
-    if (addresses.length > 0) {
-        fetchCoordinates();
-    }
-  }, [addresses]);
+  //   if (addresses.length > 0) {
+  //       fetchCoordinates();
+  //   }
+  // }, [addresses]);
 
   const initializeMap = () => {
     const mapInstance = new maplibregl.Map({
@@ -68,7 +70,7 @@ const MapComponent = (props) => {
   
     coords.forEach((coord) => {
       new maplibregl.Marker({color: "#FF0000"})
-        .setLngLat([coord.lon, coord.lat])
+        .setLngLat([coord.longitude, coord.latitude])
         .addTo(map);
     });
   
