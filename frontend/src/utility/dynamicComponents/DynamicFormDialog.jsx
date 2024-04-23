@@ -53,6 +53,9 @@ const DynamicFormDialog = ({
   };
   
   const validateField = (field, value) => {
+    if(field.hasOwnProperty("ignore")){
+      return field.ignore;
+    }
     switch (field.type) {
       case "text":
         return value.trim() !== "";
@@ -77,30 +80,27 @@ const DynamicFormDialog = ({
   
 
   const handleFormSubmit = () => {
-    setFormErrors([]);
+    let currErrors = []; 
+  
     formFields.forEach((field) => {
-      if(!formData[field.name]){
-        setFormErrors((prevErrors) => [
-          ...prevErrors,
-          "Missing Field: " + translateBE(field.name)
-        ]);    
-          
+      if (field.hasOwnProperty("ignore")) {
+        
+      } else if (!formData[field.name]) {
+        currErrors.push("Missing Field: " + translateBE(field.name));
       } else {
         const valid = validateField(field, formData[field.name]);
         if (!valid) {
-          setFormErrors((prevErrors) => [
-            ...prevErrors,
-            "Invalid Field Data: " + translateBE(field.name)
-          ]);
+          currErrors.push("Invalid Field Data: " + translateBE(field.name));
         }
       }
-    });    
-
-    if (formErrors.length === 0) {
+    });
+  
+    if (currErrors.length === 0) {
       setFormErrors([]);
       onSubmit(formData);
       onClose();
     } else {
+      setFormErrors(currErrors);
       setFormAlert(true);
     }
   };

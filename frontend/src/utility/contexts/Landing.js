@@ -12,7 +12,6 @@ export const exportDataFields = [
       { label: "Requests", value: "requests" },
       { label: "Families", value: "families" },
       { label: "Good Neighbors", value: "goodNeighbors" },
-      { label: "Users", value: "users" },
     ],
   },
   {
@@ -22,12 +21,18 @@ export const exportDataFields = [
     options: [
       { label: "Country of Origin", value: "countryOfOrigin" },
       { label: "Current City", value: "city" },
+      { label: "Completed", value: "completed" },
+      { label: "N/A", value: "" },
     ],
+    ignore: true
+
   },
   {
     name: "value",
     label: "Value of Interest",
     type: "text",
+    ignore: true
+
   },
   {
     name: "dateColumn",
@@ -38,18 +43,39 @@ export const exportDataFields = [
       { label: "Arrival to US", value: "ArrivalDate" },
       { label: "Intake", value: "DateCreated" },
       { label: "Last Visit", value: "LatestDateAtOasis" },
+      { label: "N/A", value: "" },
     ],
+    ignore: true
+
   },
   {
     name: "startDate",
     label: "Select Start Date",
     type: "date",
+    ignore: true
+
   },
   {
     name: "endDate",
     label: "Select End Date",
     type: "date",
+    ignore: true
+
   },
+  {
+    name: "startIndex",
+    label: "Starting Index",
+    type: "number",
+    ignore: true
+
+  },
+  {
+    name: "limit",
+    label: "Limit",
+    type: "number",
+    ignore: true
+
+  }
 ];
 
 export async function handleDatatoCSV(formData) {
@@ -62,22 +88,32 @@ export async function handleDatatoCSV(formData) {
         }
     }
     console.log(formData)
-    const { table, dateColumn, startDate, endDate, column, value } = formData;
+    const { table, dateColumn, startDate, endDate, column, value, startIndex, limit, raw } = formData;
     let endpoint = "http://localhost:8080/statistics";
 
-    if (startDate && endDate && dateColumn) {
+    if (!dateColumn && !startDate && !endDate && !column && !value) {
+        endpoint += "/table";
+    } else if (startIndex && limit){
+        if(startDate && endDate && dateColumn){
+            endpoint += "/somedate";
+        } else {
+            endpoint += "/somecategory";
+        }
+    } else if(startDate && endDate && dateColumn){
         endpoint += "/date";
     } else {
         endpoint += "/category";
     }
+
+    
 
     axios
     .get(endpoint, {
         params: formData
     })
     .then((response) => {
-      const csvData = transformToCSV(response.data.data);
-      downloadCSV(csvData);
+        const csvData = transformToCSV(filterColumns(response.data.data, ["old_id", "user_id"]));
+        downloadCSV(csvData);
     })
     .catch((error) => {
       console.error("Error handling data to CSV:", error);
@@ -118,4 +154,16 @@ const downloadCSV = (csvData) => {
   a.href = window.URL.createObjectURL(blob);
   a.download = "exported_data.csv";
   a.click();
+};
+
+const filterColumns = (data, columnsToExclude) => {
+    return data.map(obj => {
+        const newObj = {};
+        Object.keys(obj).forEach(key => {
+            if (!columnsToExclude.includes(key)) {
+                newObj[key] = obj[key];
+            }
+        });
+        return newObj;
+    });
 };

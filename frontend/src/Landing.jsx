@@ -26,7 +26,7 @@ const Landing = (props) => {
   const [secondaryFormFields, setSecondaryFormFields] = useState([]);
   const [secondaryFormTitle, setSecondaryFormTitle] = useState("");
   const [secondaryFormSubmit, setSecondaryFormSubmit] = useState(() => {});
-
+  const [secondaryTable, setSecondaryTable] = useState(false);
 
   const [activeTab, setActiveTab] = useState(defaultPage);
   const [data, setData] = useState({});
@@ -35,43 +35,43 @@ const Landing = (props) => {
   const [selectedRow, setSelectedRow] = useState(-1);
   const [limit, setLimit] = useState(100);
 
-useEffect(() => {
-  setFormSubmit(false);
-  Promise.all(
-    Object.entries(contexts).map(([key, value]) =>
-      axios
-        .get(value.getSomeEndpoint, {
-          params: {
-            startIndex: 0,
-            limit: limit,
-          },
-        })
-        .then((response) => {
-          console.log("Successful API call for", key);
-          const dataFromApi = response.data.data;
-          if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-            console.error("dataFromApi is not a non-empty array");
-            return [];
-          }
-          return { [key]: dataFromApi };
-        })
-        .catch((error) => {
-          console.error("Error making API call:", error);
-          return {};
-        })
+  useEffect(() => {
+    setFormSubmit(false);
+    Promise.all(
+      Object.entries(contexts).map(([key, value]) =>
+        axios
+          .get(value.getSomeEndpoint, {
+            params: {
+              startIndex: 0,
+              limit: limit,
+            },
+          })
+          .then((response) => {
+            console.log("Successful API call for", key);
+            const dataFromApi = response.data.data;
+            if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+              console.error("dataFromApi is not a non-empty array");
+              return [];
+            }
+            return { [key]: dataFromApi };
+          })
+          .catch((error) => {
+            console.error("Error making API call:", error);
+            return {};
+          })
+      )
     )
-  )
-    .then((results) => {
-      const newData = results.reduce(
-        (acc, result) => ({ ...acc, ...result }),
-        {}
-      );
-      setData((prevData) => ({ ...prevData, ...newData }));
-    })
-    .catch((error) => {
-      console.error("Error processing API responses:", error);
-    });
-}, [formSubmit, limit]);
+      .then((results) => {
+        const newData = results.reduce(
+          (acc, result) => ({ ...acc, ...result }),
+          {}
+        );
+        setData((prevData) => ({ ...prevData, ...newData }));
+      })
+      .catch((error) => {
+        console.error("Error processing API responses:", error);
+      });
+  }, [formSubmit, limit]);
 
   const handleTabChange = (tab) => {
     setActiveTab((prevTab) => {
@@ -97,7 +97,7 @@ useEffect(() => {
     setOpenForm(true);
   };
 
-  const handleCloseForm= () => {
+  const handleCloseForm = () => {
     setOpenForm(false);
   };
 
@@ -125,23 +125,76 @@ useEffect(() => {
     setSelectedRow(-1);
   };
 
-  const handleOpenSecondaryForm = () => {
-    setOpenSecondaryForm(true);
-  };
+  // const handleOpenSecondaryForm = () => {
+  //   setOpenSecondaryForm(true);
+  // };
 
   const handleCloseSecondaryForm = () => {
     setOpenSecondaryForm(false);
   };
 
   const handleSecondaryForm = (formType) => {
-      switch(formType){
-        case "csv":
-          setSecondaryFormFields(exportDataFields);
-          setSecondaryFormTitle("Export Data to CSV");
-          setSecondaryFormSubmit((formData) => handleDatatoCSV);
-      }
-      setOpenSecondaryForm(true)
-  }
+    switch (formType) {
+      case "csv":
+        setSecondaryFormFields(exportDataFields);
+        setSecondaryFormTitle("Export Data to CSV");
+        setSecondaryFormSubmit((formData) => handleDatatoCSV);
+        break;
+      case "logVisit":
+        setSecondaryFormFields(contexts["refugee"].utilityFields.logVisit);
+        setSecondaryFormTitle("Log Visit");
+        setSecondaryFormSubmit(
+          (formData) => contexts["refugee"].utilityFunctions.logVisit
+        );
+        break;
+      case "addRequest":
+        setSecondaryFormFields(contexts["request"].createFields);
+        setSecondaryFormTitle(contexts["request"].createTitle);
+        setSecondaryFormSubmit((formData) => contexts["request"].create);
+        break;
+      case "logDonation":
+        setSecondaryFormFields(contexts["donation"].createFields);
+        setSecondaryFormTitle(contexts["donation"].createTitle);
+        setSecondaryFormSubmit((formData) => contexts["donation"].create);
+        break;
+      case "toggleRequests":
+        setSecondaryTable(!secondaryTable)
+        return;
+      // case "toggleCompleted":
+      //   axios
+      //   .get(contexts['donation'].getCompletedEndpoint, {
+      //     params: {
+      //       startIndex: 0,
+      //       limit: limit,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log("Successful API call for", key);
+      //     const dataFromApi = response.data.data;
+      //     if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+      //       console.error("dataFromApi is not a non-empty array");
+      //       return [];
+      //     }
+      //     return { [key]: dataFromApi };
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error making API call:", error);
+      //     return {};
+      //   })
+      //   break;
+      // case "addMember":
+      //   setSecondaryFormFields(exportDataFields);
+      //   setSecondaryFormTitle("Export Data to CSV");
+      //   setSecondaryFormSubmit((formData) => handleDatatoCSV);
+      //   break;
+      // case "addMatch":
+      //   setSecondaryFormFields(exportDataFields);
+      //   setSecondaryFormTitle("Export Data to CSV");
+      //   setSecondaryFormSubmit((formData) => handleDatatoCSV);
+      //   break;
+    }
+    setOpenSecondaryForm(true);
+  };
 
   const handleHeaderButtons = () => {
     const buttons = [];
@@ -149,9 +202,9 @@ useEffect(() => {
       case "refugee":
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("logVisit")}
+            flex={3}
           >
             Log Visit
           </Button>
@@ -159,9 +212,9 @@ useEffect(() => {
         buttons.push(<Spacer flex={1}></Spacer>);
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("addRequest")}
+            flex={3}
           >
             Add Request
           </Button>
@@ -170,9 +223,9 @@ useEffect(() => {
       case "donator":
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("Log Donation")}
+            flex={3}
           >
             Log Donation
           </Button>
@@ -182,9 +235,9 @@ useEffect(() => {
       case "donation":
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("toggleRequests")}
+            flex={3}
           >
             Toggle Requests
           </Button>
@@ -192,20 +245,20 @@ useEffect(() => {
         buttons.push(<Spacer flex={1}></Spacer>);
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("addRequest")}
+            flex={3}
           >
-            Toggle Completed
+            Add Request
           </Button>
         );
         break;
       case "family":
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("addMember")}
+            flex={3}
           >
             Add Member
           </Button>
@@ -214,34 +267,35 @@ useEffect(() => {
       case "neighbor":
         buttons.push(
           <Button
-            variant="danger"
-            //onClick={() => handleTabChange("admin")} OPEN CSV MENU
-            flex={2}
+            variant="solid"
+            onClick={() => handleSecondaryForm("addMatch")}
+            flex={3}
           >
             Add Match
           </Button>
         );
         break;
       case "admin":
-      case "user": 
+      case "user":
         buttons.push(
           <Button
-            variant="danger"
+            variant="solid"
             onClick={() => handleSecondaryForm("csv")}
-            flex={2}
+            flex={3}
           >
             Export to CSV
           </Button>
         );
-        
+
         break;
       default:
+        <Spacer flex={10}></Spacer>
         break;
     }
-    if(activeTab !== 'mapComponent'){
+    if (activeTab !== "mapComponent") {
       buttons.push(<Spacer flex={1}></Spacer>);
       buttons.push(
-        <Button variant="solid" onClick={handleOpenForm} flex={2}>
+        <Button variant="solid" onClick={handleOpenForm} flex={3}>
           {contexts[activeTab].createTitle}
         </Button>
       );
@@ -251,14 +305,14 @@ useEffect(() => {
       <Button
         variant="lessDark"
         onClick={() => handleTabChange("admin")}
-        flex={2}
+        flex={3}
       >
         Admin
       </Button>
     );
     buttons.push(<Spacer flex={1}></Spacer>);
     buttons.push(
-      <Button variant="dark" onClick={handleLogout} flex={2}>
+      <Button variant="dark" onClick={handleLogout} flex={3}>
         Logout
       </Button>
     );
@@ -288,8 +342,8 @@ useEffect(() => {
           alt="Oasis Logo"
           style={{ width: "200px", height: "auto", marginRight: "auto" }}
         />
+        <Spacer flex={5}></Spacer>
         {handleHeaderButtons()}
-        <Spacer flex={20} />
       </Flex>
 
       <Flex
@@ -311,6 +365,18 @@ useEffect(() => {
           overflowY="auto"
         >
           <TabButton
+            onClick={() => handleTabChange("donation")}
+            isActive={activeTab === "donation"}
+          >
+            Donations
+          </TabButton>
+          <TabButton
+            onClick={() => handleTabChange("family")}
+            isActive={activeTab === "family"}
+          >
+            Families
+          </TabButton>
+          <TabButton
             onClick={() => handleTabChange("refugee")}
             isActive={activeTab === "refugee"}
           >
@@ -322,24 +388,14 @@ useEffect(() => {
           >
             Donators
           </TabButton>
-          <TabButton
-            onClick={() => handleTabChange("donation")}
-            isActive={activeTab === "donation"}
-          >
-            Donations
-          </TabButton>
+
           <TabButton
             onClick={() => handleTabChange("neighbor")}
             isActive={activeTab === "neighbor"}
           >
             Good Neighbors
           </TabButton>
-          <TabButton
-            onClick={() => handleTabChange("family")}
-            isActive={activeTab === "family"}
-          >
-            Families
-          </TabButton>
+
           <TabButton
             onClick={() => handleTabChange("mapComponent")}
             isActive={activeTab === "mapComponent"}
@@ -377,6 +433,11 @@ useEffect(() => {
               }}
               formFields={secondaryFormFields}
               title={secondaryFormTitle}
+              existData={
+                selectedRow !== -1 && data[activeTab]
+                  ? data[activeTab][selectedRow]
+                  : {}
+              }
             />
             <DynamicTable
               context={contexts[activeTab]}
@@ -387,6 +448,17 @@ useEffect(() => {
               searchValue={searchValue}
               onViewMore={handleViewMore}
             ></DynamicTable>
+            {secondaryTable ? (
+              <DynamicTable
+              context={contexts['request']}
+              data={data['request']}
+              selectedRow={selectedRow}
+              onSubmit={handleFormSubmit}
+              onClick={populateViewDialog}
+              searchValue={searchValue}
+              onViewMore={handleViewMore}
+            ></DynamicTable>
+            ) : null}
           </Flex>
         ) : (
           <MapComponent variant={"mainDisplay"}></MapComponent>

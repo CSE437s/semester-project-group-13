@@ -2,6 +2,24 @@ const { request } = require('express');
 const statisticService = require('../services/statistics.service');
 
 
+async function getTable(req, res, next) {
+  try {
+    const { table } = req.query;
+    let result;
+
+    if (table) {
+      result = await statisticService.getTable(table);
+    } else {
+      result = await statisticService.getTable();
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error while getting table', err.message);
+    next(err);
+  }
+}
+
 async function getAll(req, res, next) {
     try {
       const { table, column, value } = req.query;
@@ -86,6 +104,7 @@ async function getAll(req, res, next) {
 
 
 module.exports = {
+  getTable,
   getAll,
   getAllFromDate,
   getSomeCategory,

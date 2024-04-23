@@ -4,6 +4,8 @@ import GoodNeighborContext from "./GoodNeighbors";
 import RefugeeContext from "./Refugees";
 import DonatorContext from "./Donators";
 import UserContext from "./Users";
+import RequestContext from "./Requests";
+import NoteContext from "./Notes"
 
 export const ContextProvider = (type) => {
   switch (type) {
@@ -17,6 +19,10 @@ export const ContextProvider = (type) => {
       return GoodNeighborContext;
     case "donator":
       return DonatorContext;
+    case "request":
+      return RequestContext;
+    case "note":
+      return NoteContext;
     case "user":
     case "admin":
       return UserContext;
@@ -38,11 +44,14 @@ export function getDisplayString(context, data) {
       displayString = `${data.FamilyName}`
       break;
     case 'donation':
+    case 'request':
       displayString = `${data.item} (${data.amount})`
       break;
     case 'neighbor':
       displayString = `${data.FirstName} ${data.LastName}`
       break;
+    case 'note':
+      displayString = `${data.type}`
     default:
       console.log("Invalid Display String :", data);
   }
@@ -58,6 +67,8 @@ export function getAllContexts(){
     neighbor: GoodNeighborContext,
     user: UserContext,
     admin: UserContext,
+    request:RequestContext,
+    note: NoteContext
   }
 }
 

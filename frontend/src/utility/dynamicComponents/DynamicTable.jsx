@@ -23,7 +23,6 @@ const DynamicTable = (props) => {
     acc[field.name] = field.contextType;
     return acc;
   }, {});
-  console.log(contextLadenFields);
 
   useEffect(() => {
     if (props.data && props.data.length) {
@@ -116,7 +115,7 @@ const DynamicTable = (props) => {
   };
 
   const isRowVisible = (row, rowIndex) => {
-    if (row["is_deleted"] || row["is_deleted"] == undefined) {
+    if (row["is_deleted"] || row["is_deleted"] == undefined || row['completed']) {
       return false;
     }
 
@@ -125,6 +124,7 @@ const DynamicTable = (props) => {
     }
 
     if (props.context.type == "donation" || props.context.type == "request"){
+      console.log("shoudl be GONNENEN")
       if(row['completed'] == 1) return false;
     }
 

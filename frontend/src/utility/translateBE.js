@@ -48,7 +48,13 @@ let be_to_fe_dict = {
   refugee_family_id: "Refugee Family",
   RefugeeFamilyID: "Refugee Family",
   family_id: "Family",
-  FamilyID: "Host Family"
+  FamilyID: "Host Family",
+  user_id: "User",
+  date: "Date",
+  amount: "Amount",
+  dateColumn: "Date Filter",
+  startDate: "Start Date",
+  endDate: "End Date"
 
 };
 

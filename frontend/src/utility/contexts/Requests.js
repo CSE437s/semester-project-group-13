@@ -1,8 +1,10 @@
 import axios from "axios";
 
-const handleCreateDonation = (formData) => {
+const handleCreateRequest = (formData) => {
     formData['is_deleted'] = 0;
-    axios.post('http://localhost:8080/donation/create', formData)
+    formData['completed'] = 0;
+
+    axios.post('http://localhost:8080/requests/create', formData)
     .then((response) => {
         const data = response.data;
         console.log('Form data submitted:', formData);
@@ -12,8 +14,8 @@ const handleCreateDonation = (formData) => {
     });
 };
 
-const handleEditDonation = (formData) => {
-    const endpoint  = 'http://localhost:8080/donation/' + formData['donation_id'] + '/update'
+const handleEditRequest = (formData) => {
+    const endpoint  = 'http://localhost:8080/requests/' + formData['request_id'] + '/update'
     axios.put(endpoint, formData)
     .then((response) => {
         const data = response.data;
@@ -24,8 +26,8 @@ const handleEditDonation = (formData) => {
     });
 };
 
-const handleDeleteDonation = (formData) => {
-    const endpoint  = 'http://localhost:8080/donation/' + formData['donation_id'] + '/deleteOne'
+const handleDeleteRequest = (formData) => {
+    const endpoint  = 'http://localhost:8080/requests/' + formData['request_id'] + '/deleteOne'
     axios.delete(endpoint, formData)
     .then((response) => {
         const data = response.data;
@@ -36,51 +38,51 @@ const handleDeleteDonation = (formData) => {
     });
 }
 
-const donationCreateFields = [
+const requestCreateFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'amount', label: 'Amount', type: 'number' },
-{ name: 'completed', label: 'Completed?', type: 'bool'},
-{ name: 'date', label: 'Date of Donation', type: 'date' },
-{ name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
+// { name: 'completed', label: 'Completed?', type: 'bool'},
+{ name: 'date', label: 'Date of Request', type: 'date' },
+{ name: 'family_id', label: 'Requested By', type: 'id', contextType: "family"},
 { name: 'user_id', label: 'User', type: 'id', contextType: 'user', ignore: true},
 ];
 
-const donationEditFields = [
+const requestEditFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'amount', label: 'Amount', type: 'number' },
 { name: 'completed', label: 'Completed?', type: 'bool'},
 ];
 
-const donationViewFields = [
+const requestViewFields = [
 { name: 'item', label: 'Item', type: 'text' },
 { name: 'amount', label: 'Amount', type: 'number' },
 { name: 'completed', label: 'Completed?', type: 'bool'},
-{ name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
+{ name: 'family_id', label: 'Requested By', type: 'id', contextType: "family"},
 { name: 'user_id', label: 'Entered By', type: 'id', contextType: 'user'},
 ];
 
-const donationDisplayFields = [
+const requestDisplayFields = [
     { name: 'item', label: 'Item', type: 'text' },
     { name: 'amount', label: 'Amount', type: 'number' },
     { name: 'completed', label: 'Completed?', type: 'bool'},
 ]
 
-const DonationContext = {
-    type: "donation",
-    id: "donation_id",
-    getAllEndpoint: "http://localhost:8080/donation",
-    getSomeEndpoint: "http://localhost:8080/donation/getPending",
-    getOneEndpoint: (id) => `http://localhost:8080/donation/${id}`,
-    create: handleCreateDonation,
-    edit: handleEditDonation,
-    delete: handleDeleteDonation,
-    createFields: donationCreateFields,
-    editFields: donationEditFields,
-    viewFields: donationViewFields,
-    displayFields: donationDisplayFields,
-    createTitle: "Add Donation",
-    editTitle: "Edit Donation",
-    viewTitle: "View Donation", //TO-DO: viewDialog should provide its own title, so we can provide the first and last family name
+const RequestContext = {
+    type: "request",
+    id: "request_id",
+    getAllEndpoint: "http://localhost:8080/requests",
+    getSomeEndpoint: "http://localhost:8080/requests/getPending",
+    getOneEndpoint: (id) => `http://localhost:8080/requests/${id}`,
+    create: handleCreateRequest,
+    edit: handleEditRequest,
+    delete: handleDeleteRequest,
+    createFields: requestCreateFields,
+    editFields: requestEditFields,
+    viewFields: requestViewFields,
+    displayFields: requestDisplayFields,
+    createTitle: "Add Request",
+    editTitle: "Edit Request",
+    viewTitle: "View Request", //TO-DO: viewDialog should provide its own title, so we can provide the first and last family name
   };
   
-  export default DonationContext;
+  export default RequestContext;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const statisticsController = require('../controllers/statistics.controller');
 
+router.get('/table', statisticsController.getTable);
 router.get('/category', statisticsController.getAll);
 router.get('/somecategory', statisticsController.getSomeCategory);
 router.get('/somedate', statisticsController.getSomeFromDate);
