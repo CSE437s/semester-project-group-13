@@ -42,6 +42,17 @@ async function getOne(donation_id) {
   }
 }
 
+async function getPending() {
+  try {
+    const sql = 'SELECT * FROM donations WHERE completed = 0';
+    const rows = await db.query(sql);
+    return { data: rows };
+  } catch (error) {
+    console.error('Error while getting pending donations', error.message);
+    throw error;
+  }
+}
+
 async function create({
   item,
   amount,
@@ -117,4 +128,5 @@ module.exports = {
   update,
   deleteOne,
   getSome,
+  getPending,
 };

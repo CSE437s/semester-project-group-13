@@ -27,6 +27,17 @@ async function getSome({ startIndex, limit }) {
   }
 }
 
+async function getPending() {
+  try {
+    const sql = 'SELECT * FROM requests WHERE completed = 0';
+    const rows = await db.query(sql);
+    return { data: rows };
+  } catch (error) {
+    console.error('Error while getting pending requests', error.message);
+    throw error;
+  }
+}
+
 async function getOne(request_id) {
   try {
     const sql = 'SELECT * FROM requests WHERE request_id = ?';
@@ -153,4 +164,5 @@ module.exports = {
   update,
   deleteOne,
   getSome,
+  getPending,
 };

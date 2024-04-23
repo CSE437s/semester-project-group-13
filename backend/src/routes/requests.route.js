@@ -3,6 +3,7 @@ const router = express.Router();
 const requestController = require('../controllers/requests.controller');
 
 router.get('/', requestController.getAll);
+router.get('/getPending', requestController.getPending);
 router.get('/some', requestController.getSome);
 router.get('/:request_id', requestController.getOne);
 router.post('/create', requestController.create); 
