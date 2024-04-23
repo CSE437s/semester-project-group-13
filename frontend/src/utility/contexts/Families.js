@@ -65,7 +65,7 @@ const familyCreateFields = [
     { name: 'IsGoodNeighbor', label: 'Is Good Neighbor?', type: 'bool' },
     { name: 'IsOpenToHaveGoodNeighbor', label: 'Open to Have Good Neighbor', type: 'bool' },
     { name: 'DesiresToBeGoodNeighbor', label: 'Desires to be Good Neighbor', type: 'bool' },
-    { name: 'user_id', label: 'User', type: 'id', contextType: 'user'},
+    { name: 'user_id', label: 'User', type: 'id', contextType: 'user', ignore: true},
   ];
 
   const familyEditFields = [

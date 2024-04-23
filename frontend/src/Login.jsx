@@ -22,12 +22,13 @@ const Login = (props) => {
     const credentials = { username: username, password: password }; //we should hash the password before sending it (it should be hashed on registration)
     axios.post('http://localhost:8080/auth/login', credentials)
       .then((response) => {
-        const data = response.data;
-        console.log(data);
-        setUsername(data.username);
-        setPassword(data.password);
+        const data = response.data.data;
+        console.log(response)
+        console.log(data)
+        setUsername(data[0].username);
+        setPassword(data[0].password);
         setLoginAlert(false)
-        props.onLogin(data.user_id);
+        props.onLogin(data[0].user_id);
       })
       .catch((error) => {
         setLoginAlert(true);

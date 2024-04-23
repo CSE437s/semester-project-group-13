@@ -100,6 +100,16 @@ async function deleteOne(req, res) {
   }
 }
 
+async function getPending(req, res, next) {
+  try {
+    const getPending = await donationService.getPending();
+    res.json(getPending);
+  } catch (err) {
+    console.error('Error while getting completed donations', err.message);
+    next(err);
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
@@ -107,4 +117,5 @@ module.exports = {
   update,
   deleteOne,
   getSome,
+  getPending,
 };

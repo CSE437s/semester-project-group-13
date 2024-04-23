@@ -18,7 +18,8 @@ import {
   CloseButton,
   RadioGroup,
   Stack,
-  Radio
+  Radio,
+  Select
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import theme from "../../style/theme";
@@ -52,6 +53,9 @@ const DynamicFormDialog = ({
   };
   
   const validateField = (field, value) => {
+    if(field.hasOwnProperty("ignore")){
+      return field.ignore;
+    }
     switch (field.type) {
       case "text":
         return value.trim() !== "";
@@ -64,6 +68,8 @@ const DynamicFormDialog = ({
       case "phone":
         const phonePattern = /^\d{10}$/;
         return phonePattern.test(value);
+      case "radio":
+        return !(!value)
       case "id":
       case "number":
         return !isNaN(value);
@@ -74,30 +80,27 @@ const DynamicFormDialog = ({
   
 
   const handleFormSubmit = () => {
-    setFormErrors([]);
+    let currErrors = []; 
+  
     formFields.forEach((field) => {
-      if(!formData[field.name]){
-        setFormErrors((prevErrors) => [
-          ...prevErrors,
-          "Missing Field: " + translateBE(field.name)
-        ]);    
-          
+      if (field.hasOwnProperty("ignore")) {
+        
+      } else if (!formData[field.name]) {
+        currErrors.push("Missing Field: " + translateBE(field.name));
       } else {
         const valid = validateField(field, formData[field.name]);
         if (!valid) {
-          setFormErrors((prevErrors) => [
-            ...prevErrors,
-            "Invalid Field Data: " + translateBE(field.name)
-          ]);
+          currErrors.push("Invalid Field Data: " + translateBE(field.name));
         }
       }
-    });    
-
-    if (formErrors.length === 0) {
+    });
+  
+    if (currErrors.length === 0) {
       setFormErrors([]);
       onSubmit(formData);
       onClose();
     } else {
+      setFormErrors(currErrors);
       setFormAlert(true);
     }
   };
@@ -110,7 +113,7 @@ const DynamicFormDialog = ({
         return (
           <FormControl key={field.name} mb={4}>
             <FormLabel>{field.label}</FormLabel>
-            <RadioGroup onChange={(e) => handleFieldChange(field, e)} value={value}>
+            <RadioGroup onChange={(e) => handleFieldChange(field, e)}>
               <Stack direction="row">
                 <Radio value="1">Yes</Radio>
                 <Radio value="0">No</Radio>
@@ -142,7 +145,7 @@ const DynamicFormDialog = ({
         if (formData && formData[fieldContext.id]) {
           value = { value: formData[fieldContext.id], label: getDisplayString(fieldContext, formData) };
         } else {
-          value = {};
+          value = { value: existData[fieldContext.id], label: getDisplayString(fieldContext, existData) };
         }
         return (
           <SearchableDropdown
@@ -153,6 +156,31 @@ const DynamicFormDialog = ({
             key={field.name}
           />
         );
+      case 'radio':
+        return (
+          <FormControl key={field.name} mb={4}>
+          <FormLabel>{field.label}</FormLabel>
+          <RadioGroup onChange={(e) => handleFieldChange(field, e)}>
+            <Stack direction="row">
+            {field.options.map((entry) => ( // Changed forEach to map
+              <Radio key={entry.value} value={entry.value}>{entry.label}</Radio>
+            ))}
+            </Stack>
+          </RadioGroup>
+        </FormControl>
+        )
+      case 'dropdown':
+        return (
+          <FormControl key={field.name} mb={4}>
+          <FormLabel>{field.label}</FormLabel>
+          <Select onChange={(e) => handleFieldChange(field, e.target.value)}>
+            <option value="">Select...</option>
+            {field.options.map((entry) => (
+              <option key={entry.value} value={entry.value}>{entry.label}</option>
+            ))}
+          </Select>
+        </FormControl>
+        )
       default:
         value = formData[field.name] || "";
         return (

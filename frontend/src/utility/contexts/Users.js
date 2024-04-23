@@ -14,7 +14,7 @@ const handleCreateUser = (formData) => {
 
 const handleEditUser = (formData) => {
     const endpoint  = 'http://localhost:8080/user/' + formData['user_id'] + '/update'
-    axios.post(endpoint, formData)
+    axios.put(endpoint, formData)
     .then((response) => {
         const data = response.data;
         console.log('Form data submitted:', formData);

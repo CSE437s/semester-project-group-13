@@ -31,10 +31,11 @@ const SearchableDropdown = (props) => {
         if(!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
           console.error("dataFromApi is not a non-empty array");
         }
+        <option value="">Select...</option>
+
+        optionsFromApi.push({ key:-1, value: "", label: "Select..." })
         dataFromApi.forEach((entry) => {
           let displayString = getDisplayString(context, entry)
-
-          console.log('displayString', displayString)
           optionsFromApi.push({ key:entry[context.id], value: entry[context.id], label: displayString });
         });
         console.log(dataFromApi);

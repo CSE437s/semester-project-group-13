@@ -2,15 +2,32 @@ const { request } = require('express');
 const statisticService = require('../services/statistics.service');
 
 
+async function getTable(req, res, next) {
+  try {
+    const { table } = req.query;
+    let result;
+
+    if (table) {
+      result = await statisticService.getTable(table);
+    } else {
+      result = await statisticService.getTable();
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error while getting table', err.message);
+    next(err);
+  }
+}
+
 async function getAll(req, res, next) {
     try {
-      const { column, category, value } = req.query;
+      const { table, column, value } = req.query;
       let result;
   
-      if (category && column) {
-        result = await statisticService.getAll(column, category, value);
+      if (table && column) {
+        result = await statisticService.getAll(table, column, value);
       } else {
-
         result = await statisticService.getAll();
       }
   
@@ -69,13 +86,13 @@ async function getAll(req, res, next) {
 
   async function getAllFromDate(req, res, next) {
     try {
-        const { column, category, value, startDate, endDate, dateColumn } = req.query;
+        const { table, column, value, startDate, endDate, dateColumn } = req.query;
         let result;
 
         if (startDate && endDate) {
-            result = await statisticService.getAllFromDate(column, category, value, startDate, endDate, dateColumn);
+            result = await statisticService.getAllFromDate(table, column, value, startDate, endDate, dateColumn);
         } else {
-            result = await statisticService.getAll(column, category, value);
+            result = await statisticService.getAll(table, column, value);
         }
 
         res.json(result);
@@ -87,6 +104,7 @@ async function getAll(req, res, next) {
 
 
 module.exports = {
+  getTable,
   getAll,
   getAllFromDate,
   getSomeCategory,

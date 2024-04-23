@@ -14,91 +14,26 @@ import MapComponent from "./MapComponent";
 import DynamicFormDialog from "./utility/dynamicComponents/DynamicFormDialog";
 import SearchBar from "./utility/inputs/SearchBar";
 import PanelViewDialog from "./utility/dynamicComponents/PanelViewDialog";
-import LoadingPage from "./utility/LoadingPage";
+import { handleDatatoCSV, exportDataFields } from "./utility/contexts/Landing";
 
 const Landing = (props) => {
   const theme = useTheme();
   const contexts = getAllContexts();
-  const defaultPage = "refugee";
+  const defaultPage = "donation";
 
-  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
+  const [openSecondaryForm, setOpenSecondaryForm] = useState(false);
+  const [secondaryFormFields, setSecondaryFormFields] = useState([]);
+  const [secondaryFormTitle, setSecondaryFormTitle] = useState("");
+  const [secondaryFormSubmit, setSecondaryFormSubmit] = useState(() => {});
+  const [secondaryTable, setSecondaryTable] = useState(false);
+
   const [activeTab, setActiveTab] = useState(defaultPage);
   const [data, setData] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [selectedRow, setSelectedRow] = useState(-1);
-
-  //const [startIndex, setStartIndex] = useState(0);
   const [limit, setLimit] = useState(100);
-
-  const viewFieldNames =
-    activeTab != "mapComponent"
-      ? contexts[activeTab].viewFields.map((field) => field.name)
-      : null;
-  const contextLadenFields =
-    activeTab != "mapComponent"
-      ? contexts[activeTab].viewFields.filter((field) =>
-          field.hasOwnProperty("contextType")
-        )
-      : null;
-  const contextLadenFieldNames = contextLadenFields
-    ? contextLadenFields.map((field) => field.name)
-    : null;
-  const fieldContexts = contextLadenFields
-    ? contextLadenFields.reduce((acc, field) => {
-        acc[field.name] = field.contextType;
-        return acc;
-      }, {})
-    : null;
-
-  const handleTabChange = (tab) => {
-    setActiveTab((prevTab) => {
-      console.log("tab change", data);
-      return tab;
-    });
-    setSelectedRow(-1);
-  };
-
-  const handleLogout = () => {
-    axios
-      .post("http://localhost:8080/auth/logout")
-      .then((response) => {
-        const data = response.data;
-        props.onLogout();
-      })
-      .catch((error) => {
-        console.error("Error making API call:", error);
-      });
-  };
-
-  const handleOpenCreateDialog = () => {
-    setOpenCreateDialog(true);
-  };
-
-  const handleCloseCreateDialog = () => {
-    setOpenCreateDialog(false);
-  };
-
-  const handleFormSubmit = () => {
-    setFormSubmit(true);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchValue(e.target.value.toLowerCase().trim());
-  };
-
-  const handleClearSearch = () => {
-    setSearchValue("");
-  };
-
-  const handleViewDialog = (index) => {
-    setSelectedRow(index);
-  };
-
-  const handleViewMore = () => {
-    //setStartIndex(prevStartIndex => prevStartIndex + limit);
-    setLimit((prevLimit) => prevLimit + limit);
-  };
 
   useEffect(() => {
     setFormSubmit(false);
@@ -138,14 +73,253 @@ const Landing = (props) => {
       });
   }, [formSubmit, limit]);
 
+  const handleTabChange = (tab) => {
+    setActiveTab((prevTab) => {
+      console.log("tab change", data);
+      return tab;
+    });
+    setSelectedRow(-1);
+  };
 
+  const handleLogout = () => {
+    axios
+      .post("http://localhost:8080/auth/logout")
+      .then((response) => {
+        const data = response.data;
+        props.onLogout();
+      })
+      .catch((error) => {
+        console.error("Error making API call:", error);
+      });
+  };
+
+  const handleOpenForm = () => {
+    setOpenForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  const handleFormSubmit = () => {
+    setFormSubmit(true);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value.toLowerCase().trim());
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue("");
+  };
+
+  const populateViewDialog = (index) => {
+    setSelectedRow(index);
+  };
+
+  const handleViewMore = () => {
+    setLimit((prevLimit) => prevLimit + limit);
+  };
 
   const handlePanelClose = () => {
     setSelectedRow(-1);
   };
 
+  // const handleOpenSecondaryForm = () => {
+  //   setOpenSecondaryForm(true);
+  // };
+
+  const handleCloseSecondaryForm = () => {
+    setOpenSecondaryForm(false);
+  };
+
+  const handleSecondaryForm = (formType) => {
+    switch (formType) {
+      case "csv":
+        setSecondaryFormFields(exportDataFields);
+        setSecondaryFormTitle("Export Data to CSV");
+        setSecondaryFormSubmit((formData) => handleDatatoCSV);
+        break;
+      case "logVisit":
+        setSecondaryFormFields(contexts["refugee"].utilityFields.logVisit);
+        setSecondaryFormTitle("Log Visit");
+        setSecondaryFormSubmit(
+          (formData) => contexts["refugee"].utilityFunctions.logVisit
+        );
+        break;
+      case "addRequest":
+        setSecondaryFormFields(contexts["request"].createFields);
+        setSecondaryFormTitle(contexts["request"].createTitle);
+        setSecondaryFormSubmit((formData) => contexts["request"].create);
+        break;
+      case "logDonation":
+        setSecondaryFormFields(contexts["donation"].createFields);
+        setSecondaryFormTitle(contexts["donation"].createTitle);
+        setSecondaryFormSubmit((formData) => contexts["donation"].create);
+        break;
+      case "toggleRequests":
+        setSecondaryTable(!secondaryTable)
+        return;
+      // case "toggleCompleted":
+      //   axios
+      //   .get(contexts['donation'].getCompletedEndpoint, {
+      //     params: {
+      //       startIndex: 0,
+      //       limit: limit,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log("Successful API call for", key);
+      //     const dataFromApi = response.data.data;
+      //     if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
+      //       console.error("dataFromApi is not a non-empty array");
+      //       return [];
+      //     }
+      //     return { [key]: dataFromApi };
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error making API call:", error);
+      //     return {};
+      //   })
+      //   break;
+      // case "addMember":
+      //   setSecondaryFormFields(exportDataFields);
+      //   setSecondaryFormTitle("Export Data to CSV");
+      //   setSecondaryFormSubmit((formData) => handleDatatoCSV);
+      //   break;
+      // case "addMatch":
+      //   setSecondaryFormFields(exportDataFields);
+      //   setSecondaryFormTitle("Export Data to CSV");
+      //   setSecondaryFormSubmit((formData) => handleDatatoCSV);
+      //   break;
+    }
+    setOpenSecondaryForm(true);
+  };
+
+  const handleHeaderButtons = () => {
+    const buttons = [];
+    switch (activeTab) {
+      case "refugee":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("logVisit")}
+            flex={3}
+          >
+            Log Visit
+          </Button>
+        );
+        buttons.push(<Spacer flex={1}></Spacer>);
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("addRequest")}
+            flex={3}
+          >
+            Add Request
+          </Button>
+        );
+        break;
+      case "donator":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("Log Donation")}
+            flex={3}
+          >
+            Log Donation
+          </Button>
+        );
+        break;
+
+      case "donation":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("toggleRequests")}
+            flex={3}
+          >
+            Toggle Requests
+          </Button>
+        );
+        buttons.push(<Spacer flex={1}></Spacer>);
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("addRequest")}
+            flex={3}
+          >
+            Add Request
+          </Button>
+        );
+        break;
+      case "family":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("addMember")}
+            flex={3}
+          >
+            Add Member
+          </Button>
+        );
+        break;
+      case "neighbor":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("addMatch")}
+            flex={3}
+          >
+            Add Match
+          </Button>
+        );
+        break;
+      case "admin":
+      case "user":
+        buttons.push(
+          <Button
+            variant="solid"
+            onClick={() => handleSecondaryForm("csv")}
+            flex={3}
+          >
+            Export to CSV
+          </Button>
+        );
+
+        break;
+      default:
+        <Spacer flex={10}></Spacer>
+        break;
+    }
+    if (activeTab !== "mapComponent") {
+      buttons.push(<Spacer flex={1}></Spacer>);
+      buttons.push(
+        <Button variant="solid" onClick={handleOpenForm} flex={3}>
+          {contexts[activeTab].createTitle}
+        </Button>
+      );
+    }
+    buttons.push(<Spacer flex={1}></Spacer>);
+    buttons.push(
+      <Button
+        variant="lessDark"
+        onClick={() => handleTabChange("admin")}
+        flex={3}
+      >
+        Admin
+      </Button>
+    );
+    buttons.push(<Spacer flex={1}></Spacer>);
+    buttons.push(
+      <Button variant="dark" onClick={handleLogout} flex={3}>
+        Logout
+      </Button>
+    );
+    return buttons;
+  };
+
   return (
-    //data && (data[activeTab] || activeTab == "mapComponent") ? (
     <Flex
       flexDirection="column"
       width="100vw"
@@ -154,7 +328,7 @@ const Landing = (props) => {
     >
       <Flex
         id="header"
-        justifyContent="flex-end"
+        justifyContent="space-evenly"
         alignItems="center"
         bg="primary.900"
         p={4}
@@ -168,22 +342,8 @@ const Landing = (props) => {
           alt="Oasis Logo"
           style={{ width: "200px", height: "auto", marginRight: "auto" }}
         />
-
-        {/* handle header buttons based on context */}
-
-        <Spacer flex={20} />
-
-        <Button
-          variant="lessDark"
-          onClick={() => handleTabChange("admin")}
-          flex={2}
-        >
-          Admin
-        </Button>
-        <Spacer flex={1} />
-        <Button variant="dark" onClick={handleLogout} flex={2}>
-          Logout
-        </Button>
+        <Spacer flex={5}></Spacer>
+        {handleHeaderButtons()}
       </Flex>
 
       <Flex
@@ -205,6 +365,18 @@ const Landing = (props) => {
           overflowY="auto"
         >
           <TabButton
+            onClick={() => handleTabChange("donation")}
+            isActive={activeTab === "donation"}
+          >
+            Donations
+          </TabButton>
+          <TabButton
+            onClick={() => handleTabChange("family")}
+            isActive={activeTab === "family"}
+          >
+            Families
+          </TabButton>
+          <TabButton
             onClick={() => handleTabChange("refugee")}
             isActive={activeTab === "refugee"}
           >
@@ -216,24 +388,14 @@ const Landing = (props) => {
           >
             Donators
           </TabButton>
-          <TabButton
-            onClick={() => handleTabChange("donation")}
-            isActive={activeTab === "donation"}
-          >
-            Donations
-          </TabButton>
+
           <TabButton
             onClick={() => handleTabChange("neighbor")}
             isActive={activeTab === "neighbor"}
           >
             Good Neighbors
           </TabButton>
-          <TabButton
-            onClick={() => handleTabChange("family")}
-            isActive={activeTab === "family"}
-          >
-            Families
-          </TabButton>
+
           <TabButton
             onClick={() => handleTabChange("mapComponent")}
             isActive={activeTab === "mapComponent"}
@@ -254,8 +416,8 @@ const Landing = (props) => {
             overflowY={"auto"}
           >
             <DynamicFormDialog
-              isOpen={openCreateDialog}
-              onClose={handleCloseCreateDialog}
+              isOpen={openForm}
+              onClose={handleCloseForm}
               onSubmit={(formData) => {
                 handleFormSubmit();
                 contexts[activeTab].create(formData);
@@ -263,31 +425,40 @@ const Landing = (props) => {
               formFields={contexts[activeTab].createFields}
               title={contexts[activeTab].createTitle}
             />
+            <DynamicFormDialog
+              isOpen={openSecondaryForm}
+              onClose={handleCloseSecondaryForm}
+              onSubmit={(formData) => {
+                secondaryFormSubmit(formData);
+              }}
+              formFields={secondaryFormFields}
+              title={secondaryFormTitle}
+              existData={
+                selectedRow !== -1 && data[activeTab]
+                  ? data[activeTab][selectedRow]
+                  : {}
+              }
+            />
             <DynamicTable
               context={contexts[activeTab]}
               data={data[activeTab]}
               selectedRow={selectedRow}
               onSubmit={handleFormSubmit}
-              onClick={handleViewDialog}
+              onClick={populateViewDialog}
               searchValue={searchValue}
+              onViewMore={handleViewMore}
             ></DynamicTable>
-            {/* <Button
-              width={"20%"}
-              my={2}
-              variant={"solid"}
-              onClick={handleOpenCreateDialog}
-            >
-              {contexts[activeTab].createTitle}
-            </Button> */}
-
-            <Button
-              width={"20%"}
-              my={2}
-              variant={"solid"}
-              onClick={handleViewMore}
-            >
-              {"View More"}
-            </Button>
+            {secondaryTable ? (
+              <DynamicTable
+              context={contexts['request']}
+              data={data['request']}
+              selectedRow={selectedRow}
+              onSubmit={handleFormSubmit}
+              onClick={populateViewDialog}
+              searchValue={searchValue}
+              onViewMore={handleViewMore}
+            ></DynamicTable>
+            ) : null}
           </Flex>
         ) : (
           <MapComponent variant={"mainDisplay"}></MapComponent>
@@ -298,7 +469,6 @@ const Landing = (props) => {
               value={searchValue}
               onChange={handleSearchChange}
               onClear={handleClearSearch}
-              // onSearch={handleSearch}
             />
             <PanelViewDialog
               isOpen={
@@ -312,17 +482,12 @@ const Landing = (props) => {
                   : []
               }
               onSubmit={handleFormSubmit}
-              contextLadenFieldNames={contextLadenFieldNames}
-              fieldContexts={fieldContexts}
             ></PanelViewDialog>
           </Flex>
         ) : null}
       </Flex>
     </Flex>
   );
-  //  : (
-  //   <LoadingPage></LoadingPage>
-  // );
 };
 
 export default Landing;

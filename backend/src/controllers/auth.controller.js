@@ -22,7 +22,7 @@ async function login(req, res) {
   
       if (loginResult.data.length > 0) {
         console.log('Login successful');
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json(loginResult);
       } else {
         console.log('Invalid credentials');
         res.status(401).json({ error: 'Invalid credentials' });

@@ -81,6 +81,32 @@ const refugeeDisplayFields = [
   { name: 'is_head_of_house', label: 'Head of Household', type: 'bool'},
 ];
 
+const refugeeUtilityFields = {
+  "logVisit" : [
+    { name: "LatestDateAtOasis", label: "Date of Visit", type: "date" },
+    { name: "family_id", label: "Family", type: "id", contextType: "family" },
+  ],
+}
+
+const refugeeUtilityFunctions = {
+  "logVisit": (formData) => {
+    axios.get('http://localhost:8080/family/' + formData['family_id'])
+      .then((response) => {
+        const responseData = response.data.data;
+        const mergedData = { ...responseData, ...formData };
+        const endpoint = 'http://localhost:8080/family/' + formData['family_id'] + '/update';
+        axios.put(endpoint, mergedData)
+          .then((response) => {
+            const data = response.data;
+            console.log('Form data submitted:', mergedData);
+          }).catch((error) => {
+            if (error.s) console.error('Error submitting form:', error);
+          });
+      });
+  },
+};
+
+
 const RefugeeContext = {
   type: "refugee",
   id: "refugee_id",
@@ -94,6 +120,8 @@ const RefugeeContext = {
   editFields: refugeeEditFields,
   viewFields: refugeeViewFields,
   displayFields: refugeeDisplayFields,
+  utilityFields: refugeeUtilityFields,
+  utilityFunctions: refugeeUtilityFunctions,
   createTitle: "Add Refugee",
   editTitle: "Edit Refugee",
   viewTitle: "View Refugee", //TO-DO: viewDialog should provide its own title, so we can provide the first and last refugee name

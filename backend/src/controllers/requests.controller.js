@@ -32,6 +32,16 @@ async function getOne(req, res, next) {
   }
 }
 
+async function getPending(req, res, next) {
+  try {
+    const getPending = await requestService.getPending();
+    res.json(getPending);
+  } catch (err) {
+    console.error('Error while getting completed requests', err.message);
+    next(err);
+  }
+}
+
 async function create(req, res) {
   try {
     const {
@@ -129,4 +139,5 @@ module.exports = {
   update,
   deleteOne,
   getSome,
+  getPending,
 };

@@ -17,18 +17,8 @@ const PanelViewDialog = (props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [referenceData, setReferenceData] = useState({})
   const theme = useTheme();
-
-  const viewFieldNames = props.context.viewFields.map((field) => field.name);
+  
   const contextLadenFields = props.context.viewFields.filter((field) => field.hasOwnProperty("contextType"));
-  const contextLadenFieldNames = contextLadenFields
-    ? contextLadenFields.map((field) => field.name)
-    : null;
-  const fieldContexts = contextLadenFields
-    ? contextLadenFields.reduce((acc, field) => {
-        acc[field.name] = field.contextType;
-        return acc;
-      }, {})
-    : null;
 
     useEffect(() => {
       if (props.data) {
@@ -111,32 +101,6 @@ const PanelViewDialog = (props) => {
     }
     return <Text fontSize={'3vh'} key={field.name}>{value}</Text>;
   };
-
-  // const prepareViewData = (selectedData) => {
-  //   const viewDataDict = {};
-  //   Object.keys(selectedData).forEach((key) => {
-  //     if (viewFieldNames.includes(key)) {
-  //       if (
-  //         contextLadenFieldNames.includes(key) &&
-  //         referenceData.hasOwnProperty(fieldContexts[key])
-  //       ) {
-  //         const fieldContext = ContextProvider(fieldContexts[key]);
-  //         const referenceRow = referenceData[fieldContexts[key]][0]
-  //         //.find((entry) => 
-  //         //entry[fieldContext.id] === selectedData[key])
-  //         console.log(referenceData[fieldContexts[key]])
-  //         viewDataDict[key] = referenceRow
-  //           ? getDisplayString(fieldContext, referenceRow)
-  //           : selectedData[key];
-  //       } else {
-  //         viewDataDict[key] = selectedData[key];
-  //       }
-  //     }
-  //   });
-  //   return viewDataDict;
-  // };
-
-  // const viewData = prepareViewData(props.data)
 
   return (
 

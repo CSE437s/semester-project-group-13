@@ -1,15 +1,32 @@
 const db = require('./db.service');
 
+async function getTable(table) {
+  try {
+      const tableExists = await checkTableExists(table);
+      if (!tableExists) {
+          throw new Error(`Table '${table}' does not exist`);
+      }
+
+      let sql = `SELECT * FROM ${table}`;
+
+      const rows = await db.query(sql);
+      return {
+          data: rows,
+          metadata: {
+              rowCount: rows.length 
+          }
+      };
+  } catch (error) {
+      console.error('Error while getting requests', error);
+      throw error;
+  }
+}
+
 async function getAll(table, column, value) {
     try {
         const tableExists = await checkTableExists(table);
         if (!tableExists) {
             throw new Error(`Table '${table}' does not exist`);
-        }
-
-        const columnIsDate = await checkColumnIsDate(table, column);
-        if (column && !columnIsDate) {
-            throw new Error(`Column '${column}' in table '${table}' is not a date column`);
         }
 
         let sql = `SELECT * FROM ${table} WHERE ${column} = ?`;
@@ -180,6 +197,7 @@ async function checkColumnIsDate(table, column) {
 }
 
 module.exports = {
+    getTable,
     getAll,
     getAllFromDate,
     getSomeCategory,
