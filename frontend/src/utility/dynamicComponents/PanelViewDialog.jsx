@@ -169,7 +169,7 @@ const PanelViewDialog = (props) => {
       return (
         <Flex flexDir={"column"}>
           <Heading size={'xs'}>{entry.type}</Heading>
-          <Text fontSize={'xs'}>{entry.description}</Text>
+          <Text fontSize={'2vh'}>{entry.description}</Text>
         </Flex>
       );
     });
@@ -197,9 +197,9 @@ const PanelViewDialog = (props) => {
         maxHeight={"60vh"}
         overflowY={"auto"}
       >
-        {!noteMode
-          ? props.context.viewFields.map((field) => handleInfoContext(field))
-          : handleNoteRender()}
+        {/* {!noteMode ? */}
+           {props.context.viewFields.map((field) => handleInfoContext(field))}
+          {/* : handleNoteRender()} */}
         <DynamicFormDialog
           isOpen={openEditDialog}
           onClose={handleCloseEditDialog}
@@ -231,7 +231,7 @@ const PanelViewDialog = (props) => {
         justifyContent={"space-evenly"}
         flexDir={"column"}
       >
-        {!["donation", "request", "user", "admin", "neighbor"].includes(
+        {/* {!["donation", "request", "user", "admin", "neighbor"].includes(
           props.context.type
         ) ? (
           <Flex flexDir={"row"} flex={1} width={'95%'} justifyContent={'space-evenly'} alignItems={'center'}> 
@@ -244,8 +244,8 @@ const PanelViewDialog = (props) => {
               Add Note
             </Button>
           </Flex>
-        ) : null}
-        <Spacer flex={10}></Spacer>
+        ) : null} */}
+        {/* <Spacer flex={10}></Spacer> */}
         <Flex flexDir={"row"} flex={1} width={'95%'} justifyContent={'space-evenly'} alignItems={'center'}> 
 
           <Button flex={2} variant={"dark"} onClick={handleDeleteClick}>
