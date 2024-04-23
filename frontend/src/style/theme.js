@@ -146,6 +146,18 @@ const theme = extendTheme({
         },
       },
     },
+    Select: {
+      variants: {
+        normal: {
+          border: 'solid primary.500 2px',
+          bg: 'primary.600', // Updated to primary.500 (shades of blue)
+          color: 'black',
+          _hover: {
+            bg: 'primary.400'
+          }
+        }
+      }
+    },
   },
 });
 

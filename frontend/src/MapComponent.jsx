@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import maplibregl from "maplibre-gl";
 import axios from "axios";
 import { Button, useTheme, Flex,  Select, extendTheme, ChakraProvider } from "@chakra-ui/react";
+import theme from './style/theme';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import countriesData from './countries_coordinates.json';
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
   const [geocodes, setGeocodes] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("all");
   const theme = useTheme();
+  const countryList = countriesData.ref_country_codes;
 
-  // Fetch Lat, Lon from db
   useEffect(() => {
     axios.get('http://localhost:8080/geocode/geocodeAndFamily')
         .then((response) => {
@@ -19,12 +22,29 @@ const MapComponent = (props) => {
             longitude: geocode.longitude,
             isRefugeeFamily: geocode.isRefugeeFamily,
             family_id: geocode.family_id,
+            address: geocode.address,
+            familyName: geocode.FamilyName,
           }));
           setGeocodes(geocodesFromApi);
           console.log(geocodesFromApi);
         })
         .catch((error) => {
           console.error('Error fetching geocodes from backend:', error);
+        });
+  }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/family/familiesPerCountry')
+        .then((response) => {
+          const countriesFromApi = response.data.data.map((country) => ({
+            country: country.CountryOfOrigin,
+            count: country.NumberOfFamilies,
+          }));
+          setCountries(countriesFromApi);
+          console.log('Fetched countries:', countriesFromApi);
+        })
+        .catch((error) => {
+          console.error('Error fetching countries from backend:', error);
         });
   }, []);
 
@@ -39,6 +59,45 @@ const MapComponent = (props) => {
     setMap(mapInstance);
 
     addMarkers(mapInstance);
+  };
+
+  const initializeWorldMap = () => {
+    const mapInstance = new maplibregl.Map({
+      container: "map",
+      style: 'https://api.maptiler.com/maps/streets/style.json?key=cTPmLVGEtC2TtjsUeqHc', // style URL
+      center: [0,0],
+      zoom: 0
+    });  
+    
+    setMap(mapInstance);
+
+    countries.forEach((country) => {
+      console.log(country);
+      const specificCountry = countryList.find(
+        (cl) => cl.country === country.country
+      );
+  
+      if (!specificCountry) {
+        console.error(`Country '${country.country}' not found in JSON data.`);
+        return;
+      }
+      const popupContent = `
+      <div style="color: black;">
+        <h3>Refugee Family Count</h3>
+        <p>Country of Origin: ${country.country}</p>
+        <p>Count: ${country.count}</p>
+      </div>
+    `;
+      const popup = new maplibregl.Popup({ offset: 25 })
+        .setHTML(popupContent);
+      const color = "#FF0000"; // Red for refugees, Blue for non-refugees
+      new maplibregl.Marker({ color })
+        .setLngLat([specificCountry.longitude, specificCountry.latitude])
+        .setPopup(popup)
+        .addTo(mapInstance);
+    });
+      
+    
   };
 
   const addMarkers = (mapInstance) => {
@@ -59,32 +118,22 @@ const MapComponent = (props) => {
     }
 
     filteredGeocodes.forEach((geocode) => {
+      const popupContent = `
+      <div style="color: black;">
+        <h3>Family Information</h3>
+        <p>Family Name: ${geocode.familyName}</p>
+        <p>Address: ${geocode.address}</p>
+      </div>
+    `;
+      const popup = new maplibregl.Popup({ offset: 25 })
+        .setHTML(popupContent);
       const color = geocode.isRefugeeFamily ? "#FF0000" : "#0000FF"; // Red for refugees, Blue for non-refugees
       new maplibregl.Marker({ color })
         .setLngLat([geocode.longitude, geocode.latitude])
+        .setPopup(popup)
         .addTo(mapInstance);
     });
   };
-  // Only add the first 50 markers
-    // Suppose 'geocodes' is your initial array containing all geocode records
-    // const nonRefugees = geocodes.filter((geocode) => !geocode.isRefugeeFamily); // Non-refugees
-    // const refugees = geocodes.filter((geocode) => geocode.isRefugeeFamily); // Refugees
-    // const limitedNonRefugees = nonRefugees.slice(0, 50); // Get the first 50 non-refugees
-    // const limitedRefugees = refugees.slice(0, 50); // Get the first 50 refugees
-
-    // // Create markers for non-refugees
-    // limitedNonRefugees.forEach((geocode) => {
-    // new maplibregl.Marker({ color: "#0000FF" }) // Blue for non-refugees
-    //   .setLngLat([geocode.longitude, geocode.latitude])
-    //   .addTo(mapInstance); // Add to map instance
-    // });
-
-    // // Create markers for refugees
-    // limitedRefugees.forEach((geocode) => {
-    // new maplibregl.Marker({ color: "#FF0000" }) // Red for refugees
-    //   .setLngLat([geocode.longitude, geocode.latitude])
-    //   .addTo(mapInstance);
-    // });
  
 
   const handleGeocode = async () => {
@@ -98,18 +147,6 @@ const MapComponent = (props) => {
     }
   };
 
-  // Creates Markers for each family address
-  // useEffect(() => {
-  //   if (!map || !coords.length) return;
-  
-  //   coords.forEach((coord) => {
-  //     new maplibregl.Marker({color: "#FF0000"})
-  //       .setLngLat([coord.longitude, coord.latitude])
-  //       .addTo(map);
-  //   });
-  
-  // }, [map, coords]);
-
   return (
     props.variant === "mainDisplay" ? (
       <Flex alignItems="center" id="main-display" maxWidth="85vw" width="85vw" flexDir="column" justifyContent="flex-start" p={2} marginLeft={'15vw'}>
@@ -121,12 +158,9 @@ const MapComponent = (props) => {
         >
           Open Map
         </Button>
-        <Select color='black'
-        bg = 'primary.600'
-        font = 'Menlo'
-        borderColor = 'transparent'
-        placeholder="Select filter"
-        listbox={{backgroundColor: 'primary.600'}}
+        <Select  
+        variant={'normal'}
+        color = 'black'
         onChange={(e) => {
           setFilter(e.target.value);
           addMarkers(map); // Re-add markers with the new filter
@@ -139,9 +173,9 @@ const MapComponent = (props) => {
         <Button
           mt={4}
           colorScheme="purple"
-          onClick={handleGeocode}
+          onClick={initializeWorldMap}
         >
-          Geocode Addresses
+          Open World Map
         </Button>
       </Flex>
     ) : (

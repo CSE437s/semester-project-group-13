@@ -34,7 +34,7 @@ async function getOne(geocode_id) {
 
 async function getGeocodeAndFamily() {
   try {
-    const sql = 'SELECT g.family_id, g.latitude, g.longitude, f.isRefugeeFamily FROM geocodes g JOIN families f ON g.family_id = f.family_id WHERE g.is_deleted = 0';
+    const sql = 'SELECT g.family_id, g.latitude, g.longitude, f.isRefugeeFamily, f.address, f.FamilyName FROM geocodes g JOIN families f ON g.family_id = f.family_id WHERE g.is_deleted = 0';
     console.log('Executing query:', sql);
 
     const rows = await db.query(sql);
