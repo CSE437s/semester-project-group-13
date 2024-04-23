@@ -21,7 +21,7 @@ const cors = require("cors");
 
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
-  res.send("Hello from our server!");
+  res.send("Welcome To Oasis API!");
 });
 
 app.use(
@@ -56,7 +56,7 @@ app.get('/cors', (req, res) => {
   })
 
 app.listen(8080, () => {
-  console.log("server listening on port 8080");
+  console.log("Welcome To Oasis API");
 });
 
 /* Add this later to make sure we are safe. 
