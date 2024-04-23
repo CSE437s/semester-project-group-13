@@ -32,6 +32,19 @@ async function getOne(geocode_id) {
   }
 }
 
+async function getGeocodeAndFamily() {
+  try {
+    const sql = 'SELECT g.family_id, g.latitude, g.longitude, f.isRefugeeFamily FROM geocodes g JOIN families f ON g.family_id = f.family_id WHERE g.is_deleted = 0';
+    console.log('Executing query:', sql);
+
+    const rows = await db.query(sql);
+    return { data: rows };
+  } catch (error) {
+    console.error('Error while getting one geocode', error);
+    throw error;
+  }
+}
+
 async function create({
   family_id,
   latitude,
@@ -129,7 +142,7 @@ async function geocode(address, zip_code, family_id) {
     // Make a request to the geocoding service (e.g., Nominatim) to obtain coordinates for the address
     const fullAddress = `${address}, ${zip_code}`;
 
-    await delay(1000);
+    await delay(100);
 
     const response = await nominatim.get('search', {
       params: {
@@ -142,6 +155,12 @@ async function geocode(address, zip_code, family_id) {
     // Extract latitude and longitude from the response
     if (response.data.length === 0) {
       console.error(`No geocode found for address: ${fullAddress}`);
+      const geocodeResult = await create({
+        family_id,
+        latitude: null,
+        longitude: null,
+        is_deleted: 0,
+      });
       return null;
     }
 
@@ -171,6 +190,13 @@ async function geocode(address, zip_code, family_id) {
   } catch (error) {
     // Handle errors, such as network issues or invalid addresses
     console.error('Geocoding error:', error);
+    await create({
+      family_id,
+      latitude: null,
+      longitude: null,
+      is_deleted: 0,
+    });
+    return null; // Creates a null record
     throw new Error(`Geocoding error: ${error.message}`);
   }
 }
@@ -215,6 +241,7 @@ async function geocodeFamilies() {
     }
 
     console.log('Successfully geocoded families');
+    return {success: true};
   } catch (error) {
     console.error('Error during geocoding families:', error);
     throw error;
@@ -224,6 +251,7 @@ async function geocodeFamilies() {
   module.exports = {
     getAll,
     getOne,
+    getGeocodeAndFamily,
     create,
     update,
     deleteOne,

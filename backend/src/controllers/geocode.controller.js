@@ -19,6 +19,15 @@ async function getAll(req, res, next) {
       next(err);
     }
   }
+
+  async function getGeocodeAndFamily(req, res, next) {
+    try {
+      res.json(await geocodeService.getGeocodeAndFamily());
+    } catch (err) {
+      console.error('Error while getting all geocodes and families', err.message);
+      next(err);
+    }
+  }
   
   async function create({
     family_id,
@@ -136,6 +145,7 @@ async function geocodeFamilies(req, res, next) {
 module.exports = {
     getAll,
     getOne,
+    getGeocodeAndFamily,
     create,
     update,
     deleteOne,

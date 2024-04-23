@@ -5,6 +5,7 @@ const axios = require('axios');
 
 router.get('/', geocodeController.getAll);
 router.get('/geocodeFamilies', geocodeController.getGeocodeFamilies);
+router.get('/geocodeAndFamily', geocodeController.getGeocodeAndFamily);
 router.post('/geocode-families', geocodeController.geocodeFamilies);
 router.get('/:geocode_id', geocodeController.getOne);
 router.post('/create', geocodeController.create);
