@@ -2,6 +2,18 @@ import axios from "axios";
 
 const handleCreateNote = (formData) => {
     formData['is_deleted'] = 0;
+    formData['refugee_id'] = formData['refugee_id'] ? formData['refugee_id'] : null;
+    formData['donator_id'] = formData['donator_id'] ? formData['donator_id'] : null;
+    formData['family_id'] = formData['family_id'] ? formData['family_id'] : null;
+
+    for (const propName in formData) {
+        if (!noteTrueFields.some(field => field.name === propName)) {
+            delete formData[propName];
+        }
+    }
+    formData['is_deleted'] = 0;
+
+    console.log(formData)
     axios.post('http://localhost:8080/notes/create', formData)
     .then((response) => {
         const data = response.data;
@@ -40,11 +52,21 @@ const noteCreateFields = [
 { name: 'type', label: 'Topic', type: 'text' },
 { name: 'date', label: 'Date Entered', type: 'date' },
 { name: 'description', label: 'Description', type: 'text' },
-{ name: 'refugee_id', label: 'Refugee', type: 'id', contextType: "refugee", ignore: true},
-{ name: 'donator_id', label: 'Donator', type: 'id', contextType: "family", ignore: true},
-{ name: 'family_id', label: 'Family', type: 'id', contextType: "family", ignore: true},
+// { name: 'refugee_id', label: 'Refugee', type: 'id', contextType: "refugee", ignore: true},
+// { name: 'donator_id', label: 'Donator', type: 'id', contextType: "family", ignore: true},
+// { name: 'family_id', label: 'Family', type: 'id', contextType: "family", ignore: true},
 { name: 'user_id', label: 'User', type: 'id', contextType: 'user', ignore: true},
 ];
+
+const noteTrueFields = [
+    { name: 'type', label: 'Topic', type: 'text' },
+    { name: 'date', label: 'Date Entered', type: 'date' },
+    { name: 'description', label: 'Description', type: 'text' },
+    { name: 'refugee_id', label: 'Refugee', type: 'id', contextType: "refugee", ignore: true},
+    { name: 'donator_id', label: 'Donator', type: 'id', contextType: "family", ignore: true},
+    { name: 'family_id', label: 'Family', type: 'id', contextType: "family", ignore: true},
+    { name: 'user_id', label: 'User', type: 'id', contextType: 'user', ignore: true},
+    ];
 
 const noteEditFields = [
     { name: 'description', label: 'Description', type: 'text' },
@@ -55,9 +77,9 @@ const noteViewFields = [
     { name: 'type', label: 'Topic', type: 'text' },
     { name: 'date', label: 'Date Entered', type: 'date' },
     { name: 'description', label: 'Description', type: 'text' },
-    { name: 'refugee_id', label: 'Given By', type: 'id', contextType: "refugee"},
-    { name: 'donator_id', label: 'Given By', type: 'id', contextType: "family"},
-    { name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
+    // { name: 'refugee_id', label: 'Given By', type: 'id', contextType: "refugee"},
+    // { name: 'donator_id', label: 'Given By', type: 'id', contextType: "family"},
+    // { name: 'family_id', label: 'Given By', type: 'id', contextType: "family"},
 ];
 
 const noteDisplayFields = [

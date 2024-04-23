@@ -25,7 +25,7 @@ const Landing = (props) => {
   const [openSecondaryForm, setOpenSecondaryForm] = useState(false);
   const [secondaryFormFields, setSecondaryFormFields] = useState([]);
   const [secondaryFormTitle, setSecondaryFormTitle] = useState("");
-  const [secondaryFormSubmit, setSecondaryFormSubmit] = useState(() => {});
+  const [secondaryFormType, setSecondaryFormType] = useState("");
   const [secondaryTable, setSecondaryTable] = useState(false);
 
   const [activeTab, setActiveTab] = useState(defaultPage);
@@ -138,50 +138,26 @@ const Landing = (props) => {
       case "csv":
         setSecondaryFormFields(exportDataFields);
         setSecondaryFormTitle("Export Data to CSV");
-        setSecondaryFormSubmit((formData) => handleDatatoCSV);
+        setSecondaryFormType("csv");
         break;
       case "logVisit":
+        setSecondaryFormType("logVisit");
         setSecondaryFormFields(contexts["refugee"].utilityFields.logVisit);
         setSecondaryFormTitle("Log Visit");
-        setSecondaryFormSubmit(
-          (formData) => contexts["refugee"].utilityFunctions.logVisit
-        );
         break;
       case "addRequest":
         setSecondaryFormFields(contexts["request"].createFields);
         setSecondaryFormTitle(contexts["request"].createTitle);
-        setSecondaryFormSubmit((formData) => contexts["request"].create);
+        setSecondaryFormType("addRequest");
         break;
       case "logDonation":
         setSecondaryFormFields(contexts["donation"].createFields);
         setSecondaryFormTitle(contexts["donation"].createTitle);
-        setSecondaryFormSubmit((formData) => contexts["donation"].create);
+        setSecondaryFormType("logDonation");
         break;
       case "toggleRequests":
-        setSecondaryTable(!secondaryTable)
+        setSecondaryTable(!secondaryTable);
         return;
-      // case "toggleCompleted":
-      //   axios
-      //   .get(contexts['donation'].getCompletedEndpoint, {
-      //     params: {
-      //       startIndex: 0,
-      //       limit: limit,
-      //     },
-      //   })
-      //   .then((response) => {
-      //     console.log("Successful API call for", key);
-      //     const dataFromApi = response.data.data;
-      //     if (!Array.isArray(dataFromApi) || dataFromApi.length === 0) {
-      //       console.error("dataFromApi is not a non-empty array");
-      //       return [];
-      //     }
-      //     return { [key]: dataFromApi };
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error making API call:", error);
-      //     return {};
-      //   })
-      //   break;
       // case "addMember":
       //   setSecondaryFormFields(exportDataFields);
       //   setSecondaryFormTitle("Export Data to CSV");
@@ -196,20 +172,34 @@ const Landing = (props) => {
     setOpenSecondaryForm(true);
   };
 
+  const handleSecondaryFormSubmit = (type, formData) => {
+    console.log(formData)
+    switch(type){
+      case "csv":
+        return handleDatatoCSV(formData);
+      case "logVisit":
+        return (formData) => contexts["refugee"].utilityFunctions.logVisit(formData);
+      case "addRequest":
+        return (formData) => contexts["request"].create(formData);
+      case "logDonation":
+        return (formData) => contexts["donation"].create(formData);
+    }
+  }
+
   const handleHeaderButtons = () => {
     const buttons = [];
     switch (activeTab) {
       case "refugee":
-        buttons.push(
-          <Button
-            variant="solid"
-            onClick={() => handleSecondaryForm("logVisit")}
-            flex={3}
-          >
-            Log Visit
-          </Button>
-        );
-        buttons.push(<Spacer flex={1}></Spacer>);
+        // buttons.push(
+        //   <Button
+        //     variant="solid"
+        //     onClick={() => handleSecondaryForm("logVisit")}
+        //     flex={3}
+        //   >
+        //     Log Visit
+        //   </Button>
+        // );
+        // buttons.push(<Spacer flex={1}></Spacer>);
         buttons.push(
           <Button
             variant="solid"
@@ -224,7 +214,7 @@ const Landing = (props) => {
         buttons.push(
           <Button
             variant="solid"
-            onClick={() => handleSecondaryForm("Log Donation")}
+            onClick={() => handleSecondaryForm("logDonation")}
             flex={3}
           >
             Log Donation
@@ -257,23 +247,43 @@ const Landing = (props) => {
         buttons.push(
           <Button
             variant="solid"
-            onClick={() => handleSecondaryForm("addMember")}
+            onClick={() => handleSecondaryForm("logDonation")}
             flex={3}
           >
-            Add Member
+            Log Donation
           </Button>
         );
+        //buttons.push(<Spacer flex={1}></Spacer>);
+        // buttons.push(
+        //   <Button
+        //     variant="solid"
+        //     onClick={() => handleSecondaryForm("logVisit")}
+        //     flex={3}
+        //   >
+        //     Log Visit
+        //   </Button>
+        // );
+        // buttons.push(<Spacer flex={1}></Spacer>);
+        // buttons.push(
+        //   <Button
+        //     variant="solid"
+        //     onClick={() => handleSecondaryForm("addMember")}
+        //     flex={3}
+        //   >
+        //     Add Member
+        //   </Button>
+        // );
         break;
       case "neighbor":
-        buttons.push(
-          <Button
-            variant="solid"
-            onClick={() => handleSecondaryForm("addMatch")}
-            flex={3}
-          >
-            Add Match
-          </Button>
-        );
+        // buttons.push(
+        //   <Button
+        //     variant="solid"
+        //     onClick={() => handleSecondaryForm("addMatch")}
+        //     flex={3}
+        //   >
+        //     Add Match
+        //   </Button>
+        // );
         break;
       case "admin":
       case "user":
@@ -293,14 +303,14 @@ const Landing = (props) => {
         break;
     }
     if (activeTab !== "mapComponent") {
-      buttons.push(<Spacer flex={1}></Spacer>);
+      buttons.push(<Spacer></Spacer>);
       buttons.push(
         <Button variant="solid" onClick={handleOpenForm} flex={3}>
           {contexts[activeTab].createTitle}
         </Button>
       );
     }
-    buttons.push(<Spacer flex={1}></Spacer>);
+    buttons.push(<Spacer></Spacer>);
     buttons.push(
       <Button
         variant="lessDark"
@@ -310,7 +320,7 @@ const Landing = (props) => {
         Admin
       </Button>
     );
-    buttons.push(<Spacer flex={1}></Spacer>);
+    buttons.push(<Spacer></Spacer>);
     buttons.push(
       <Button variant="dark" onClick={handleLogout} flex={3}>
         Logout
@@ -429,7 +439,8 @@ const Landing = (props) => {
               isOpen={openSecondaryForm}
               onClose={handleCloseSecondaryForm}
               onSubmit={(formData) => {
-                secondaryFormSubmit(formData);
+                handleFormSubmit()
+                handleSecondaryFormSubmit(secondaryFormType, formData);
               }}
               formFields={secondaryFormFields}
               title={secondaryFormTitle}

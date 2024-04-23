@@ -90,6 +90,11 @@ const refugeeUtilityFields = {
 
 const refugeeUtilityFunctions = {
   "logVisit": (formData) => {
+    for (const propName in formData) {
+      if (!refugeeUtilityFields["logVisit"].some(field => field.name === propName)) {
+          delete formData[propName];
+      }
+  }
     axios.get('http://localhost:8080/family/' + formData['family_id'])
       .then((response) => {
         const responseData = response.data.data;
